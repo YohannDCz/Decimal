@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppUser {
@@ -51,7 +51,7 @@ class AuthenticationService {
       password: user.password,
     );
     if (authResponse.session != null) {
-      await createTableEntry();
+      // await createTableEntry();
     }
     return authResponse;
   }
@@ -86,12 +86,17 @@ class AuthenticationService {
     // Just a random string
     var rawNonce = _generateRandomString();
     var hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+    late String clientId;
 
     ///
     /// Client ID that you registered with Google Cloud.
     /// You will have two different values for iOS and Android.
-    const clientId = "773564083129-o0f8gi4dqc4j158i82vm8101dcdmk539.apps.googleusercontent.com";
-    const applicationId = 'com.decimal.app';
+    if (Platform.isAndroid) {
+      clientId = "959308871265-7qc198u051dnipuoa4h5ij8l7t2k1hnk.apps.googleusercontent.com";
+    } else if (Platform.isIOS) {
+      clientId = "959308871265-0lo4k01j3fd0rfpp7v4mumv84jirh0qf.apps.googleusercontent.com";
+    }
+    const applicationId = 'com.mycompany.decimal';
 
     /// Fixed value for google login
     const redirectUrl = '$applicationId:/google_auth';
@@ -145,40 +150,30 @@ class AuthenticationService {
       nonce: rawNonce,
     );
     if (SupabaseAuth.user != null) {
-      await createTableEntry();
+      // await createTableEntry();
     }
   }
 
   Future facebookLogin() async {
     await SupabaseInitialization.supabase.auth.signInWithOAuth(
-      redirectTo: 'https://btoizxrzdesvhuxyqnhy.supabase.co/auth/v1/callback',
+      redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
       Provider.facebook,
     );
 
-    await createTableEntry();
+    // await createTableEntry();
   }
 
-  Stream<AuthState> authChanges() {
-    return SupabaseInitialization.supabase.auth.onAuthStateChange;
-  }
+  // Stream<AuthState> authChanges() {
+  //   return SupabaseInitialization.supabase.auth.onAuthStateChange;
+  // }
 
-  Future checkFirstTime() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Object? firsTimeObject = sharedPreferences.get("firstTime");
-    bool isFirstTime = firsTimeObject != null ? false : true;
-    if (isFirstTime) {
-      await sharedPreferences.setBool("firstTime", false);
-    }
-    return isFirstTime;
-  }
+  // Future resetPassword(String email) async {
+  //   await SupabaseInitialization.supabase.auth.resetPasswordForEmail(email);
+  // }
 
-  Future resetPassword(String email) async {
-    await SupabaseInitialization.supabase.auth.resetPasswordForEmail(email);
-  }
-
-  Future updatePassword(String newPassword) async {
-    await SupabaseInitialization.supabase.auth.updateUser(UserAttributes(password: newPassword));
-  }
+  // Future updatePassword(String newPassword) async {
+  //   await SupabaseInitialization.supabase.auth.updateUser(UserAttributes(password: newPassword));
+  // }
 
   Future<void> deleteUser() async {
     var user = Supabase.instance.client.auth.currentUser;

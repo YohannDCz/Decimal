@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:decimal/screens/feed.dart';
+import 'package:decimal/screens/profile.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/theme.dart';
@@ -29,8 +31,8 @@ class _HomeState extends State<Home> {
     });
 
     _children = [
-      // const Profile(),
-      // const Feed(),
+      const Profile(),
+      const Feed(),
       // const Offline(),
     ];
   }
@@ -58,34 +60,42 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: IndexedStack(
-          index: isOffline ? 3 : _currentIndex, // Si hors ligne, affichez l'écran hors connexion
-          children: _children,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: AppColors.black,
-          currentIndex: _currentIndex,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline, color: AppColors.secondaryText),
-              activeIcon: Icon(Icons.person, color: AppColors.white),
-              label: 'Accueil',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined, color: AppColors.secondaryText),
-              activeIcon: Icon(Icons.home, color: AppColors.white),
-              label: 'Recherche',
-            ),
-          ],
-        ),
+        body: _indexedStack(),
+        bottomNavigationBar: _bottomNavigationBar(),
       ),
     );
+  }
+
+  IndexedStack _indexedStack() {
+    return IndexedStack(
+        index: isOffline ? 3 : _currentIndex, // Si hors ligne, affichez l'écran hors connexion
+        children: _children,
+      );
+  }
+
+  BottomNavigationBar _bottomNavigationBar() {
+    return BottomNavigationBar(
+        backgroundColor: AppColors.black,
+        currentIndex: _currentIndex,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, color: AppColors.secondaryText),
+            activeIcon: Icon(Icons.person, color: AppColors.white),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined, color: AppColors.secondaryText),
+            activeIcon: Icon(Icons.home, color: AppColors.white),
+            label: 'Recherche',
+          ),
+        ],
+      );
   }
 }
