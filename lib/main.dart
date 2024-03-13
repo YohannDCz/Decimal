@@ -1,3 +1,4 @@
+import 'package:decimal/screens/feed_expanded.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -38,7 +39,7 @@ class Decimal extends StatelessWidget {
         "/signin": (context) => const SignIn(),
         "/signin_email": (context) => const SignInEmail(),
         "/signup_email": (context) => const SignUpEmail(),
-        // "/signin_email": (context) => const SignInEmail(),
+        "/feed_expanded": (context) => const FeedExpanded(),
       },
     );
   }
