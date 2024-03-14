@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 
 class EmailInput extends StatelessWidget {
   const EmailInput({super.key, required this.hint, required this.controller});

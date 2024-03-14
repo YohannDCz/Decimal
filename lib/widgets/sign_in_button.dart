@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 
 class SignInButton extends StatelessWidget {
   const SignInButton({super.key, required this.icon, required this.label, required this.onPressed, this.padding});

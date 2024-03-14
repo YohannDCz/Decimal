@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 import '../widgets/auth_title.dart';
 import '../widgets/email_input.dart';
 import '../widgets/password_input.dart';

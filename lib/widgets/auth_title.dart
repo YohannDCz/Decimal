@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 
 class AuthTitle extends StatelessWidget {
   const AuthTitle({

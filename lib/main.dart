@@ -1,13 +1,7 @@
-import 'package:decimal/screens/feed_expanded.dart';
+import 'package:decimal/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'screens/home.dart';
-import 'screens/signin_.dart';
-import 'screens/signin_email.dart';
-import 'screens/signup_email.dart';
-import 'utils/theme.dart';
 
 void main() async {
   try {
@@ -20,27 +14,5 @@ void main() async {
   } catch (e) {
     rethrow;
   }
-  runApp(const Decimal());
-}
-
-class Decimal extends StatelessWidget {
-  const Decimal({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: appTheme,
-      home: const Home(),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        "/home": (context) => const Home(),
-        "/signin": (context) => const SignIn(),
-        "/signin_email": (context) => const SignInEmail(),
-        "/signup_email": (context) => const SignUpEmail(),
-        "/feed_expanded": (context) => const FeedExpanded(),
-      },
-    );
-  }
+  runApp(const DecimalApp());
 }

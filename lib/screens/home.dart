@@ -5,7 +5,7 @@ import 'package:decimal/screens/feed_.dart';
 import 'package:decimal/screens/profile.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -37,11 +37,6 @@ class _HomeState extends State<Home> {
     ];
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -56,6 +51,12 @@ class _HomeState extends State<Home> {
     }
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(

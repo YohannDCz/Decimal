@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../config/theme.dart';
 
 class PasswordInput extends StatelessWidget {
   const PasswordInput({super.key, required this.hint, required this.controller});

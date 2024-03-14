@@ -2,7 +2,7 @@
 FLUTTER_ROOT=/Applications/flutter
 FLUTTER_APPLICATION_PATH=/Users/yohannd/Desktop/decimal
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/yohannd/Desktop/Decimal/lib/main.dart
+FLUTTER_TARGET=/Users/yohannd/Desktop/decimal/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1

@@ -3,7 +3,7 @@
 export "FLUTTER_ROOT=/Applications/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/yohannd/Desktop/decimal"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=/Users/yohannd/Desktop/Decimal/lib/main.dart"
+export "FLUTTER_TARGET=/Users/yohannd/Desktop/decimal/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"
