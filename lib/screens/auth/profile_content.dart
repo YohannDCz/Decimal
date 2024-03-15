@@ -1,42 +1,81 @@
+import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/theme.dart';
+import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/auth/widgets/buttons.dart';
 import 'package:decimal/screens/auth/widgets/profile_form.dart';
 import 'package:decimal/screens/auth/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfileContent1 extends StatefulWidget {
-  const ProfileContent1({super.key});
+class ProfileContent extends StatefulWidget {
+  const ProfileContent({super.key});
 
   @override
-  State<ProfileContent1> createState() => _ProfileContent1State();
+  State<ProfileContent> createState() => _ProfileContentState();
 }
 
-class _ProfileContent1State extends State<ProfileContent1> {
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final pseudoController = TextEditingController();
+class _ProfileContentState extends State<ProfileContent> {
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController pseudoController = TextEditingController();
+  String? coverPictureUrl;
+  String? profilePictureUrl;
+
+  @override
+  initState() {
+    super.initState();
+    BlocProvider.of<ProfileContentBloc>(context).add(GetProfile());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(gradient: AppColors.gradient),
-        child: Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ProfileHeader(),
-              ProfileForm(firstNameController: firstNameController, lastNameController: lastNameController, pseudoController: pseudoController),
-              const Buttons(),
-              height4,
-            ],
+    return BlocBuilder<ProfileContentBloc, ProfileContentState>(
+      builder: (context, state) {
+        if (state is ProfileContentSuccess) {
+          firstNameController.text = state.user!.name.split(" ").first;
+          lastNameController.text = state.user!.name.split(' ').skip(1).join(' ');
+          pseudoController.text = state.user!.pseudo;
+          coverPictureUrl = state.user!.cover_picture;
+          profilePictureUrl = state.user!.profile_picture;
+        }
+        print("ProfileContent");
+        return Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(gradient: AppColors.gradient),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ProfileHeader(
+                  coverPictureUrl: coverPictureUrl,
+                  profilePictureUrl: profilePictureUrl,
+                  name: "${firstNameController.text} ${lastNameController.text}",
+                  pseudo: pseudoController.text,
+                ),
+                ProfileForm(
+                  coverPictureUrl: coverPictureUrl,
+                  profilePictureUrl: profilePictureUrl,
+                  firstNameController: firstNameController,
+                  lastNameController: lastNameController,
+                  pseudoController: pseudoController,
+                ),
+                Buttons(onPressed: () {
+                  BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(
+                    name: "${firstNameController.text} ${lastNameController.text}",
+                    pseudo: pseudoController.text,
+                    profile_picture: profilePictureUrl,
+                    cover_picture: coverPictureUrl,
+                  )));
+                }),
+                height4,
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

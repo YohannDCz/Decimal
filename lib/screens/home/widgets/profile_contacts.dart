@@ -1,8 +1,8 @@
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
 
-class Contacts extends StatelessWidget {
-  const Contacts({
+class ProfileContacts extends StatelessWidget {
+  const ProfileContacts({
     super.key,
   });
 

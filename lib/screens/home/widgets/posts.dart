@@ -3,17 +3,11 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:flutter/material.dart';
 
 class Posts extends StatelessWidget {
-  const Posts({
-    super.key,
-    required ScrollController scrollController,
-  }) : _scrollController = scrollController;
-
-  final ScrollController _scrollController;
+  const Posts({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: _scrollController,
       child: Container(
         height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 64,
         padding: const EdgeInsets.symmetric(horizontal: 4.0),

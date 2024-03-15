@@ -1,9 +1,9 @@
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/home/widgets/contacts.dart';
+import 'package:decimal/screens/home/widgets/profile_contacts.dart';
 import 'package:decimal/screens/home/widgets/profile_description.dart';
 import 'package:decimal/screens/home/widgets/profile_pics.dart';
 import 'package:decimal/screens/home/widgets/publications.dart';
-import 'package:decimal/screens/home/widgets/stories_profile.dart';
+import 'package:decimal/screens/home/widgets/profile_stories.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -24,9 +24,9 @@ class _ProfileState extends State<Profile> {
         child: Column(
           children: [
             const ProfileDescription(),
-            const StoriesProfile(),
+            const ProfileStories(),
             const ProfilePics(),
-            const Contacts(),
+            const ProfileContacts(),
             Publications(type: type),
           ],
         ),

@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc: ^8.1.4
   flutter_dotenv: ^5.0.2
   font_awesome_flutter: ^10.6.0
+  image_picker: ^1.0.7
   mocktail: ^1.0.3
   provider: ^6.1.1
   shared_preferences: ^2.2.2

@@ -1,17 +1,28 @@
+import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
+// ignore: must_be_immutable
 class ProfileForm extends StatelessWidget {
-  const ProfileForm({
+  ProfileForm({
     super.key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.pseudoController,
+    this.profilePictureUrl,
+    this.coverPictureUrl,
+    this.firstNameController,
+    this.lastNameController,
+    this.pseudoController,
   });
 
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController pseudoController;
+  String? profilePictureUrl;
+  String? coverPictureUrl;
+  TextEditingController? firstNameController;
+  TextEditingController? lastNameController;
+  TextEditingController? pseudoController;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +48,9 @@ class ProfileForm extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      BlocProvider.of<ProfileContentBloc>(context).add(UploadProfilePicture());
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.tertiary,
                       shape: RoundedRectangleBorder(
@@ -71,7 +84,9 @@ class ProfileForm extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<ProfileContentBloc>(context).add(UploadCoverPicture());
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.tertiary,
                       shape: RoundedRectangleBorder(
@@ -109,6 +124,12 @@ class ProfileForm extends StatelessWidget {
                       Flexible(
                         child: TextFormField(
                           controller: firstNameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your first name';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.white,
@@ -126,6 +147,12 @@ class ProfileForm extends StatelessWidget {
                       Flexible(
                         child: TextFormField(
                           controller: lastNameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your last name';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.white,

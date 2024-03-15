@@ -2,6 +2,7 @@ import 'package:decimal/config/app_providers.dart' as bloc;
 import 'package:decimal/config/routes.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/screens/auth/profile_content.dart';
+import 'package:decimal/screens/auth/signin_.dart';
 import 'package:flutter/material.dart';
 
 class DecimalApp extends StatelessWidget {
@@ -15,7 +16,7 @@ class DecimalApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: appTheme,
         routes: appRoutes,
-        home: const ProfileContent1(),
+        home: const SignIn(),
       ),
     );
   }

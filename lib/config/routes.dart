@@ -1,3 +1,4 @@
+import 'package:decimal/screens/auth/profile_content.dart';
 import 'package:decimal/screens/home/home.dart';
 import 'package:decimal/screens/auth/signin_.dart';
 import 'package:decimal/screens/auth/signin_email.dart';
@@ -9,4 +10,5 @@ Map<String, WidgetBuilder> appRoutes = {
   "/signin": (context) => const SignIn(),
   "/signin_email": (context) => const SignInEmail(),
   "/signup_email": (context) => const SignUpEmail(),
+  "/profile_content": (context) => const ProfileContent(),
 };

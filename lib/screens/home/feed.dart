@@ -50,11 +50,11 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
         TabBarView(
           controller: _tabController,
           children: [
-            MainFeed(scrollController: _scrollController, type: type),
-            Stories(scrollController: _scrollController),
-            Videos(scrollController: _scrollController),
-            Pics(scrollController: _scrollController),
-            Posts(scrollController: _scrollController),
+            MainFeed(scrollController: _scrollController),
+            Stories(),
+            Videos(),
+            Pics(),
+            Posts(),
           ],
         ),
         SearchTabBar(

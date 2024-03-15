@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 class Buttons extends StatelessWidget {
   const Buttons({
     super.key,
+    required this.onPressed,
   });
-
+  
+  final VoidCallback onPressed;
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,15 +17,16 @@ class Buttons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+            },
             child: Text(
               'Pass',
               style: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(color: AppColors.white, decoration: TextDecoration.underline),
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-            },
+            onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(

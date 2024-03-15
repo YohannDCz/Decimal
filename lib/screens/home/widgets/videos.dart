@@ -1,16 +1,10 @@
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/home/feed.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Videos extends StatelessWidget {
-  const Videos({
-    super.key,
-    required ScrollController scrollController,
-  }) : _scrollController = scrollController;
-
-  final ScrollController _scrollController;
+  const Videos({super.key});
 
   String _extractId(String url) {
     String videoId = url.split('?')[0].substring('https://youtu.be/'.length);
@@ -20,7 +14,6 @@ class Videos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: _scrollController,
       child: Container(
         color: AppColors.primaryBackground,
         width: double.infinity,

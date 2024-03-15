@@ -1,5 +1,4 @@
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
-import 'package:decimal/config/constants.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,15 +18,14 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
   @override
   initState() {
     super.initState();
-    supabaseAuth.onAuthStateChange.listen((auth) {
-      if (auth.session != null) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-      }
-    });
+    // supabaseAuth.onAuthStateChange.listen((auth) {
+    //   if (auth.session != null) {
+    //     Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+    //   }
+    // });
   }
 
   @override
@@ -60,18 +58,21 @@ class _SignInState extends State<SignIn> {
                 label: "Sign in with Twitter",
                 onPressed: () {
                   BlocProvider.of<AuthenticationBloc>(context).add(TwitterLogin());
+                  context.read<AuthenticationService>().getUser(context);
                 }),
             SignInButton(
                 icon: FontAwesomeIcons.google,
                 label: "Sign in with Google",
-                onPressed: () {
+                onPressed: () async {
                   BlocProvider.of<AuthenticationBloc>(context).add(GoogleLogin());
+                  await context.read<AuthenticationService>().getUser(context);
                 }),
             SignInButton(
                 icon: FontAwesomeIcons.facebookF,
                 label: "Sign in with Facebook",
                 onPressed: () {
                   BlocProvider.of<AuthenticationBloc>(context).add(FacebookLogin());
+                  context.read<AuthenticationService>().getUser(context);
                 },
                 padding: 6.0),
             const DividerSignIn(),

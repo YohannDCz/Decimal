@@ -4,8 +4,17 @@ import 'package:flutter/material.dart';
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
     super.key,
+    this.coverPictureUrl,
+    this.profilePictureUrl,
+    this.name,
+    this.pseudo,
   });
 
+  final String? coverPictureUrl;
+  final String? profilePictureUrl;
+  final String? name;
+  final String? pseudo;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,9 +27,9 @@ class ProfileHeader extends StatelessWidget {
               Container(
                 height: 276.0,
                 width: double.infinity,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage('https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/cover_placeholder.jpeg?t=2024-03-15T09%3A44%3A56.150Z'),
+                    image: NetworkImage(coverPictureUrl ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/cover_placeholder.jpeg?t=2024-03-15T09%3A44%3A56.150Z'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -30,11 +39,11 @@ class ProfileHeader extends StatelessWidget {
                 child: Container(
                   width: 100.0,
                   height: 100.0,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 2.0)),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    border: const Border.fromBorderSide(BorderSide(color: Colors.white, width: 2.0)),
                     image: DecorationImage(
-                      image: NetworkImage('https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-15T09%3A45%3A10.012Z'),
+                      image: NetworkImage(profilePictureUrl ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-15T09%3A45%3A10.012Z'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -45,21 +54,13 @@ class ProfileHeader extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: 'John', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
-                TextSpan(text: ' ', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
-                TextSpan(text: 'Doe', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
-              ],
-            ),
-          ),
+          child: Text(name ?? 'John', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
         ),
         Text.rich(
           TextSpan(
             children: [
               TextSpan(text: '@', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
-              TextSpan(text: 'johndoe', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
+              TextSpan(text: pseudo ?? 'johndoe', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(color: AppColors.white)),
             ],
           ),
         ),

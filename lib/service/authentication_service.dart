@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -182,6 +184,19 @@ class AuthenticationService {
       }
     } else {
       throw 'Erreur de connexion';
+    }
+  }
+
+  Future<dynamic> getUser(BuildContext context) async {
+    try {
+      final response = await supabaseClient.from('user').select().eq('id', supabaseUser!.id).single();
+      if (response.data != null) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      } else {
+        Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
+      }
+    } catch (e) {
+      throw Exception('Unable to get profile: $e');
     }
   }
 

@@ -2,8 +2,8 @@ import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class StoriesProfile extends StatelessWidget {
-  const StoriesProfile({
+class ProfileStories extends StatelessWidget {
+  const ProfileStories({
     super.key,
   });
 

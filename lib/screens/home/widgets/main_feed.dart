@@ -1,35 +1,32 @@
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/home/profile.dart';
-import 'package:decimal/screens/home/widgets/publications.dart';
 import 'package:flutter/material.dart';
 
-class MainFeed extends StatelessWidget {
-  const MainFeed({
-    super.key,
-    required ScrollController scrollController,
-    required this.type,
-  }) : _scrollController = scrollController;
+import 'publications.dart';
 
-  final ScrollController _scrollController;
-  final String type;
+class MainFeed extends StatefulWidget {
+  const MainFeed({super.key, required this.scrollController});
+
+  final ScrollController scrollController;
+
+  @override
+  State<MainFeed> createState() => _MainFeedState();
+}
+
+class _MainFeedState extends State<MainFeed> {
+  String type = 'videos';
 
   void _scrollToPosition() {
-    _scrollController.animateTo(
+    widget.scrollController.animateTo(
       238.0,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
   }
 
-  String _extractId(String url) {
-    String videoId = url.split('?')[0].substring('https://youtu.be/'.length);
-    return videoId;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: _scrollController,
+      controller: widget.scrollController,
       child: Column(
         children: [
           Align(
