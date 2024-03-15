@@ -1,8 +1,7 @@
 import 'package:decimal/config/app_providers.dart' as bloc;
 import 'package:decimal/config/routes.dart';
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/feed_.dart';
-import 'package:decimal/screens/home.dart';
+import 'package:decimal/screens/auth/profile_content.dart';
 import 'package:flutter/material.dart';
 
 class DecimalApp extends StatelessWidget {
@@ -13,9 +12,10 @@ class DecimalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return bloc.Bloc(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: appTheme,
         routes: appRoutes,
-        home: const Home(),
+        home: const ProfileContent1(),
       ),
     );
   }

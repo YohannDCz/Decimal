@@ -5,13 +5,17 @@ ThemeData appTheme = ThemeData(
   primaryColor: const Color(0xFF4BAEFB),
 
   // Text themes
-  primaryTextTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Color(0xFF000000), fontSize: 20.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Large
-    bodyMedium: TextStyle(color: Color(0xFF000000), fontSize: 18.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Medium
-    bodySmall: TextStyle(color: Color(0xFF000000), fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Small
-    headlineLarge: TextStyle(color: Color(0xFF57636C), fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'), // Label Large
-    headlineMedium: TextStyle(color: Color(0xFF57636C), fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'), // Label Medium
-    headlineSmall: TextStyle(color: Color(0xFF57636C), fontSize: 12.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'), // Label Small
+  primaryTextTheme: TextTheme(
+    titleLarge: TextStyle(color: AppColors.primaryText, fontSize: 20.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Large
+    titleMedium: TextStyle(color: AppColors.primaryText, fontSize: 18.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Medium
+    titleSmall: TextStyle(color: AppColors.primaryText, fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Body Small
+    labelLarge: TextStyle(color: AppColors.secondaryText, fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'), // Label Large
+    labelMedium: TextStyle(color: AppColors.secondaryText, fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'), // Label Medium
+    labelSmall: TextStyle(color: AppColors.secondaryText, fontSize: 12.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto Condensed'),
+    bodyLarge: TextStyle(color: AppColors.primaryText, fontSize: 16.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Label Large
+    bodyMedium: TextStyle(color: AppColors.primaryText, fontSize: 14.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'), // Label Medium
+    bodySmall: TextStyle(color: AppColors.primaryText, fontSize: 12.0, fontWeight: FontWeight.normal, fontFamily: 'Roboto'),
+    // Label Small
   ),
 
   // Background colors
@@ -27,7 +31,7 @@ class AppColors {
   static Color tertiary = const Color(0xFFF7E03E);
   static Color alternate = const Color(0xFF6DC73C);
   static Color primaryText = const Color(0xFF14181B);
-  static Color secondaryText = const Color(0xFF57636C);
+  static Color secondaryText = Colors.grey;
   static Color primaryBackground = const Color(0xFFF0F0F0);
   static Color secondaryBackground = const Color(0xFFFFFFFF);
   static Color accent1 = const Color(0x7F4BAEFB);
@@ -58,6 +62,7 @@ SizedBox width8 = const SizedBox(width: 8.0);
 SizedBox width16 = const SizedBox(width: 16.0);
 SizedBox width24 = const SizedBox(width: 24.0);
 
+SizedBox height4 = const SizedBox(height: 4.0);
 SizedBox height8 = const SizedBox(height: 8.0);
 SizedBox height12 = const SizedBox(height: 12.0);
 SizedBox height16 = const SizedBox(height: 16.0);
