@@ -1,14 +1,10 @@
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/home/feed.dart';
 import 'package:decimal/screens/home/widgets/contacts.dart';
 import 'package:decimal/screens/home/widgets/profile_description.dart';
 import 'package:decimal/screens/home/widgets/profile_pics.dart';
 import 'package:decimal/screens/home/widgets/publications.dart';
-import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/screens/home/widgets/stories_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

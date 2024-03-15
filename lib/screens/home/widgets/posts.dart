@@ -1,5 +1,4 @@
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/screens/home/feed.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:flutter/material.dart';
 
