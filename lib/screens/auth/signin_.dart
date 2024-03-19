@@ -42,54 +42,62 @@ class _SignInState extends State<SignIn> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(gradient: AppColors.gradient),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SignInButton(
-                icon: Icons.email,
-                label: "Sign in with email",
-                onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/signin_email', (route) => false);
-                }),
-            SignInButton(
-                icon: FontAwesomeIcons.twitter,
-                label: "Sign in with Twitter",
-                onPressed: () {
-                  BlocProvider.of<AuthenticationBloc>(context).add(TwitterLogin());
-                  context.read<AuthenticationService>().getUser(context);
-                }),
-            SignInButton(
-                icon: FontAwesomeIcons.google,
-                label: "Sign in with Google",
-                onPressed: () async {
-                  BlocProvider.of<AuthenticationBloc>(context).add(GoogleLogin());
-                  await context.read<AuthenticationService>().getUser(context);
-                }),
-            SignInButton(
-                icon: FontAwesomeIcons.facebookF,
-                label: "Sign in with Facebook",
-                onPressed: () {
-                  BlocProvider.of<AuthenticationBloc>(context).add(FacebookLogin());
-                  context.read<AuthenticationService>().getUser(context);
+        child: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state is AuthenticationSuccess) {
+              // if (state.userExist!) {
+              //   Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              // } else {
+              Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
+            }
+            // }
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SignInButton(
+                  icon: Icons.email,
+                  label: "Sign in with email",
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/signin_email', (route) => false);
+                  }),
+              SignInButton(
+                  icon: FontAwesomeIcons.twitter,
+                  label: "Sign in with Twitter",
+                  onPressed: () {
+                    BlocProvider.of<AuthenticationBloc>(context).add(TwitterLogin());
+                  }),
+              SignInButton(
+                  icon: FontAwesomeIcons.google,
+                  label: "Sign in with Google",
+                  onPressed: () async {
+                    BlocProvider.of<AuthenticationBloc>(context).add(GoogleLogin());
+                  }),
+              SignInButton(
+                  icon: FontAwesomeIcons.facebookF,
+                  label: "Sign in with Facebook",
+                  onPressed: () {
+                    BlocProvider.of<AuthenticationBloc>(context).add(FacebookLogin());
+                  },
+                  padding: 6.0),
+              const DividerSignIn(),
+              SignInButton(
+                  icon: Icons.email,
+                  label: "Sign up with email",
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/signup_email', (route) => false);
+                  }),
+              height16,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                 },
-                padding: 6.0),
-            const DividerSignIn(),
-            SignInButton(
-                icon: Icons.email,
-                label: "Sign up with email",
-                onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/signup_email', (route) => false);
-                }),
-            height16,
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-              },
-              child: Text("Continue as guest", style: bodySmall!.copyWith(color: Colors.white, decoration: TextDecoration.underline)),
-            ),
-          ],
+                child: Text("Continue as guest", style: bodySmall!.copyWith(color: Colors.white, decoration: TextDecoration.underline)),
+              ),
+            ],
+          ),
         ),
       ),
     );

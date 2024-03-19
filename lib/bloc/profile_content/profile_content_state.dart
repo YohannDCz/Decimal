@@ -14,7 +14,7 @@ final class ProfileContentInitial extends ProfileContentState {}
 final class ProfileContentLoading extends ProfileContentState {}
 
 final class ProfileContentSuccess extends ProfileContentState {
-  const ProfileContentSuccess(CustomUser? user) : super(user: user);
+  const ProfileContentSuccess(CustomUser user) : super(user: user);
 
   @override
   List<Object?> get props => [user];

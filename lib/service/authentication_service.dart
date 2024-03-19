@@ -24,12 +24,11 @@ class AuthenticationService {
   Future createTableEntry(email) async {
     if (supabaseAuth.currentSession != null) {
       var userToInsert = {
-        'uiid': supabaseUser!.id,
+        'uuid': supabaseUser!.id,
         'email': email,
       };
       // Perform the insert query
       var response = await supabaseClient.from('users').upsert([userToInsert]);
-      print(response);
       return response;
     }
     return null;
@@ -52,7 +51,6 @@ class AuthenticationService {
         email: user.email,
         password: user.password,
       );
-      await createTableEntry(user.email);
       return 'User signed up successfully';
     } catch (e) {
       throw "Erreur lors de l'inscription avec email : $e";
@@ -143,14 +141,6 @@ class AuthenticationService {
     } catch (e) {
       throw 'Erreur lors de la connexion avec Google : $e';
     }
-
-    try {
-      if (supabaseUser != null) {
-        await createTableEntry(response.user!.email);
-      }
-    } catch (e) {
-      throw 'Erreur lors de l\'entrée de la table : $e';
-    }
   }
 
   Future signInWithFacebook() async {
@@ -159,8 +149,6 @@ class AuthenticationService {
         redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
         Provider.facebook,
       );
-      await createTableEntry(supabaseUser!.email);
-      debugPrint('Email de l\'utilisateur: ${supabaseUser!.email}');
     } catch (e) {
       throw "Erreur lors de la connexion avec Facebook : $e";
     }
@@ -187,16 +175,12 @@ class AuthenticationService {
     }
   }
 
-  Future<dynamic> getUser(BuildContext context) async {
+  Future<bool> getUser() async {
     try {
-      final response = await supabaseClient.from('user').select().eq('id', supabaseUser!.id).single();
-      if (response.data != null) {
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-      } else {
-        Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
-      }
+      await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
+      return true;
     } catch (e) {
-      throw Exception('Unable to get profile: $e');
+      return false;
     }
   }
 

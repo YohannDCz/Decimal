@@ -1,11 +1,7 @@
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
-import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
 class ProfileForm extends StatelessWidget {

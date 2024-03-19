@@ -1,6 +1,8 @@
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
+import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/service/authentication_service.dart';
+import 'package:decimal/service/feed_service.dart';
 import 'package:decimal/service/profile_content_serrvice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,9 @@ class Bloc extends StatelessWidget {
         RepositoryProvider(
           create: (context) => ProfileContentService(),
         ),
+        RepositoryProvider(
+          create: (context) => FeedService(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -29,6 +34,9 @@ class Bloc extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ProfileContentBloc(profileContentService: context.read<ProfileContentService>()),
+          ),
+          BlocProvider(
+            create: (context) => FeedBloc(feedService: context.read<FeedService>()),
           ),
         ],
         child: child,

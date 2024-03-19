@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:decimal/config/constants.dart';
+import 'package:equatable/equatable.dart';
 
 class AppUser {
   AppUser({
@@ -11,24 +12,24 @@ class AppUser {
   final String password;
 }
 
-class CustomUser {
-  CustomUser({
-    this.id,
+class CustomUser extends Equatable {
+  const CustomUser({
+    required this.id,
     this.profile_picture,
     this.cover_picture,
-    required this.name,
+    this.name,
     required this.pseudo,
   });
 
-  final String? id;
+  final String id;
   final String? profile_picture;
   final String? cover_picture;
-  final String name;
+  final String? name;
   final String pseudo;
 
   factory CustomUser.fromMap(Map<String, dynamic> map) {
     return CustomUser(
-      id: map["id"] != null ? map['id'] as String : "",
+      id: map["uuid"] != null ? map['uuid'] as String : "",
       profile_picture: map['profile_picture'] != null ? map['profile_picture'] as String : "",
       cover_picture: map['cover_picture'] != null ? map['cover_picture'] as String : "",
       name: map["name"] != null ? map['name'] as String : "",
@@ -40,7 +41,7 @@ class CustomUser {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': supabaseUser!.id,
+      'uuid': supabaseUser!.id,
       'profile_picture': profile_picture,
       'cover_picture': cover_picture,
       'name': name,
@@ -65,4 +66,7 @@ class CustomUser {
       pseudo: pseudo ?? this.pseudo,
     );
   }
+
+  @override
+  List<Object?> get props => [id, profile_picture, cover_picture, name, pseudo];
 }

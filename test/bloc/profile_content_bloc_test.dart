@@ -4,26 +4,36 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/profile_content_serrvice.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+class MockProfileContentBloc extends MockBloc<ProfileContentEvent, ProfileContentState> implements ProfileContentBloc {}
+
 class MockProfileContentService extends Mock implements ProfileContentService {}
+
+class MockImagePicker extends Mock implements ImagePicker {}
 
 void main() {
   group('ProfileContentBloc', () {
     late ProfileContentBloc profileContentBloc;
     late MockProfileContentService mockProfileContentService;
     late CustomUser user;
-
+    late XFile fakeImage;
+    late MockProfileContentBloc mockProfileContentBloc;
+    
     setUpAll(() {
       registerFallbackValue(File('path/to/image'));
-      registerFallbackValue(CustomUser(id: '', profile_picture: '', cover_picture: '', name: '', pseudo: ''));
+      registerFallbackValue(const CustomUser(id: '', profile_picture: '', cover_picture: '', name: '', pseudo: ''));
+      registerFallbackValue(XFile('path/to/image'));
     });
 
     setUp(() {
       mockProfileContentService = MockProfileContentService();
       profileContentBloc = ProfileContentBloc(profileContentService: mockProfileContentService);
-      user = CustomUser(id: '', profile_picture: '', cover_picture: '', name: '', pseudo: '');
+      user = const CustomUser(id: '', profile_picture: '', cover_picture: '', name: '', pseudo: '');
+      fakeImage = XFile('path/to/fake_image');
+      mockProfileContentBloc = MockProfileContentBloc();
     });
 
     tearDown(() {
@@ -37,41 +47,50 @@ void main() {
     blocTest<ProfileContentBloc, ProfileContentState>(
       'emits [ProfileContentLoading, ProfileContentSuccess] when UploadProfilePicture is added',
       build: () {
-        when(() => mockProfileContentService.uploadPicture()).thenAnswer((_) async => 'path/to/image');
+        when(mockProfileContentService.selectImage).thenAnswer((_) async => fakeImage);
+        when(() => mockProfileContentService.uploadPicture("profile", fakeImage)).thenAnswer((_) async => 'path/to/image');
+        when(() => mockProfileContentService.getProfile()).thenAnswer((_) async => user);
+        when(() => mockProfileContentService.updateProfile(any())).thenAnswer((_) async {});
+
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(UploadProfilePicture()),
-      expect: () => [ProfileContentLoading(), const ProfileContentSuccess(profilePictureUrl: 'path/to/image')],
+      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user.copyWith(profile_picture: 'path/to/image'))],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
       'emits [ProfileContentLoading, ProfileContentFailure] when UploadProfilePicture fails',
       build: () {
-        when(() => mockProfileContentService.uploadPicture()).thenThrow(Exception('Profile loading failed'));
+        when(mockProfileContentService.selectImage).thenAnswer((_) async => fakeImage);
+        when(() => mockProfileContentService.uploadPicture("profile", fakeImage)).thenThrow(Exception('Unable to read the image as bytes'));
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(UploadProfilePicture()),
-      expect: () => [ProfileContentLoading(), const ProfileContentFailure(error: 'Exception: Profile loading failed')],
+      expect: () => [ProfileContentLoading(), const ProfileContentFailure(error: 'Exception: Unable to read the image as bytes')],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
       'emits [ProfileContentLoading, ProfileContentSuccess] when UploadCoverPicture is added',
       build: () {
-        when(() => mockProfileContentService.uploadPicture()).thenAnswer((_) async => 'path/to/image');
+        when(mockProfileContentService.selectImage).thenAnswer((_) async => fakeImage);
+        when(() => mockProfileContentService.uploadPicture("cover", fakeImage)).thenAnswer((_) async => 'path/to/image');
+        when(() => mockProfileContentService.getProfile()).thenAnswer((_) async => user);
+        when(() => mockProfileContentService.updateProfile(any())).thenAnswer((_) async {});
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(UploadCoverPicture()),
-      expect: () => [ProfileContentLoading(), const ProfileContentSuccess(coverPictureUrl: 'path/to/image')],
+      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user.copyWith(cover_picture: 'path/to/image'))],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
       'emits [ProfileContentLoading, ProfileContentFailure] when UploadCoverPicture fails',
       build: () {
-        when(() => mockProfileContentService.uploadPicture()).thenThrow(Exception('Profile loading failed'));
+        when(mockProfileContentService.selectImage).thenAnswer((_) async => fakeImage);
+        when(() => mockProfileContentService.uploadPicture("cover", fakeImage)).thenThrow(Exception('Unable to read the image as bytes'));
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(UploadCoverPicture()),
-      expect: () => [ProfileContentLoading(), const ProfileContentFailure(error: 'Exception: Profile loading failed')],
+      expect: () => [ProfileContentLoading(), const ProfileContentFailure(error: 'Exception: Unable to read the image as bytes')],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
@@ -81,7 +100,7 @@ void main() {
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(GetProfile()),
-      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user: user)],
+      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user)],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
@@ -101,7 +120,7 @@ void main() {
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(UpdateProfile(user)),
-      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user: user)],
+      expect: () => [ProfileContentLoading(), ProfileContentSuccess(user)],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(
@@ -121,7 +140,7 @@ void main() {
         return profileContentBloc;
       },
       act: (bloc) => bloc.add(DeleteProfile()),
-      expect: () => [ProfileContentLoading(), const ProfileContentSuccess()],
+      expect: () => [ProfileContentLoading()],
     );
 
     blocTest<ProfileContentBloc, ProfileContentState>(

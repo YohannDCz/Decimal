@@ -10,7 +10,10 @@ final class AuthenticationInitial extends AuthenticationState {}
 
 final class AuthenticationLoading extends AuthenticationState {}
 
-final class AuthenticationSuccess extends AuthenticationState {}
+final class AuthenticationSuccess extends AuthenticationState {
+  AuthenticationSuccess({this.userExist});
+  final bool? userExist;
+}
 
 final class AuthenticationFailure extends AuthenticationState {
   AuthenticationFailure({required this.error});

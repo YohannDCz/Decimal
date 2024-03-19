@@ -13,7 +13,10 @@ class Feed extends StatefulWidget {
   State<Feed> createState() => _FeedState();
 }
 
-class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
+class _FeedState extends State<Feed> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   String type = 'videos';
 
   final ScrollController _scrollController = ScrollController();
@@ -45,16 +48,18 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Stack(
       children: [
         TabBarView(
           controller: _tabController,
           children: [
             MainFeed(scrollController: _scrollController),
-            Stories(),
-            Videos(),
-            Pics(),
-            Posts(),
+            const Stories(),
+            const Videos(),
+            const Pics(),
+            const Posts(),
           ],
         ),
         SearchTabBar(

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:equatable/equatable.dart';
@@ -14,7 +15,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signInWithEmail(event.user);
-        emit(AuthenticationSuccess());
+        emit(AuthenticationSuccess(userExist: true));
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }
@@ -25,7 +26,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signUpWithEmail(event.user);
-        emit(AuthenticationSuccess());
+        emit(AuthenticationSuccess(userExist: false));
+        if (supabaseUser != null) {
+          await authenticationService.createTableEntry(supabaseUser!.email);
+        }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }
@@ -41,7 +45,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signInWithGoogle();
-        emit(AuthenticationSuccess());
+        bool response = await authenticationService.getUser();
+        if (response) {
+          emit(AuthenticationSuccess(userExist: true));
+        } else {
+          emit(AuthenticationSuccess(userExist: false));
+        }
+        if (supabaseUser != null) {
+          await authenticationService.createTableEntry(supabaseUser!.email);
+        }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }
@@ -52,7 +64,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signInWithFacebook();
-        emit(AuthenticationSuccess());
+        bool response = await authenticationService.getUser();
+        if (response) {
+          emit(AuthenticationSuccess(userExist: true));
+        } else {
+          emit(AuthenticationSuccess(userExist: false));
+        }
+        if (supabaseUser != null) {
+          await authenticationService.createTableEntry(supabaseUser!.email);
+        }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }
@@ -63,7 +83,15 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signInWithTwitter();
-        emit(AuthenticationSuccess());
+        bool response = await authenticationService.getUser();
+        if (response) {
+          emit(AuthenticationSuccess(userExist: true));
+        } else {
+          emit(AuthenticationSuccess(userExist: false));
+        }
+        if (supabaseUser != null) {
+          await authenticationService.createTableEntry(supabaseUser!.email);
+        }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }

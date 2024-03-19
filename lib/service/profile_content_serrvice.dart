@@ -10,8 +10,9 @@ class ProfileContentService {
   // CRUD pour le profil utlisateur
   Future<CustomUser> getProfile() async {
     try {
-      final response = await supabaseClient.from('user').select().eq('id', supabaseUser!.id).single();
+      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
       final CustomUser user = CustomUser.fromMap(response);
+      print('User: $user');
       return user;
     } catch (e) {
       throw Exception('Unable to get profile: $e');
@@ -21,13 +22,14 @@ class ProfileContentService {
   Future<void> updateProfile(CustomUser user) async {
     try {
       var userToInsert = {
-        'id': supabaseUser!.id,
+        'uuid': supabaseUser!.id,
+        'email': supabaseUser!.email,
         'profile_picture': user.profile_picture,
         'cover_picture': user.cover_picture,
         'name': user.name,
         'pseudo': user.pseudo,
       };
-      await supabaseClient.from('user').upsert([userToInsert]);
+      await supabaseClient.from('users').upsert([userToInsert]);
     } catch (e) {
       throw Exception('Unable to update profile: $e');
     }
@@ -43,29 +45,33 @@ class ProfileContentService {
   //#####################################################################
 
   // Fonction pour la gestion des images sur l'appareil de l'utilisateur
-  Future<String> uploadPicture() async {
+
+  Future<XFile?> selectImage() async {
+    final XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return pickedFile;
+    }
+    return null;
+  }
+
+  Future<String> uploadPicture(String type, XFile image) async {
     try {
-      final picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      final imageBytes = await image.readAsBytes();
+
       const uuid = Uuid();
+      final uuidString = uuid.v4();
+      final imagePath = '$uuidString.png';
 
-      if (image != null) {
-        final imageBytes = await image.readAsBytes();
-        final uuidString = uuid.v4();
-        final imagePath = 'profile/$uuidString.png';
-        await supabaseClient.storage.from('profiles').uploadBinary(
-              imagePath,
-              imageBytes,
-              fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
-            );
+      await supabaseClient.storage.from('Assets/image/other_user/$type').uploadBinary(
+            imagePath,
+            imageBytes,
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+          );
 
-        final imageUrl = supabaseClient.storage.from('profiles').getPublicUrl(imagePath);
-        return imageUrl;
-      } else {
-        throw Exception('No image selected');
-      }
+      final imageUrl = supabaseClient.storage.from('Assets/image/other_user/$type').getPublicUrl(imagePath);
+      return imageUrl;
     } catch (e) {
-      throw Exception('Unable to upload picture on the device: $e');
+      throw Exception('Unable to read the image as bytes: $e');
     }
   }
 }

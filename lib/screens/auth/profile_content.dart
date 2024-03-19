@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/auth/widgets/buttons.dart';
@@ -29,16 +30,20 @@ class _ProfileContentState extends State<ProfileContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileContentBloc, ProfileContentState>(
-      builder: (context, state) {
+    return BlocConsumer<ProfileContentBloc, ProfileContentState>(
+      listener: (context, state) {
         if (state is ProfileContentSuccess) {
-          firstNameController.text = state.user!.name.split(" ").first;
-          lastNameController.text = state.user!.name.split(' ').skip(1).join(' ');
-          pseudoController.text = state.user!.pseudo;
-          coverPictureUrl = state.user!.cover_picture;
-          profilePictureUrl = state.user!.profile_picture;
+          debugPrint("OOOK");
+          setState(() {
+            firstNameController.text = state.user!.name!.split(" ").first;
+            lastNameController.text = state.user!.name!.split(' ').skip(1).join(' ');
+            pseudoController.text = state.user!.pseudo;
+            coverPictureUrl = state.user!.cover_picture;
+            profilePictureUrl = state.user!.profile_picture;
+          });
         }
-        print("ProfileContent");
+      },
+      builder: (context, state) {
         return Scaffold(
           body: Container(
             width: double.infinity,
@@ -64,6 +69,7 @@ class _ProfileContentState extends State<ProfileContent> {
                 ),
                 Buttons(onPressed: () {
                   BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(
+                    id: supabaseUser!.id,
                     name: "${firstNameController.text} ${lastNameController.text}",
                     pseudo: pseudoController.text,
                     profile_picture: profilePictureUrl,

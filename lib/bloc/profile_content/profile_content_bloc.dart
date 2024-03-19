@@ -34,7 +34,6 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
 
       try {
         await profileContentService.deleteProfile();
-        emit(const ProfileContentSuccess(null));
       } catch (e) {
         emit(ProfileContentFailure(error: e.toString()));
       }
@@ -42,11 +41,20 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
 
     on<UploadProfilePicture>((event, emit) async {
       emit(ProfileContentLoading());
-
       try {
-        final imageUrl = await profileContentService.uploadPicture();
-        final updatedUser = state.user!.copyWith(profile_picture: imageUrl);
-        emit(ProfileContentSuccess(updatedUser));
+        final image = await profileContentService.selectImage();
+        if (image != null) {
+          final imageUrl = await profileContentService.uploadPicture("profile", image);
+          
+          if (state.user == null) {
+            final user = await profileContentService.getProfile();
+            final updatedUser = user.copyWith(profile_picture: imageUrl);
+            add(UpdateProfile(updatedUser));
+          } else {
+            final updatedUser = state.user!.copyWith(profile_picture: imageUrl);
+            add(UpdateProfile(updatedUser));
+          }
+        }
       } catch (e) {
         emit(ProfileContentFailure(error: e.toString()));
       }
@@ -54,11 +62,20 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
 
     on<UploadCoverPicture>((event, emit) async {
       emit(ProfileContentLoading());
-
       try {
-        final imageUrl = await profileContentService.uploadPicture();
-        final updatedUser = state.user!.copyWith(cover_picture: imageUrl);
-        emit(ProfileContentSuccess(updatedUser));
+        final image = await profileContentService.selectImage();
+        if (image != null) {
+          final imageUrl = await profileContentService.uploadPicture("cover", image);
+
+          if (state.user == null) {
+            final user = await profileContentService.getProfile();
+            final updatedUser = user.copyWith(cover_picture: imageUrl);
+            add(UpdateProfile(updatedUser));
+          } else {
+            final updatedUser = state.user!.copyWith(cover_picture: imageUrl);
+            add(UpdateProfile(updatedUser));
+          }
+        }
       } catch (e) {
         emit(ProfileContentFailure(error: e.toString()));
       }
