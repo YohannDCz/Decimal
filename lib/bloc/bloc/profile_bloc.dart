@@ -9,7 +9,7 @@ part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({required this.profileService, required this.profileContentService}) : super(ProfileInitial()) {
-    on<FetchAllPublications>((event, emit) async {
+    on<FetchProfileContent>((event, emit) async {
       emit(FetchLoading());
 
       try {
@@ -19,7 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final fetchStoriesSuccess = await profileService.getStoriesData();
         final fetchPicsSuccess = await profileService.getPicsData();
 
-        emit(FetchAllSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
+        emit(FetchProfileSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
       }

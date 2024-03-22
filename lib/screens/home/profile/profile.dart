@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
+import 'package:decimal/bloc/bloc/profile_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_contacts.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_description.dart';
@@ -16,7 +17,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String type = 'posts';
+
+  @override
+  initState() {
+    super.initState();
+    BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent());
+  }
 
   @override
   Widget build(BuildContext context) {

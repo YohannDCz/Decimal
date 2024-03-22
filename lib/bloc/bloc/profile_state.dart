@@ -11,8 +11,8 @@ final class ProfileInitial extends ProfileState {}
 
 final class FetchLoading extends ProfileState {}
 
-final class FetchAllSuccess extends ProfileState {
-  const FetchAllSuccess({required this.fetchStoriesSuccess, required this.fetchPicsSuccess, required this.fetchAllSuccess, required this.fetchDescriptionSuccess, required this.fetchContactSuccess});
+final class FetchProfileSuccess extends ProfileState {
+  const FetchProfileSuccess({required this.fetchStoriesSuccess, required this.fetchPicsSuccess, required this.fetchAllSuccess, required this.fetchDescriptionSuccess, required this.fetchContactSuccess});
 
   final CustomUser fetchDescriptionSuccess;
   final Map<String, dynamic> fetchContactSuccess;

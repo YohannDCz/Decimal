@@ -1,4 +1,4 @@
-import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -11,17 +11,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class ProfilePublications extends StatefulWidget {
-  const ProfilePublications({
+class FeedPublications extends StatefulWidget {
+  const FeedPublications({
     super.key,
   });
 
   @override
-  State<ProfilePublications> createState() => _ProfilePublicationsState();
+  State<FeedPublications> createState() => _FeedPublicationsState();
 }
 
-class _ProfilePublicationsState extends State<ProfilePublications> {
-  late CustomUser user;
+class _FeedPublicationsState extends State<FeedPublications> {
   late List<PublicationModel> publications;
   late List<PublicationItemModel> publicationItems;
   late List<CustomUser> users;
@@ -40,32 +39,31 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
   @override
   initState() {
     super.initState();
-    user = const CustomUser(id: '');
+
     publications = [];
     publicationItems = [];
     users = [];
     commentsAll = [];
     commentsUsers = [];
+
+    BlocProvider.of<FeedBloc>(context).add(FetchAllPublications());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileBloc, ProfileState>(
+    return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          setState(() {
-            user = state.fetchDescriptionSuccess;
-            publications = state.fetchAllSuccess['publications'];
-            publicationItems = state.fetchAllSuccess['publicationItems'];
-            users = state.fetchAllSuccess['users'];
-            commentsAll = state.fetchAllSuccess['comments'];
-            commentsUsers = state.fetchAllSuccess['commentsUsers'];
-          });
+        if (state is FetchAllSuccess) {
+          publications = state.fetchAllSuccess['publications'];
+          publicationItems = state.fetchAllSuccess['publicationItems'];
+          users = state.fetchAllSuccess['users'];
+          commentsAll = state.fetchAllSuccess['comments'];
+          commentsUsers = state.fetchAllSuccess['commentsUsers'];
         }
       },
       builder: (context, state) {
         return Skeletonizer(
-          enabled: publications.isEmpty,
+          enabled: state is FetchLoading,
           child: Container(
             color: AppColors.primaryBackground,
             width: double.infinity,
@@ -74,15 +72,17 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5,
+                itemCount:  state is FetchLoading ? 1 : 18,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
-                    PublicationModel publication = publications[index];
-                    PublicationItemModel publicationItem = publicationItems[index];
-                    CustomUser user = users[index];
-                    List<CommentModel> comments = commentsAll[index];
-                    List<CustomUser> commentUsers = commentsUsers[index];
+                    late final PublicationModel publication = publications[index];
+                    late final PublicationItemModel publicationItem = publicationItems[index];
+                    late final CustomUser user = users[index];
+                    late final List<CommentModel> comments = commentsAll[index];
+                    late final List<CustomUser> commentUsers = commentsUsers[index];
+          
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
+          
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
@@ -115,8 +115,8 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(user.name ?? '[suer_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                              Text(context.read<FeedService>().getDuration(publication.date_of_publication)?.toString() ?? "[x_time_ago]", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                              Text(user.name ?? 'John Doe', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                              Text(context.read<FeedService>().getDuration(publication.date_of_publication).toString(), style: Theme.of(context).primaryTextTheme.labelMedium),
                                             ],
                                           ),
                                         ],
@@ -133,7 +133,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         color: AppColors.primaryBackground,
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
-                                          child: Text(publicationItem.content ?? '[post_description]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                          child: Text(publicationItem.content ?? 'This is a post', style: Theme.of(context).primaryTextTheme.bodyMedium),
                                         ),
                                       )
                                     else if (publication.type == 'pics')
@@ -172,7 +172,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                             ),
                             if (publication.type != 'pics' && isNotDirty)
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                                 child: Reactions(container: false, publication_id: publication.id),
                               ),
                             Padding(
@@ -186,11 +186,11 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text.rich(
                                           TextSpan(
-                                            text: user.pseudo ?? _extractPseudo(user.name ?? '[user_pseudo]'),
+                                            text: user.pseudo ?? _extractPseudo(user.name ?? 'John Doe'),
                                             style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                                             children: [
                                               const TextSpan(text: ' '),
-                                              TextSpan(text: publicationItem.content ?? '[description_content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                              TextSpan(text: publicationItem.content ?? 'Content of the description', style: Theme.of(context).primaryTextTheme.bodyMedium),
                                             ],
                                           ),
                                         ),
@@ -226,7 +226,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                               padding: const EdgeInsets.only(bottom: 8.0),
                                               child: Text.rich(
                                                 TextSpan(
-                                                  text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? '[user_pseudo]'),
+                                                  text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? 'John Doe'),
                                                   style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                                                   children: [
                                                     const TextSpan(text: ' '),
@@ -274,13 +274,13 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         contentPadding: const EdgeInsets.only(left: 48.0, top: 8.0, right: 4.0, bottom: 8.0),
                                       ),
                                     ),
-                                    Positioned(
+                                    const Positioned(
                                       top: 10.0,
                                       left: 8.0,
                                       child: CircleAvatar(
                                         radius: 14.0,
                                         backgroundImage: NetworkImage(
-                                          user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
+                                          'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
                                         ),
                                       ),
                                     ),

@@ -4,6 +4,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class FeedStories extends StatefulWidget {
   const FeedStories({
@@ -15,9 +16,14 @@ class FeedStories extends StatefulWidget {
 }
 
 class _FeedStoriesState extends State<FeedStories> {
+  late List<PublicationModel> publications;
+  late List<CustomUser> users;
+
   @override
   initState() {
     super.initState();
+    publications = [];
+    users = [];
   }
 
   String _extractPseudo(String pseudo) {
@@ -26,105 +32,112 @@ class _FeedStoriesState extends State<FeedStories> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FeedBloc, FeedState>(
+    return BlocConsumer<FeedBloc, FeedState>(
+      listener: (context, state) {
+        if (state is FetchAllSuccess) {
+          setState(() {
+            publications = state.fetchAllSuccess['publications'];
+            users = state.fetchAllSuccess['users'];
+          });
+        }
+      },
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: SizedBox(
-            width: double.infinity,
-            height: 140.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                if (state is FetchAllSuccess) {
-                  PublicationModel publication = state.fetchStoriesSuccess['publications'][index];
-                  CustomUser user = state.fetchStoriesSuccess['users'][index];
-                  if (index == 0) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 4.0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/stories', arguments: publication.id);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColors.primary, width: 4.0),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: CircleAvatar(
-                                  radius: 36.0,
-                                  backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+        return Skeletonizer(
+          enabled: publications.isEmpty,
+          ignoreContainers: true,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 120.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  if (publications.isNotEmpty && index < publications.length) {
+                    PublicationModel publication = publications[index];
+                    CustomUser user = users[index];
+
+                    print(publication);
+                    print(user);
+          
+                    if (index == 0) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 4.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/stories', arguments: publication.id);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.primary, width: 4.0),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    radius: 36.0,
+                                    backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
-                          ],
+                              Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/stories', arguments: publication.id);
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.primary, width: 4.0),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    radius: 36.0,
+                                    backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                                  ),
+                                ),
+                              ),
+                              Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/stories', arguments: publication.id);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColors.primary, width: 4.0),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: CircleAvatar(
-                                  radius: 36.0,
-                                  backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
-                                ),
-                              ),
-                            ),
-                            Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Column(
+                    return Column(
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColors.primary, width: 4.0),
                             shape: BoxShape.circle,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Container(
-                              width: 72.0,
-                              height: 72.0,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: CircleAvatar(
+                              radius: 36.0,
+                              backgroundImage: NetworkImage('https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
                             ),
                           ),
                         ),
-                        Text("pseudo", style: Theme.of(context).primaryTextTheme.bodySmall),
+                        Text(_extractPseudo("John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
                       ],
-                    ),
-                  );
-                }
-              },
+                    );
+                  }
+                },
+              ),
             ),
           ),
         );

@@ -11,5 +11,5 @@ final class FetchPics extends ProfileEvent {}
 
 final class FetchStories extends ProfileEvent {}
 
-final class FetchAllPublications extends ProfileEvent {}
+final class FetchProfileContent extends ProfileEvent {}
 

@@ -1,8 +1,11 @@
 import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
+import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class Pics extends StatefulWidget {
   const Pics({super.key});
@@ -16,10 +19,15 @@ class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   late List<PublicationItemModel> publicationItems;
+  late List<PublicationModel> publications;
+  late List<CustomUser> users;
+
   @override
   initState() {
     super.initState();
     publicationItems = [];
+    publications = [];
+    users = [];
     BlocProvider.of<FeedBloc>(context).add(FetchPics());
   }
 
@@ -31,31 +39,52 @@ class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
       listener: (context, state) {
         if (state is FetchPicsSuccess) {
           setState(() {
+            publications = state.publications;
             publicationItems = state.publicationItem;
+            users = state.users;
           });
         }
       },
       builder: (context, state) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                height48,
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 2.0,
-                    mainAxisSpacing: 2.0,
-                  ),
-                  shrinkWrap: true,
-                  itemCount: publicationItems.length,
-                  itemBuilder: (context, index) {
-                    return Image.network(publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/placeholder_pics.png?t=2024-03-21T08%3A33%3A54.213Z', fit: BoxFit.cover);
-                  },
-                )
-              ],
+        return Skeletonizer(
+          enabled: publications.isEmpty,
+          containersColor: AppColors.accent3,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  height48,
+                  GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 2.0,
+                      mainAxisSpacing: 2.0,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: 18,
+                    itemBuilder: (context, index) {
+                      if (publicationItems.isNotEmpty && index < publicationItems.length) {
+                        return Hero(
+                          tag: 'MyHero${publicationItems[index].id}',
+                          child: Material(
+                            child: InkWell(
+                              onTap: () => Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
+                              child: Image.network(
+                                publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Image.asset('assets/images/placeholder.png', fit: BoxFit.cover);
+                      }
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         );

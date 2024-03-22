@@ -8,11 +8,9 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 
 class ProfileService {
-  final supabaseUser = supabaseClient.auth.currentUser!.id;
-
   Future<List<PublicationModel>> getPublications(String publication) async {
     try {
-      final response = await supabaseClient.from("publications").select().or('type.eq.$publication, user_uuid.eq.$supabaseUser').limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).eq('user_uuid', supabaseUser!.id).limit(18).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -40,7 +38,7 @@ class ProfileService {
   Future<List<CustomUser>> getPublicationUsers(String publicationType) async {
     try {
       // Obtention des publications filtrées par le type spécifié.
-      final response = await supabaseClient.from('publications').select('users(*)').or('type.eq.$publicationType, user_uuid.eq.$supabaseUser').limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).eq('user_uuid', supabaseUser!.id).limit(18).order('date_of_publication', ascending: false);
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
@@ -51,7 +49,7 @@ class ProfileService {
 
   Future<List<List<CommentModel>>> getComments(String publicationType) async {
     try {
-      final response = await supabaseClient.from('publications').select('comments(*)').or('type.eq.$publicationType, user_uuid.eq.$supabaseUser').limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).eq('user_uuid', supabaseUser!.id).limit(18).order('date_of_publication', ascending: false);
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
@@ -82,7 +80,7 @@ class ProfileService {
 
   Future<List<PublicationModel>> getAllPublications() async {
     try {
-      final response = await supabaseClient.from("publications").select().or('type.eq.posts, type.eq.pics, type.eq.videos, user_uuid.eq.$supabaseUser').limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('user_uuid', supabaseUser!.id).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -98,10 +96,8 @@ class ProfileService {
       for (var items in publications) {
         final response = await supabaseClient.from(items.type).select().eq('publication_id', items.id).single();
         final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
-        print(publicationModel);
         publicationItems.add(publicationModel);
       }
-      print(publicationItems);
       return publicationItems;
     } catch (e) {
       print('Unable to get the publications or the publication item: $e');
@@ -112,7 +108,7 @@ class ProfileService {
   Future<List<CustomUser>> getAllPublicationUsers() async {
     try {
       // Obtention des publications filtrées par le type spécifié.
-      final response = await supabaseClient.from('publications').select('users(*)').or('type.eq.posts, type.eq.pics, type.eq.videos, user_uuid.eq.$supabaseUser').limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('users(*)').eq('user_uuid', supabaseUser!.id).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
@@ -123,7 +119,7 @@ class ProfileService {
 
   Future<List<List<CommentModel>>> getAllComments() async {
     try {
-      final response = await supabaseClient.from('publications').select('comments(*)').eq('user_uuid', supabaseUser).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('comments(*)').eq('user_uuid', supabaseUser!.id).limit(5).order('date_of_publication', ascending: false);
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
@@ -154,7 +150,7 @@ class ProfileService {
 
   Future<List<CustomUser>> getContacts(String contactType) async {
     try {
-      final response = await supabaseClient.from(contactType).select().eq('user_uuid', supabaseUser);
+      final response = await supabaseClient.from(contactType).select().eq('user_uuid', supabaseUser!.id);
       final contacts = (response as List).map((e) => ContactModel.fromMap(e as Map<String, dynamic>)).toList();
       final List<CustomUser> users = [];
       for (var contact in contacts) {
@@ -220,7 +216,6 @@ class ProfileService {
       final comments = await getAllComments();
       final commentsUsers = await getAllCommentUsers();
       final publicationData = {'publications': publications, 'publicationItems': publicationItems, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
-      print(publicationItems);
       return publicationData;
     } catch (e) {
       print('Unable to get the publication data: $e');

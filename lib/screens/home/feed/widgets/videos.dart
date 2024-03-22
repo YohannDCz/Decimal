@@ -1,6 +1,5 @@
 import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Videos extends StatefulWidget {
@@ -60,104 +60,182 @@ class _VideosState extends State<Videos> with AutomaticKeepAliveClientMixin {
         }
       },
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Container(
-            color: AppColors.primaryBackground,
-            width: double.infinity,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: publicationItems.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Column(
-                            children: [
-                              Column(
+        return Skeletonizer(
+          enabled: publications.isEmpty,
+          child: SingleChildScrollView(
+            child: Container(
+              color: AppColors.primaryBackground,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 48.0, bottom: 4.0),
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state is FetchLoading ? 3 : 18,
+                      itemBuilder: (context, index) {
+                        if (publications.isNotEmpty && index < publications.length) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 8.0),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(6.0),
-                                                child: Image.network(
-                                                  users[index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
-                                                  width: 48.0,
-                                                  height: 48.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                            Row(
                                               children: [
-                                                Text(users[index].name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                                Text(context.read<FeedService>().getDuration(publications[index].date_of_publication)?.toString() ?? "[x_time_ago]", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 8.0),
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(6.0),
+                                                    child: Image.network(
+                                                      users[index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
+                                                      width: 48.0,
+                                                      height: 48.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(users[index].name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                                    Text(context.read<FeedService>().getDuration(publications[index].date_of_publication)?.toString() ?? "[x_time_ago]", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                  ],
+                                                ),
                                               ],
                                             ),
+                                            const Icon(Icons.more_vert),
                                           ],
                                         ),
-                                        const Icon(Icons.more_vert),
-                                      ],
-                                    ),
+                                      ),
+                                      YoutubePlayer(
+                                        controller: YoutubePlayerController(
+                                          initialVideoId: _extractId(publicationItems[index].url ?? "https://youtu.be/dQw4w9WgXcQ?si=C1RoFT6luIcZHlN-"), // Add videoID.
+                                          flags: const YoutubePlayerFlags(
+                                            autoPlay: false,
+                                            mute: false,
+                                          ),
+                                        ),
+                                        showVideoProgressIndicator: true,
+                                        onReady: () {
+                                          print('Player is ready.');
+                                        },
+                                      )
+                                    ],
                                   ),
-                                  YoutubePlayer(
-                                    controller: YoutubePlayerController(
-                                      initialVideoId: _extractId(publicationItems[index].url ?? "https://youtu.be/dQw4w9WgXcQ?si=C1RoFT6luIcZHlN-"), // Add videoID.
-                                      flags: const YoutubePlayerFlags(
-                                        autoPlay: false,
-                                        mute: false,
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                                    child: Reactions(container: false, publication_id: publications[index].id),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text: users[index].pseudo ?? _extractPseudo(users[index].name ?? '[user_pseudo]'),
+                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                          children: [
+                                            const TextSpan(text: ' '),
+                                            TextSpan(text: publicationItems[index].title ?? '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    showVideoProgressIndicator: true,
-                                    onReady: () {
-                                      print('Player is ready.');
-                                    },
-                                  )
+                                  ),
                                 ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                                child: Reactions(container: false, publication_id: publications[index].id),
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text.rich(
-                                    TextSpan(
-                                      text: users[index].pseudo ?? _extractPseudo(users[index].name ?? '[user_pseudo]'),
-                                      style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                      children: [
-                                        const TextSpan(text: ' '),
-                                        TextSpan(text: publicationItems[index].content ?? '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                      ],
+                              child: Column(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 8.0),
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(6.0),
+                                                    child: Image.network(
+                                                      'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
+                                                      width: 48.0,
+                                                      height: 48.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text('[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                                    Text("2h", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            const Icon(Icons.more_vert),
+                                          ],
+                                        ),
+                                      ),
+                                      AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: Image.asset("assets/images/placeholder.png", fit: BoxFit.cover, width: double.infinity),
+                                      ),
+                                    ],
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 8.0, left: 8.0),
+                                    child: Reactions(container: false, publication_id: 1),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text: '[user_pseudo]',
+                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                          children: [
+                                            const TextSpan(text: ' '),
+                                            TextSpan(text: '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

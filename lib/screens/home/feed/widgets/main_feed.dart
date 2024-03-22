@@ -2,7 +2,7 @@ import 'package:decimal/config/theme.dart';
 import 'package:decimal/screens/home/feed/widgets/feed_stories.dart';
 import 'package:flutter/material.dart';
 
-import 'feed_publications.dart';
+import 'main_feed_publications.dart';
 
 class MainFeed extends StatefulWidget {
   const MainFeed({super.key, required ScrollController scrollController, required searchBarfocusNode})

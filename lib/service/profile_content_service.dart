@@ -13,7 +13,6 @@ class ProfileContentService {
     try {
       final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
       final CustomUser user = CustomUser.fromMap(response);
-      print('User: $user');
       return user;
     } catch (e) {
       print('Unable to get profile: $e');

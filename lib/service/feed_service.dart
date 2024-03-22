@@ -93,10 +93,8 @@ class FeedService {
       for (var items in publications) {
         final response = await supabaseClient.from(items.type).select().eq('publication_id', items.id).single();
         final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
-        print(publicationModel);
         publicationItems.add(publicationModel);
       }
-      print(publicationItems);
       return publicationItems;
     } catch (e) {
       print('Unable to get the publications or the publication item: $e');
@@ -147,7 +145,7 @@ class FeedService {
     }
   }
 
-  Future<int> getReactions(String reactionType, int publicationId) async {
+  Future<int> getReactions(String reactionType, int? publicationId) async {
     try {
       final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
       return response.length;
@@ -157,8 +155,8 @@ class FeedService {
     }
   }
 
-  String? getDuration(DateTime time) {
-    final duration = DateTime(2029).difference(time);
+  String? getDuration(DateTime? time) {
+    final duration = DateTime(2029).difference(time!);
     if (duration.inDays > 365) {
       return "${(duration.inDays / 365).floor()}y"; // years
     } else if (duration.inDays >= 30) {
@@ -178,13 +176,14 @@ class FeedService {
 
   Future<Map<String, dynamic>> getStoriesData() async {
     try {
-    final publications = await getPublications("stories");
-    final stories = await getPublicationItems("stories");
-    final users = await getPublicationUsers("stories");
-    final comments = await getComments("stories");
-    final commentsUsers = await getCommentUsers("stories");
-    final storiesData = {'publications': publications, 'stories': stories, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
-    return storiesData;
+      final publications = await getPublications("stories");
+      final stories = await getPublicationItems("stories");
+      final users = await getPublicationUsers("stories");
+      final comments = await getComments("stories");
+      final commentsUsers = await getCommentUsers("stories");
+      print(stories);
+      final storiesData = {'publications': publications, 'stories': stories, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
+      return storiesData;
     } catch (e) {
       print('Unable to get the stories data: $e');
       throw Exception('Unable to get the stories data: $e');
@@ -193,14 +192,13 @@ class FeedService {
 
   Future<Map<String, dynamic>> getPublicationData() async {
     try {
-    final publications = await getAllPublications();
-    final publicationItems = await getAllPublicationItems();
-    final users = await getAllPublicationUsers();
-    final comments = await getAllComments();
-    final commentsUsers = await getAllCommentUsers();
-    final publicationData = {'publications': publications, 'publicationItems': publicationItems, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
-    print(publicationItems);
-    return publicationData;
+      final publications = await getAllPublications();
+      final publicationItems = await getAllPublicationItems();
+      final users = await getAllPublicationUsers();
+      final comments = await getAllComments();
+      final commentsUsers = await getAllCommentUsers();
+      final publicationData = {'publications': publications, 'publicationItems': publicationItems, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
+      return publicationData;
     } catch (e) {
       print('Unable to get the publication data: $e');
       throw Exception('Unable to get the publication data: $e');

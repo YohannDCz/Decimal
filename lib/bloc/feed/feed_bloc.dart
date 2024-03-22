@@ -12,7 +12,7 @@ part 'feed_state.dart';
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FeedBloc({required this.feedService}) : super(FetchInitial()) {
     on<FetchPosts>((event, emit) async {
-      // emit(FetchLoading());
+      emit(FetchLoading());
 
       try {
         final publications = await feedService.getPublications("posts");
@@ -26,7 +26,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     });
     on<FetchPics>((event, emit) async {
-      // emit(FetchLoading());
+      emit(FetchLoading());
 
       try {
         final publications = await feedService.getPublications("pics");
@@ -41,7 +41,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     });
 
     on<FetchVideos>((event, emit) async {
-      // emit(FetchLoading());
+      emit(FetchLoading());
 
       try {
         final publications = await feedService.getPublications("videos");
@@ -56,7 +56,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     });
 
     on<FetchStories>((event, emit) async {
-      // emit(FetchLoading());
+      emit(FetchLoading());
 
       try {
         final publications = await feedService.getPublications("stories");
@@ -71,7 +71,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     });
 
     on<FetchAllPublications>((event, emit) async {
-      // emit(FetchLoading());
+      emit(FetchLoading());
 
       try {
         final fetchAllSuccess = await feedService.getPublicationData();

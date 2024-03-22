@@ -24,7 +24,7 @@ class PublicationModel extends Equatable {
     return PublicationModel(
       id: map["id"] != null ? map['id'] as int : 0,
       type: map['type'] != null ? map['type'] as String : "",
-      date_of_publication: map['date_of_publication'] != null ? DateTime.parse(map['date_of_publication'] as String) : DateTime.now(),
+      date_of_publication: map['date_of_publication'] != null ? DateTime.parse(map['date_of_publication'] as String) : DateTime(2029),
       location: map["location"] != null ? map['location'] as String : "",
       user_uuid: map['user_uuid'] != null ? map['user_uuid'] as String : "",
     );
