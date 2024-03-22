@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:decimal/models/user_model.dart';
-import 'package:decimal/service/profile_content_serrvice.dart';
+import 'package:decimal/service/profile_content_service.dart';
 import 'package:equatable/equatable.dart';
 
 part 'profile_content_event.dart';
@@ -80,6 +80,7 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
         emit(ProfileContentFailure(error: e.toString()));
       }
     });
+
   }
   ProfileContentService profileContentService;
 }

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:decimal/screens/home/feed.dart';
-import 'package:decimal/screens/home/profile.dart';
+import 'package:decimal/screens/home/feed/feed.dart';
+import 'package:decimal/screens/home/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/theme.dart';

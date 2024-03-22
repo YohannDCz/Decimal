@@ -23,6 +23,7 @@ class AuthenticationService {
 
   Future createTableEntry(email) async {
     if (supabaseAuth.currentSession != null) {
+      
       var userToInsert = {
         'uuid': supabaseUser!.id,
         'email': email,

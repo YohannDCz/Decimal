@@ -23,3 +23,9 @@ final class DeleteProfile extends ProfileContentEvent {}
 final class UploadProfilePicture extends ProfileContentEvent {}
 
 final class UploadCoverPicture extends ProfileContentEvent {}
+
+final class GetContacts extends ProfileContentEvent {}
+
+final class GetFollowers extends ProfileContentEvent {}
+
+final class GetFollowings extends ProfileContentEvent {}

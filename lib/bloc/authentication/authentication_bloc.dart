@@ -27,9 +27,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       try {
         await authenticationService.signUpWithEmail(event.user);
         emit(AuthenticationSuccess(userExist: false));
-        if (supabaseUser != null) {
-          await authenticationService.createTableEntry(supabaseUser!.email);
-        }
+        await authenticationService.createTableEntry(supabaseUser!.email);
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }

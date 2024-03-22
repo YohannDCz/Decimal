@@ -17,3 +17,5 @@ final class FetchStories extends FeedEvent {
 }
 
 final class FetchUsers extends FeedEvent {}
+
+final class FetchAllPublications extends FeedEvent {}

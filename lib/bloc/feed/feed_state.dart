@@ -12,48 +12,65 @@ final class FetchInitial extends FeedState {}
 final class FetchLoading extends FeedState {}
 
 final class FetchPostsSuccess extends FeedState {
-  const FetchPostsSuccess({required this.users, required this.publications, required this.publicationItem});
+  const FetchPostsSuccess({required this.users, required this.publications, required this.publicationItem, required this.comments, required this.commentsUsers});
 
   final List<CustomUser> users;
   final List<PublicationModel> publications;
   final List<PublicationItemModel> publicationItem;
+  final List<List<CommentModel>?> comments;
+  final List<List<CustomUser>?> commentsUsers;
 
   @override
-  List<Object> get props => [users, publications, publicationItem];
+  List<Object?> get props => [users, publications, publicationItem, comments];
 }
   
-
 final class FetchPicsSuccess extends FeedState {
-  const FetchPicsSuccess({required this.publications, required this.users, required this.publicationItem});
+  const FetchPicsSuccess({required this.users, required this.publications, required this.publicationItem, required this.comments, required this.commentsUsers});
 
-  final List<PublicationModel> publications;
   final List<CustomUser> users;
+  final List<PublicationModel> publications;
   final List<PublicationItemModel> publicationItem;
+  final List<List<CommentModel>?> comments; 
+  final List<List<CustomUser>?> commentsUsers;
 
   @override
-  List<Object> get props => [publications, users, publicationItem];
+  List<Object?> get props => [users, publications, publicationItem, comments];
 }
 
 final class FetchVideosSuccess extends FeedState {
-  const FetchVideosSuccess({required this.publications, required this.users, required this.publicationItem});
+  const FetchVideosSuccess({required this.users, required this.publications, required this.publicationItem, required this.comments, required this.commentsUsers});
 
-  final List<PublicationModel> publications;
   final List<CustomUser> users;
+  final List<PublicationModel> publications;
   final List<PublicationItemModel> publicationItem;
+  final List<List<CommentModel>?> comments;
+  final List<List<CustomUser>?> commentsUsers;
 
   @override
-  List<Object> get props => [publications, users,   publicationItem];
+  List<Object?> get props => [users, publications, publicationItem, comments];
 }
 
 final class FetchStoriesSuccess extends FeedState {
-  const FetchStoriesSuccess({required this.publications, required this.users, required this.publicationItem});
+  const FetchStoriesSuccess({required this.users, required this.publications, required this.publicationItem, required this.comments, required this.commentsUsers});
 
-  final List<PublicationModel> publications;
   final List<CustomUser> users;
+  final List<PublicationModel> publications;
   final List<PublicationItemModel> publicationItem;
+  final List<List<CommentModel>?> comments;
+  final List<List<CustomUser>?> commentsUsers;
 
   @override
-  List<Object> get props => [publications, users, publicationItem];
+  List<Object?> get props => [users, publications, publicationItem, comments];
+}
+
+final class FetchAllSuccess extends FeedState {
+  const FetchAllSuccess({required this.fetchAllSuccess, required this.fetchStoriesSuccess});
+
+  final Map<String, dynamic> fetchAllSuccess;
+  final Map<String, dynamic> fetchStoriesSuccess;
+
+  @override
+  List<Object?> get props => [fetchAllSuccess, fetchStoriesSuccess];
 }
 
 final class FetchFailure extends FeedState {

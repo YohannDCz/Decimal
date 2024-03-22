@@ -1,5 +1,4 @@
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
-import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,21 +28,30 @@ class _SignInEmailState extends State<SignInEmail> {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(gradient: AppColors.gradient),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const AuthTitle(label: "Sign in with email"),
-            height16,
-            EmailInput(hint: "Enter email address", controller: emailController),
-            height12,
-            PasswordInput(hint: "Enter password", controller: passwordController),
-            height24,
-            _submitButton(context),
-            height32,
-            _goToNetworksLogin(context, bodySmall),
-          ],
+        child: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state is AuthenticationSuccess) {
+              if (state.userExist!) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              }
+            }
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const AuthTitle(label: "Sign in with email"),
+              height16,
+              EmailInput(hint: "Enter email address", controller: emailController),
+              height12,
+              PasswordInput(hint: "Enter password", controller: passwordController),
+              height24,
+              _submitButton(context),
+              height32,
+              _goToNetworksLogin(context, bodySmall),
+            ],
+          ),
         ),
       ),
     );
@@ -51,33 +59,32 @@ class _SignInEmailState extends State<SignInEmail> {
 
   InkWell _goToNetworksLogin(BuildContext context, TextStyle? bodySmall) {
     return InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/signin', (route) => false);
-              },
-              child: Text("Sign in with social network", style: bodySmall!.copyWith(color: Colors.white, decoration: TextDecoration.underline)));
+        onTap: () {
+          Navigator.of(context).pushNamedAndRemoveUntil('/signin', (route) => false);
+        },
+        child: Text("Sign in with social network", style: bodySmall!.copyWith(color: Colors.white, decoration: TextDecoration.underline)));
   }
 
   SizedBox _submitButton(BuildContext context) {
     return SizedBox(
-            width: 280.0,
-            height: 50.0,
-            child: ElevatedButton(
-              onPressed: () {
-                BlocProvider.of<AuthenticationBloc>(context).add(SignInWithEmail(
-                  user: AppUser(email: emailController.text, password: passwordController.text),
-                ));
-                if (supabaseSession != null) {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(99.0),
-                ),
-              ),
-              child: Text("Sign In", style: TextStyle(color: AppColors.white)),
-            ),
-          );
+      width: 280.0,
+      height: 50.0,
+      child: ElevatedButton(
+        onPressed: () {
+          BlocProvider.of<AuthenticationBloc>(context).add(SignInWithEmail(
+            user: AppUser(email: emailController.text, password: passwordController.text),
+          ));
+
+          Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(99.0),
+          ),
+        ),
+        child: Text("Sign In", style: TextStyle(color: AppColors.white)),
+      ),
+    );
   }
 }

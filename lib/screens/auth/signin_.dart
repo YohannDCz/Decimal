@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +22,11 @@ class _SignInState extends State<SignIn> {
   @override
   initState() {
     super.initState();
-    // supabaseAuth.onAuthStateChange.listen((auth) {
-    //   if (auth.session != null) {
-    //     Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-    //   }
-    // });
+    supabaseAuth.onAuthStateChange.listen((auth) {
+      if (auth.session != null) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      }
+    });
   }
 
   @override
@@ -45,12 +46,12 @@ class _SignInState extends State<SignIn> {
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationSuccess) {
-              // if (state.userExist!) {
-              //   Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-              // } else {
+              if (state.userExist!) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              } else {
               Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
             }
-            // }
+            }
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

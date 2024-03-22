@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/models/user_model.dart';
-import 'package:decimal/service/profile_content_serrvice.dart';
+import 'package:decimal/service/profile_content_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

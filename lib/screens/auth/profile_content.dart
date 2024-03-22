@@ -37,7 +37,7 @@ class _ProfileContentState extends State<ProfileContent> {
           setState(() {
             firstNameController.text = state.user!.name!.split(" ").first;
             lastNameController.text = state.user!.name!.split(' ').skip(1).join(' ');
-            pseudoController.text = state.user!.pseudo;
+            pseudoController.text = state.user!.pseudo!;
             coverPictureUrl = state.user!.cover_picture;
             profilePictureUrl = state.user!.profile_picture;
           });
