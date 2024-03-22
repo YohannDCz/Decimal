@@ -4,6 +4,14 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>AppAuthCore_Privacy.bundle/Info.plist</key>
+		<data>
+		0JlbUjve5B3xH42dm/TAe1oCTss=
+		</data>
+		<key>AppAuthCore_Privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		MCDRptixYfA+qALBX9b4uxq3rwo=
+		</data>
 		<key>Headers/AppAuth-umbrella.h</key>
 		<data>
 		or0uc+5fBhvuF05zNuLoQ70WHjQ=
@@ -22,7 +30,7 @@
 		</data>
 		<key>Headers/OIDAuthState.h</key>
 		<data>
-		3WY55yU8xkDmxCC7TuTCe3l4rck=
+		1le346h3D2y5xQry6dGQZZMsPek=
 		</data>
 		<key>Headers/OIDAuthStateChangeDelegate.h</key>
 		<data>
@@ -34,11 +42,11 @@
 		</data>
 		<key>Headers/OIDAuthorizationRequest.h</key>
 		<data>
-		U4D9AKQ0Xat1gLayx5p8agK1jaE=
+		NA3sdbt/FFlz0/PwJbliZmr94Hk=
 		</data>
 		<key>Headers/OIDAuthorizationResponse.h</key>
 		<data>
-		y3Urbnge7ISUnQLFCCH3jzkZaZQ=
+		AKthHL4VxFj6lRuxzIDHuJLPavE=
 		</data>
 		<key>Headers/OIDAuthorizationService+IOS.h</key>
 		<data>
@@ -82,7 +90,7 @@
 		</data>
 		<key>Headers/OIDExternalUserAgentIOS.h</key>
 		<data>
-		46iSjkTOhJs21KJIV8+f8ZfN7YI=
+		mwYfWWZKB4RqnpJVlYT1iAYb31k=
 		</data>
 		<key>Headers/OIDExternalUserAgentIOSCustomBrowser.h</key>
 		<data>
@@ -138,7 +146,7 @@
 		</data>
 		<key>Headers/OIDTokenRequest.h</key>
 		<data>
-		B2wA2sE1X8LrJW4zd/knCuWgRvs=
+		tUs0FLrgeWdWETBPOBjaVK0qM9I=
 		</data>
 		<key>Headers/OIDTokenResponse.h</key>
 		<data>
@@ -158,7 +166,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		eA4Gr69c7C7ZpTp60VbwZDACRN8=
+		TMO9UYIBxb05iqMz5QD9YByCziI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -167,6 +175,28 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>AppAuthCore_Privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			0JlbUjve5B3xH42dm/TAe1oCTss=
+			</data>
+			<key>hash2</key>
+			<data>
+			chAJifhcx3iH3xmUyUr7bywgVq81G5SpV/Sok72q/Hk=
+			</data>
+		</dict>
+		<key>AppAuthCore_Privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MCDRptixYfA+qALBX9b4uxq3rwo=
+			</data>
+			<key>hash2</key>
+			<data>
+			Wt6WL6rqHt273QbEz4qHLOxVT2TFWgDgATYATTeOHO0=
+			</data>
+		</dict>
 		<key>Headers/AppAuth-umbrella.h</key>
 		<dict>
 			<key>hash</key>
@@ -215,11 +245,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3WY55yU8xkDmxCC7TuTCe3l4rck=
+			1le346h3D2y5xQry6dGQZZMsPek=
 			</data>
 			<key>hash2</key>
 			<data>
-			iyxdIZ8RJLjcXLFXpN7j/QllsrVngY7btYb3ffsp6jc=
+			vsRPK92lw+piqe+QeHSZw+XfRMTDO8Y4b3Tdzxw+R1I=
 			</data>
 		</dict>
 		<key>Headers/OIDAuthStateChangeDelegate.h</key>
@@ -248,22 +278,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			U4D9AKQ0Xat1gLayx5p8agK1jaE=
+			NA3sdbt/FFlz0/PwJbliZmr94Hk=
 			</data>
 			<key>hash2</key>
 			<data>
-			CQp6TRmIZ4p0NTgdvPFcbkxOcHCckOMqoa2eYONTqSo=
+			FVFKSLG4XIxvxD/VyapBPKHg+8PxHWvWekCZmkoAhoU=
 			</data>
 		</dict>
 		<key>Headers/OIDAuthorizationResponse.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			y3Urbnge7ISUnQLFCCH3jzkZaZQ=
+			AKthHL4VxFj6lRuxzIDHuJLPavE=
 			</data>
 			<key>hash2</key>
 			<data>
-			7x0V5WWmlRGjllH0ct+1wxjR1fBp9pHVoSNqJY86hYM=
+			SFq2NuvrjXCISI/gCf2uhPzUZLgMyQ5S46heZgPA5/k=
 			</data>
 		</dict>
 		<key>Headers/OIDAuthorizationService+IOS.h</key>
@@ -380,11 +410,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			46iSjkTOhJs21KJIV8+f8ZfN7YI=
+			mwYfWWZKB4RqnpJVlYT1iAYb31k=
 			</data>
 			<key>hash2</key>
 			<data>
-			GaXXpUKkH4itu8GuR6Esv4BkjqhQvb1IIC93GdZSFpk=
+			tN/4irirgU6+FBj61GE7LB1NCHqt2Fx9CuDIQC0t51M=
 			</data>
 		</dict>
 		<key>Headers/OIDExternalUserAgentIOSCustomBrowser.h</key>
@@ -534,11 +564,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			B2wA2sE1X8LrJW4zd/knCuWgRvs=
+			tUs0FLrgeWdWETBPOBjaVK0qM9I=
 			</data>
 			<key>hash2</key>
 			<data>
-			97HGQDFPjXnFgutXm7gzo+Uon9sDp8XEpONlEnSSgPM=
+			58ocSfs1PLNFNehd8obHEqXdQ4/hg5ua7eR2V06eTo4=
 			</data>
 		</dict>
 		<key>Headers/OIDTokenResponse.h</key>

@@ -1,18 +1,18 @@
 PODS:
   - app_links (0.0.1):
     - Flutter
-  - AppAuth (1.6.2):
-    - AppAuth/Core (= 1.6.2)
-    - AppAuth/ExternalUserAgent (= 1.6.2)
-  - AppAuth/Core (1.6.2)
-  - AppAuth/ExternalUserAgent (1.6.2):
+  - AppAuth (1.7.2):
+    - AppAuth/Core (= 1.7.2)
+    - AppAuth/ExternalUserAgent (= 1.7.2)
+  - AppAuth/Core (1.7.2)
+  - AppAuth/ExternalUserAgent (1.7.2):
     - AppAuth/Core
   - connectivity (0.0.1):
     - Flutter
     - Reachability
   - Flutter (1.0.0)
   - flutter_appauth (0.0.1):
-    - AppAuth (= 1.6.2)
+    - AppAuth (= 1.7.2)
     - Flutter
   - flutter_inappwebview_ios (0.0.1):
     - Flutter
@@ -27,7 +27,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - Reachability (3.2)
+  - Reachability (3.7.5)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -88,22 +88,22 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  app_links: 5ef33d0d295a89d9d16bb81b0e3b0d5f70d6c875
-  AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  app_links: e70ca16b4b0f88253b3b3660200d4a10b4ea9795
+  AppAuth: ca2458caccec349cc1e26d8d9e8fd7d22f1d01f3
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: 0863b1f33110b410213e736aead4a6727303f509
+  flutter_appauth: c5e36e22af413d4b5b2997d61c97f7350d9bd25b
   flutter_inappwebview_ios: 97215cf7d4677db55df76782dbd2930c5e1c1ea0
   image_picker_ios: b545a5f16c0fa88e3ecbbce3ed4de45567a8ec18
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  Reachability: 44d15955cdaee6cef699877e1f6647dd6f6698cc
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
   video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
   webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 978dd492a93a8ef4ec2dc2b3631de447af34068a
 
 COCOAPODS: 1.15.2
