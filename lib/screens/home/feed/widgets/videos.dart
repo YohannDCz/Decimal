@@ -7,7 +7,6 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -18,10 +17,7 @@ class Videos extends StatefulWidget {
   State<Videos> createState() => _VideosState();
 }
 
-class _VideosState extends State<Videos> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _VideosState extends State<Videos> {
   late List<PublicationModel> publications;
   late List<PublicationItemModel> publicationItems;
   late List<CustomUser> users;
@@ -49,7 +45,6 @@ class _VideosState extends State<Videos> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
         if (state is FetchVideosSuccess) {
@@ -69,7 +64,6 @@ class _VideosState extends State<Videos> with AutomaticKeepAliveClientMixin {
               width: double.infinity,
               child: Column(
                 children: [
-                  const Gap(46),
                   if (state is FetchLoading) LinearProgressIndicator(color: AppColors.secondary, minHeight: 1),
                   Padding(
                     padding: const EdgeInsets.all(4.0),

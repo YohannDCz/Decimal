@@ -7,7 +7,6 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Posts extends StatefulWidget {
@@ -52,7 +51,6 @@ class _PostsState extends State<Posts> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Gap(46),
                   if (state is FetchLoading) LinearProgressIndicator(color: AppColors.alternate, minHeight: 1),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -65,7 +63,7 @@ class _PostsState extends State<Posts> {
                           final CustomUser user = users[index];
                           final PublicationItemModel publicationItem = publicationItems[index];
                           final PublicationModel publication = publications[index];
-                    
+
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 4.0),
                             child: Container(

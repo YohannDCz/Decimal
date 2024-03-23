@@ -5,7 +5,6 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Pics extends StatefulWidget {
@@ -15,10 +14,7 @@ class Pics extends StatefulWidget {
   State<Pics> createState() => _PicsState();
 }
 
-class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _PicsState extends State<Pics> {
   late List<PublicationItemModel> publicationItems;
   late List<PublicationModel> publications;
   late List<CustomUser> users;
@@ -34,8 +30,6 @@ class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
         if (state is FetchPicsSuccess) {
@@ -55,7 +49,6 @@ class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Gap(46),
                   if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
                   Padding(
                     padding: const EdgeInsets.only(top: 4.0),

@@ -3,7 +3,6 @@ import 'package:decimal/config/theme.dart';
 import 'package:decimal/screens/home/feed/widgets/feed_stories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 import 'main_feed_publications.dart';
 
@@ -19,9 +18,7 @@ class MainFeed extends StatefulWidget {
   State<MainFeed> createState() => _MainFeedState();
 }
 
-class _MainFeedState extends State<MainFeed> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _MainFeedState extends State<MainFeed> {
 
   String type = 'videos';
 
@@ -37,15 +34,17 @@ class _MainFeedState extends State<MainFeed> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BlocBuilder<FeedBloc, FeedState>(
       builder: (context, state) {
         return SingleChildScrollView(
           controller: widget._scrollController,
           child: Column(
             children: [
-              const Gap(46),
-              if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary,minHeight: 1,),
+              if (state is FetchLoading)
+                LinearProgressIndicator(
+                  color: AppColors.primary,
+                  minHeight: 1,
+                ),
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(

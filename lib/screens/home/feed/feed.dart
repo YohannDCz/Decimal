@@ -1,9 +1,9 @@
 import 'package:decimal/screens/home/feed/widgets/main_feed.dart';
 import 'package:decimal/screens/home/feed/widgets/pics.dart';
 import 'package:decimal/screens/home/feed/widgets/posts.dart';
+import 'package:decimal/screens/home/feed/widgets/search_tab_bar.dart';
 import 'package:decimal/screens/home/feed/widgets/stories.dart';
 import 'package:decimal/screens/home/feed/widgets/videos.dart';
-import 'package:decimal/screens/home/feed/widgets/search_tab_bar.dart';
 import 'package:flutter/material.dart';
 
 class Feed extends StatefulWidget {
@@ -48,27 +48,27 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        TabBarView(
-          controller: _tabController,
-          children: [
-            MainFeed(
-              scrollController: _scrollController,
-              searchBarfocusNode: _searchBarFocusNode,
-            ),
-            const Stories(),
-            const Videos(),
-            const Pics(),
-            const Posts(),
-          ],
-        ),
-        SearchTabBar(
-          afficherTabBar: _displayTabBar,
-          tabController: _tabController,
-          searchBarFocusNode: _searchBarFocusNode,
-        ),
-      ],
+    return Scaffold(
+      bottomNavigationBar: _displayTabBar
+          ? SearchTabBar(
+              afficherTabBar: _displayTabBar,
+              tabController: _tabController,
+              searchBarFocusNode: _searchBarFocusNode,
+            )
+          : null,
+      body: IndexedStack(
+        index: 0,
+        children: [
+          MainFeed(
+            scrollController: _scrollController,
+            searchBarfocusNode: _searchBarFocusNode,
+          ),
+          const Stories(),
+          const Posts(),
+          const Pics(),
+          const Videos(),
+        ],
+      ),
     );
   }
 }
