@@ -7,6 +7,7 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Posts extends StatefulWidget {
@@ -24,10 +25,10 @@ class _PostsState extends State<Posts> {
   @override
   initState() {
     super.initState();
-    BlocProvider.of<FeedBloc>(context).add(FetchPosts());
     publications = [];
     publicationItems = [];
     users = [];
+    BlocProvider.of<FeedBloc>(context).add(FetchPosts());
   }
 
   @override
@@ -47,14 +48,15 @@ class _PostsState extends State<Posts> {
           enabled: publications.isEmpty,
           child: Container(
             height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 64,
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
             color: AppColors.primaryBackground,
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 48.0),
-                child: Column(
-                  children: [
-                    ListView.builder(
+              child: Column(
+                children: [
+                  const Gap(46),
+                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.alternate, minHeight: 1),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: 10,
@@ -63,7 +65,7 @@ class _PostsState extends State<Posts> {
                           final CustomUser user = users[index];
                           final PublicationItemModel publicationItem = publicationItems[index];
                           final PublicationModel publication = publications[index];
-
+                    
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 4.0),
                             child: Container(
@@ -95,7 +97,7 @@ class _PostsState extends State<Posts> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(user.name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                                Text(context.read<FeedService>().getDuration(publication.date_of_publication)?.toString() ?? '[x_time_ago]', style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                Text('${context.read<FeedService>().getDuration(publication.date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium),
                                               ],
                                             ),
                                           ],
@@ -152,7 +154,7 @@ class _PostsState extends State<Posts> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text('[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                                Text('2h ago', style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                Text('[x_time_ago]', style: Theme.of(context).primaryTextTheme.labelMedium),
                                               ],
                                             ),
                                           ],
@@ -179,9 +181,9 @@ class _PostsState extends State<Posts> {
                           );
                         }
                       },
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

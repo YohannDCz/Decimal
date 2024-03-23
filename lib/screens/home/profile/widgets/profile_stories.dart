@@ -6,6 +6,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -22,7 +23,7 @@ class _ProfileStoriesState extends State<ProfileStories> {
   late List<PublicationModel> publications;
   late List<CustomUser> users;
   late List<PublicationItemModel>? stories;
-  late List<List<CommentModel>> comments;
+  late List<List<CommentModel>> commentsAll;
   late List<List<CustomUser>> commentsUsers;
 
   @override
@@ -31,12 +32,8 @@ class _ProfileStoriesState extends State<ProfileStories> {
     publications = [];
     users = [];
     stories = [];
-    comments = [];
+    commentsAll = [];
     commentsUsers = [];
-  }
-
-  String _extractPseudo(String pseudo) {
-    return pseudo.toLowerCase().replaceAll(' ', '');
   }
 
   @override
@@ -47,8 +44,6 @@ class _ProfileStoriesState extends State<ProfileStories> {
           publications = state.fetchStoriesSuccess['publications'];
           users = state.fetchStoriesSuccess['users'];
           stories = state.fetchStoriesSuccess['stories'];
-          comments = state.fetchStoriesSuccess['comments'];
-          commentsUsers = state.fetchStoriesSuccess['commentsUsers'];
         }
       },
       builder: (context, state) {
@@ -59,43 +54,52 @@ class _ProfileStoriesState extends State<ProfileStories> {
               borderRadius: BorderRadius.circular(12.0),
               color: AppColors.white,
             ),
-            height: 160.0,
+            height: 180.0,
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.only(top: 16.0, left: 8.0),
               child: Skeletonizer(
+                enabled: stories!.isEmpty,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: 6,
+                  itemCount: stories!.isNotEmpty ? stories!.length : 5,
                   itemBuilder: (BuildContext context, int index) {
                     if (stories != null && index < stories!.length) {
+                      final PublicationModel publication = publications[index];
+                      final CustomUser user = users[index];
+                      final PublicationItemModel story = stories![index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: SizedBox(
                           width: 72.0,
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: VideoPlayer(
-                                    VideoPlayerController.networkUrl(Uri.parse(stories![index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/1.mp4?t=2023-11-19T07%3A21%3A29.624Z'))..initialize(),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/story_widget', arguments: {'publication': publication, 'publicationItem': story, 'user': user});
+                            },
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: AspectRatio(
+                                    aspectRatio: 9 / 16,
+                                    child: VideoPlayer(
+                                      VideoPlayerController.networkUrl(Uri.parse(story.url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/1.mp4?t=2023-11-19T07%3A21%3A29.624Z'))..initialize(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              height4,
-                              Text(
-                                stories![index].title == null
-                                    ? '[story_title]'
-                                    : stories![index].title!.isEmpty
-                                        ? '[story_title]'
-                                        : stories![index].title!,
-                                style: Theme.of(context).primaryTextTheme.bodySmall,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                                const Gap(4),
+                                Text(
+                                  story.title == null
+                                      ? '[story_title]'
+                                      : story.title!.isEmpty
+                                          ? '[story_title]'
+                                          : story.title!,
+                                  style: Theme.of(context).primaryTextTheme.bodySmall,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -109,14 +113,14 @@ class _ProfileStoriesState extends State<ProfileStories> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12.0),
                                 child: AspectRatio(
-                                  aspectRatio: 16 / 9,
+                                  aspectRatio: 9 / 16,
                                   child: Image.network(
                                     'https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive-960x540.jpg',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
-                              height4,
+                              const Gap(4),
                               Text(
                                 '[story_title]',
                                 style: Theme.of(context).primaryTextTheme.bodySmall,

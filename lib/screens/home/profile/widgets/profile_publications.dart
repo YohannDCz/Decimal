@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/config/provider.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -8,6 +9,7 @@ import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -74,7 +76,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 5,
+                itemCount: publications.isNotEmpty ? publications.length : 3,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
                     PublicationModel publication = publications[index];
@@ -83,6 +85,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                     List<CommentModel> comments = commentsAll[index];
                     List<CustomUser> commentUsers = commentsUsers[index];
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
+                    bool commentsOpen = false;
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
@@ -103,20 +106,30 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(right: 8.0),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(6.0),
-                                              child: Image.network(
-                                                user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z',
-                                                width: 48.0,
-                                                height: 48.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).pushNamed('/profile', arguments: user.id);
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(6.0),
+                                                child: Image.network(
+                                                  user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z',
+                                                  width: 48.0,
+                                                  height: 48.0,
+                                                ),
                                               ),
                                             ),
                                           ),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(user.name ?? '[suer_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                              Text(context.read<FeedService>().getDuration(publication.date_of_publication)?.toString() ?? "[x_time_ago]", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).pushNamed('/profile', arguments: user.id);
+                                                },
+                                                child: Text(user.name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                              ),
+                                              Text('${context.read<FeedService>().getDuration(publication.date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium),
                                             ],
                                           ),
                                         ],
@@ -162,9 +175,6 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                           ),
                                         ),
                                         showVideoProgressIndicator: true,
-                                        onReady: () {
-                                          print('Player is ready.');
-                                        },
                                       )
                                   ],
                                 ),
@@ -200,14 +210,21 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                                      child: Text.rich(
-                                        TextSpan(
-                                          text: comments.length.toString(),
-                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
-                                          children: [
-                                            const TextSpan(text: ' '),
-                                            TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
-                                          ],
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            commentsOpen = !commentsOpen;
+                                          });
+                                        },
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: comments.length.toString(),
+                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
+                                            children: [
+                                              const TextSpan(text: ' '),
+                                              TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -220,7 +237,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: comments.length,
+                                          itemCount: commentsOpen ? comments.length : 2,
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -277,10 +294,16 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                     Positioned(
                                       top: 10.0,
                                       left: 8.0,
-                                      child: CircleAvatar(
-                                        radius: 14.0,
-                                        backgroundImage: NetworkImage(
-                                          user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Provider.of<NavBar>(context).currentIndex = 0;
+                                          Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 14.0,
+                                          backgroundImage: NetworkImage(
+                                            user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
+                                          ),
                                         ),
                                       ),
                                     ),

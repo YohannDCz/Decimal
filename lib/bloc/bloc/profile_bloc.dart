@@ -13,13 +13,29 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(FetchLoading());
 
       try {
-        final fetchDescriptionSuccess = await profileContentService.getProfile();
-        final fetchContactSuccess = await profileService.getContactsData();
-        final fetchAllSuccess = await profileService.getPublicationsData();
-        final fetchStoriesSuccess = await profileService.getStoriesData();
-        final fetchPicsSuccess = await profileService.getPicsData();
+        final fetchDescriptionSuccess = await profileContentService.getProfile(event.user_id);
+        final fetchContactSuccess = await profileService.getContactsData(event.user_id);
+        final fetchAllSuccess = await profileService.getPublicationsData(event.user_id);
+        final fetchStoriesSuccess = await profileService.getStoriesData(event.user_id);
+        final fetchPicsSuccess = await profileService.getPicsData(event.user_id);
 
         emit(FetchProfileSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
+      } catch (e) {
+        emit(FetchFailure(error: e.toString()));
+      }
+    });
+
+    on<FetchProfileUserContent>((event, emit) async {
+      emit(FetchLoading());
+
+      try {
+        final fetchDescriptionSuccess = await profileContentService.getProfile(event.user_id);
+        final fetchContactSuccess = await profileService.getContactsData(event.user_id);
+        final fetchAllSuccess = await profileService.getPublicationsData(event.user_id);
+        final fetchStoriesSuccess = await profileService.getStoriesData(event.user_id);
+        final fetchPicsSuccess = await profileService.getPicsData(event.user_id);
+
+        emit(FetchProfileUserSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
       }

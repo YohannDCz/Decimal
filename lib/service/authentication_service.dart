@@ -94,7 +94,6 @@ class AuthenticationService {
 
     late dynamic result;
     late String? idToken;
-    late AuthResponse response;
 
     try {
       result = await appAuth.authorize(
@@ -134,7 +133,7 @@ class AuthenticationService {
     }
 
     try {
-      response = await supabaseAuth.signInWithIdToken(
+      await supabaseAuth.signInWithIdToken(
         provider: Provider.google,
         idToken: idToken!,
         nonce: rawNonce,

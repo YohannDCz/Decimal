@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:equatable/equatable.dart';
@@ -12,7 +13,7 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
       emit(ProfileContentLoading());
 
       try {
-        final user = await profileContentService.getProfile();
+        final user = await profileContentService.getProfile(supabaseUser!.id);
         emit(ProfileContentSuccess(user));
       } catch (e) {
         emit(ProfileContentFailure(error: e.toString()));
@@ -47,7 +48,7 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
           final imageUrl = await profileContentService.uploadPicture("profile", image);
           
           if (state.user == null) {
-            final user = await profileContentService.getProfile();
+            final user = await profileContentService.getProfile(supabaseUser!.id);
             final updatedUser = user.copyWith(profile_picture: imageUrl);
             add(UpdateProfile(updatedUser));
           } else {
@@ -68,7 +69,7 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
           final imageUrl = await profileContentService.uploadPicture("cover", image);
 
           if (state.user == null) {
-            final user = await profileContentService.getProfile();
+            final user = await profileContentService.getProfile(supabaseUser!.id);
             final updatedUser = user.copyWith(cover_picture: imageUrl);
             add(UpdateProfile(updatedUser));
           } else {

@@ -14,10 +14,22 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "ansicolor",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/ansicolor-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "app_links",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/app_links-3.5.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "archive",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/archive-3.4.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "args",
@@ -54,6 +66,18 @@
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/characters-1.3.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "checked_yaml",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/checked_yaml-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/cli_util-0.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "clock",
@@ -260,6 +284,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.13.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_lints-2.0.3",
       "packageUri": "lib/",
@@ -270,6 +300,12 @@
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_lorem-2.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_native_splash",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_native_splash-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_plugin_android_lifecycle",
@@ -306,6 +342,12 @@
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/functions_client-1.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "gap",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/gap-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "glob",
@@ -360,6 +402,12 @@
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "image",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image-4.1.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "image_picker",
@@ -418,6 +466,12 @@
     {
       "name": "js",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/js-0.6.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "json_annotation",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/json_annotation-4.8.1",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -548,6 +602,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "petitparser",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/petitparser-6.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/platform-3.1.4",
       "packageUri": "lib/",
@@ -556,6 +616,12 @@
     {
       "name": "plugin_platform_interface",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "pointycastle",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/pointycastle-3.7.4",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -788,6 +854,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "universal_io",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/universal_io-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "url_launcher",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher-6.2.5",
       "packageUri": "lib/",
@@ -944,6 +1016,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/xml-6.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "yaml",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/yaml-3.1.2",
       "packageUri": "lib/",
@@ -968,7 +1046,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-03-22T16:23:00.324943Z",
+  "generated": "2024-03-23T08:41:37.415338Z",
   "generator": "pub",
   "generatorVersion": "3.3.1"
 }

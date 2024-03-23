@@ -62,7 +62,6 @@ SizedBox width8 = const SizedBox(width: 8.0);
 SizedBox width16 = const SizedBox(width: 16.0);
 SizedBox width24 = const SizedBox(width: 24.0);
 
-SizedBox height4 = const SizedBox(height: 4.0);
 SizedBox height8 = const SizedBox(height: 8.0);
 SizedBox height12 = const SizedBox(height: 12.0);
 SizedBox height16 = const SizedBox(height: 16.0);

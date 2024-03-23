@@ -17,7 +17,6 @@ class ProfileHeader extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    print(profilePictureUrl);
     return Column(
       children: [
         SizedBox(

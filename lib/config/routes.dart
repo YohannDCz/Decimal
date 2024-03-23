@@ -1,8 +1,15 @@
+import 'package:decimal/models/publication_items_model.dart';
+import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/auth/profile_content.dart';
-import 'package:decimal/screens/home/home.dart';
 import 'package:decimal/screens/auth/signin_.dart';
 import 'package:decimal/screens/auth/signin_email.dart';
 import 'package:decimal/screens/auth/signup_email.dart';
+import 'package:decimal/screens/home/home.dart';
+import 'package:decimal/screens/home/profile/profile.dart';
+import 'package:decimal/screens/home/widgets/pic_widget.dart';
+import 'package:decimal/screens/home/widgets/profile_pics_widget.dart';
+import 'package:decimal/screens/home/widgets/story_widget.dart';
 import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> appRoutes = {
@@ -12,3 +19,32 @@ Map<String, WidgetBuilder> appRoutes = {
   "/signup_email": (context) => const SignUpEmail(),
   "/profile_content": (context) => const ProfileContent(),
 };
+
+Route<dynamic>? generateRoute(RouteSettings settings) {
+  switch (settings.name) {
+    case '/profile':
+      final userUuid = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => Profile(user_uuid: userUuid));
+
+    case '/profile_pics_widget':
+      final url = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => ProfilePicsWidget(url: url));
+
+    case '/story_widget':
+      final args = settings.arguments as Map;
+      final publication = args["publication"] as PublicationModel;
+      final publicationItem = args["publicationItem"] as PublicationItemModel;
+      final user = args["user"] as CustomUser;
+      return MaterialPageRoute(builder: (context) => StoryWidget(publication: publication, publicationItem: publicationItem, user: user));
+
+    case '/pic_widget':
+      final args = settings.arguments as Map;
+      final publication = args["publication"] as PublicationModel;
+      final publicationItem = args["publicationItem"] as PublicationItemModel;
+      final user = args["user"] as CustomUser;
+      return MaterialPageRoute(builder: (context) => PicWidget(publication: publication, publicationItem: publicationItem, user: user));
+
+    default:
+      return MaterialPageRoute(builder: (context) => const SignIn());
+  }
+}

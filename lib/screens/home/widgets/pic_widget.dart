@@ -104,7 +104,7 @@ class PicWidget extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(context.read<FeedService>().getDuration(_publication.date_of_publication)?.toString() ?? 'x_time_ago', style: Theme.of(context).primaryTextTheme.labelMedium!.copyWith(color: AppColors.white)),
+                            child: Text('${context.read<FeedService>().getDuration(_publication.date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium!.copyWith(color: AppColors.white)),
                           ),
                         ],
                       ),

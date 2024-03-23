@@ -5,6 +5,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Pics extends StatefulWidget {
@@ -54,34 +55,38 @@ class _PicsState extends State<Pics> with AutomaticKeepAliveClientMixin {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  height48,
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 2.0,
-                      mainAxisSpacing: 2.0,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: 18,
-                    itemBuilder: (context, index) {
-                      if (publicationItems.isNotEmpty && index < publicationItems.length) {
-                        return Hero(
-                          tag: 'MyHero${publicationItems[index].id}',
-                          child: Material(
-                            child: InkWell(
-                              onTap: () => Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
-                              child: Image.network(
-                                publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
-                                fit: BoxFit.cover,
+                  const Gap(46),
+                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 2.0,
+                        mainAxisSpacing: 2.0,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: 18,
+                      itemBuilder: (context, index) {
+                        if (publicationItems.isNotEmpty && index < publicationItems.length) {
+                          return Hero(
+                            tag: 'MyHero${publicationItems[index].id}',
+                            child: Material(
+                              child: InkWell(
+                                onTap: () => Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
+                                child: Image.network(
+                                  publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return Image.asset('assets/images/placeholder.png', fit: BoxFit.cover);
-                      }
-                    },
+                          );
+                        } else {
+                          return Image.asset('assets/images/placeholder.png', fit: BoxFit.cover);
+                        }
+                      },
+                    ),
                   )
                 ],
               ),

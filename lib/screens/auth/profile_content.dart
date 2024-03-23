@@ -7,6 +7,7 @@ import 'package:decimal/screens/auth/widgets/profile_form.dart';
 import 'package:decimal/screens/auth/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class ProfileContent extends StatefulWidget {
   const ProfileContent({super.key});
@@ -76,7 +77,7 @@ class _ProfileContentState extends State<ProfileContent> {
                     cover_picture: coverPictureUrl,
                   )));
                 }),
-                height4,
+                const Gap(4),
               ],
             ),
           ),

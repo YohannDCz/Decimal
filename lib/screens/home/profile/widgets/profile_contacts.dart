@@ -62,37 +62,42 @@ class _ProfileContactsState extends State<ProfileContacts> {
                       itemCount: 6,
                       itemBuilder: (context, index) {
                         if (contacts != null && index < contacts!.length) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: Image.network(
-                                    contacts![index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z',
-                                    fit: BoxFit.cover,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/profile', arguments: contacts![index].id);
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Image.network(
+                                      contacts![index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z',
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 30.0,
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [Colors.transparent, Colors.black],
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 30.0,
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [Colors.transparent, Colors.black],
+                                        ),
+                                      ),
+                                      child: Text(
+                                        contacts![index].name ?? '[contact_name]',
+                                        style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.white),
                                       ),
                                     ),
-                                    child: Text(
-                                      contacts![index].name ?? '[contact_name]',
-                                      style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.white),
-                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         } else {

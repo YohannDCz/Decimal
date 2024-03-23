@@ -1,9 +1,11 @@
 import 'package:decimal/bloc/feed/feed_bloc.dart';
+import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -50,8 +52,10 @@ class _StoriesState extends State<Stories> with AutomaticKeepAliveClientMixin {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                const Gap(46),
+                if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
                 Padding(
-                  padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 48.0, bottom: 4.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -65,9 +69,9 @@ class _StoriesState extends State<Stories> with AutomaticKeepAliveClientMixin {
                     itemBuilder: (context, index) {
                       if (publications.isNotEmpty && index < publications.length) {
                         return Hero(
-                            tag: 'MyHero${publicationItems[index].id}',
-                            child: Material(
-                                child: InkWell(
+                          tag: 'MyHero${publicationItems[index].id}',
+                          child: Material(
+                            child: GestureDetector(
                               onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -78,7 +82,9 @@ class _StoriesState extends State<Stories> with AutomaticKeepAliveClientMixin {
                                   ),
                                 ),
                               ),
-                            )));
+                            ),
+                          ),
+                        );
                       } else {
                         return ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),

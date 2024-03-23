@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // ignore: must_be_immutable
 class SearchTabBar extends StatelessWidget {
-  SearchTabBar({
+  const SearchTabBar({
     super.key,
     required bool afficherTabBar,
     required TabController tabController,
@@ -16,7 +16,7 @@ class SearchTabBar extends StatelessWidget {
 
   final bool _displayTabBar;
   final TabController _tabController;
-  FocusNode _searchBarFocusNode;
+  final FocusNode _searchBarFocusNode;
 
   @override
   Widget build(BuildContext context) {

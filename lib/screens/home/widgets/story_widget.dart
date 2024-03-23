@@ -37,8 +37,9 @@ class StoryWidget extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: VideoPlayer(
-
-                    VideoPlayerController.networkUrl(Uri.parse(_publicationItem.url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4?t=2024-03-19T14%3A15%3A20.129Z"))..initialize()..play(),
+                    VideoPlayerController.networkUrl(Uri.parse(_publicationItem.url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4?t=2024-03-19T14%3A15%3A20.129Z"))
+                      ..initialize()
+                      ..play(),
                   ),
                 ),
               ),
@@ -95,9 +96,14 @@ class StoryWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(_user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z'),
-                        radius: 24.0,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/profile', arguments: _user.id);
+                        },
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(_user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z'),
+                          radius: 24.0,
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +114,7 @@ class StoryWidget extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(context.read<FeedService>().getDuration(_publication.date_of_publication)?.toString() ?? 'x_time_ago', style: Theme.of(context).primaryTextTheme.labelMedium!.copyWith(color: AppColors.white)),
+                            child: Text('${context.read<FeedService>().getDuration(_publication.date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium!.copyWith(color: AppColors.white)),
                           ),
                         ],
                       ),

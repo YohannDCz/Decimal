@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../config/theme.dart';
 import 'widgets/divider_sign_in.dart';
@@ -19,10 +22,12 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+    StreamSubscription<AuthState>? _authSubscription;
+
   @override
   initState() {
     super.initState();
-    supabaseAuth.onAuthStateChange.listen((auth) {
+    _authSubscription =  supabaseAuth.onAuthStateChange.listen((auth) {
       if (auth.session != null) {
         Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       }
@@ -31,6 +36,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   dispose() {
+    _authSubscription?.cancel();
     super.dispose();
   }
 

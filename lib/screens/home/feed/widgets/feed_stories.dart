@@ -1,5 +1,6 @@
 import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/config/theme.dart';
+import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,14 @@ class FeedStories extends StatefulWidget {
 
 class _FeedStoriesState extends State<FeedStories> {
   late List<PublicationModel> publications;
+  late List<PublicationItemModel> publicationItems;
   late List<CustomUser> users;
 
   @override
   initState() {
     super.initState();
     publications = [];
+    publicationItems = [];
     users = [];
   }
 
@@ -37,6 +40,7 @@ class _FeedStoriesState extends State<FeedStories> {
         if (state is FetchAllSuccess) {
           setState(() {
             publications = state.fetchAllSuccess['publications'];
+            publicationItems = state.fetchAllSuccess['publicationItems'];
             users = state.fetchAllSuccess['users'];
           });
         }
@@ -56,62 +60,60 @@ class _FeedStoriesState extends State<FeedStories> {
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
                     PublicationModel publication = publications[index];
+                    PublicationItemModel publicationItem = publicationItems[index];
                     CustomUser user = users[index];
 
-                    print(publication);
-                    print(user);
-          
                     if (index == 0) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 4.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/stories', arguments: publication.id);
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.primary, width: 4.0),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: CircleAvatar(
-                                    radius: 36.0,
-                                    backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                        child: Material(
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publication, 'publicationItem': publicationItem, 'user': users[index]}),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.primary, width: 4.0),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: CircleAvatar(
+                                      radius: 36.0,
+                                      backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
-                            ],
+                                Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
+                              ],
+                            ),
                           ),
                         ),
                       );
                     } else {
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/stories', arguments: publication.id);
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.primary, width: 4.0),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: CircleAvatar(
-                                    radius: 36.0,
-                                    backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                        child: Material(
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publication, 'publicationItem': publicationItem, 'user': users[index]}),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.primary, width: 4.0),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: CircleAvatar(
+                                      radius: 36.0,
+                                      backgroundImage: NetworkImage(user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T14%3A44%3A04.325Z'),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
-                            ],
+                                Text(user.pseudo ?? _extractPseudo(user.name ?? "John Doe"), style: Theme.of(context).primaryTextTheme.bodySmall),
+                              ],
+                            ),
                           ),
                         ),
                       );

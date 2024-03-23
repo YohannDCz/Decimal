@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 part of 'profile_bloc.dart';
 
 sealed class ProfileEvent extends Equatable {
@@ -11,5 +13,21 @@ final class FetchPics extends ProfileEvent {}
 
 final class FetchStories extends ProfileEvent {}
 
-final class FetchProfileContent extends ProfileEvent {}
+final class FetchProfileContent extends ProfileEvent {
+  final String user_id;
+
+  const FetchProfileContent(this.user_id);
+
+  @override
+  List<Object> get props => [user_id];
+}
+
+final class FetchProfileUserContent extends ProfileEvent {
+  final String user_id;
+
+  const FetchProfileUserContent(this.user_id);
+
+  @override
+  List<Object> get props => [user_id];
+}
 

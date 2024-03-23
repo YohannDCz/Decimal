@@ -3,6 +3,7 @@ import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
+import 'package:flutter/material.dart';
 
 class FeedService {
   Future<List<PublicationModel>> getPublications(String publication) async {
@@ -11,7 +12,7 @@ class FeedService {
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
-      print('Unable to get $publication: $e');
+      debugPrint('Unable to get $publication: $e');
       throw Exception('Unable to get $publication: $e');
     }
   }
@@ -27,7 +28,7 @@ class FeedService {
       }
       return publicationItems;
     } catch (e) {
-      print('Unable to get the publication or the $publication item: $e');
+      debugPrint('Unable to get the publication or the $publication item: $e');
       throw Exception('Unable to get the publictoin or the $publication item: $e');
     }
   }
@@ -39,7 +40,7 @@ class FeedService {
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
-      print('Erreur lors de la récupération des utilisateurs ou des publications : $e');
+      debugPrint('Erreur lors de la récupération des utilisateurs ou des publications : $e');
       throw Exception('Erreur lors de la récupération des utilisateurs ou des publications : $e');
     }
   }
@@ -50,7 +51,7 @@ class FeedService {
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
-      print('Unable to get the comments: $e');
+      debugPrint('Unable to get the comments: $e');
       throw Exception('Unable to get the comments: $e');
     }
   }
@@ -70,7 +71,7 @@ class FeedService {
       }
       return allUsers;
     } catch (e) {
-      print('Unable to get all the comments: $e');
+      debugPrint('Unable to get all the comments: $e');
       throw Exception('Unable to get all the comments: $e');
     }
   }
@@ -81,7 +82,7 @@ class FeedService {
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
-      print('Unable to get all publications: $e');
+      debugPrint('Unable to get all publications: $e');
       throw Exception('Unable to get all publications: $e');
     }
   }
@@ -97,7 +98,7 @@ class FeedService {
       }
       return publicationItems;
     } catch (e) {
-      print('Unable to get the publications or the publication item: $e');
+      debugPrint('Unable to get the publications or the publication item: $e');
       throw Exception('Unable to get the publictions or the publication item: $e');
     }
   }
@@ -109,7 +110,7 @@ class FeedService {
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
-      print('Erreur lors de la récupération des utilisateurs ou des publications : $e');
+      debugPrint('Erreur lors de la récupération des utilisateurs ou des publications : $e');
       throw Exception('Erreur lors de la récupération des utilisateurs ou des publications : $e');
     }
   }
@@ -120,7 +121,7 @@ class FeedService {
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
-      print('Unable to get all the comments: $e');
+      debugPrint('Unable to get all the comments: $e');
       throw Exception('Unable to get all the comments: $e');
     }
   }
@@ -140,7 +141,7 @@ class FeedService {
       }
       return allUsers;
     } catch (e) {
-      print('Unable to get all the comments: $e');
+      debugPrint('Unable to get all the comments: $e');
       throw Exception('Unable to get all the comments: $e');
     }
   }
@@ -150,7 +151,7 @@ class FeedService {
       final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
       return response.length;
     } catch (e) {
-      print('Unable to get the reactions: $e');
+      debugPrint('Unable to get the reactions: $e');
       throw Exception('Unable to get the reactions: $e');
     }
   }
@@ -181,11 +182,10 @@ class FeedService {
       final users = await getPublicationUsers("stories");
       final comments = await getComments("stories");
       final commentsUsers = await getCommentUsers("stories");
-      print(stories);
       final storiesData = {'publications': publications, 'stories': stories, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
       return storiesData;
     } catch (e) {
-      print('Unable to get the stories data: $e');
+      debugPrint('Unable to get the stories data: $e');
       throw Exception('Unable to get the stories data: $e');
     }
   }
@@ -200,7 +200,7 @@ class FeedService {
       final publicationData = {'publications': publications, 'publicationItems': publicationItems, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
       return publicationData;
     } catch (e) {
-      print('Unable to get the publication data: $e');
+      debugPrint('Unable to get the publication data: $e');
       throw Exception('Unable to get the publication data: $e');
     }
   }

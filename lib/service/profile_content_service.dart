@@ -1,21 +1,21 @@
-import 'dart:io';
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:decimal/config/constants.dart';
-import 'package:decimal/models/contact_model.dart';
 import 'package:decimal/models/user_model.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class ProfileContentService {
   // CRUD pour le profil utlisateur
-  Future<CustomUser> getProfile() async {
+  Future<CustomUser> getProfile(String user_uuid) async {
     try {
-      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
+      final response = await supabaseClient.from('users').select().eq('uuid', user_uuid).single();
       final CustomUser user = CustomUser.fromMap(response);
       return user;
     } catch (e) {
-      print('Unable to get profile: $e');
+      debugPrint('Unable to get profile: $e');
       throw Exception('Unable to get profile: $e');
     }
   }
@@ -33,7 +33,7 @@ class ProfileContentService {
       };
       await supabaseClient.from('users').upsert([userToInsert]);
     } catch (e) {
-      print('Unable to update profile: $e');
+      debugPrint('Unable to update profile: $e');
       throw Exception('Unable to update profile: $e');
     }
   }
@@ -45,8 +45,6 @@ class ProfileContentService {
       throw Exception('Unable to delete profile: $e');
     }
   }
-
-  
 
   //#####################################################################
 

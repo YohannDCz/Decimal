@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/feed/feed_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -6,6 +7,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/profile_content_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -49,6 +51,11 @@ class _FeedPublicationsState extends State<FeedPublications> {
     BlocProvider.of<FeedBloc>(context).add(FetchAllPublications());
   }
 
+  Future<String> _extractProfilePicUser() async {
+    CustomUser user = await context.read<ProfileContentService>().getProfile(supabaseUser!.id);
+    return user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z';
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FeedBloc, FeedState>(
@@ -72,7 +79,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount:  state is FetchLoading ? 1 : 18,
+                itemCount: state is FetchLoading ? 1 : 18,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
                     late final PublicationModel publication = publications[index];
@@ -80,9 +87,10 @@ class _FeedPublicationsState extends State<FeedPublications> {
                     late final CustomUser user = users[index];
                     late final List<CommentModel> comments = commentsAll[index];
                     late final List<CustomUser> commentUsers = commentsUsers[index];
-          
+
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
-          
+
+                    bool commentsOpen = false;
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
@@ -103,20 +111,30 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(right: 8.0),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(6.0),
-                                              child: Image.network(
-                                                user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z',
-                                                width: 48.0,
-                                                height: 48.0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).pushNamed('/profile', arguments: user.id);
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(6.0),
+                                                child: Image.network(
+                                                  user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z',
+                                                  width: 48.0,
+                                                  height: 48.0,
+                                                ),
                                               ),
                                             ),
                                           ),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(user.name ?? 'John Doe', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                              Text(context.read<FeedService>().getDuration(publication.date_of_publication).toString(), style: Theme.of(context).primaryTextTheme.labelMedium),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).pushNamed('/profile', arguments: user.id);
+                                                },
+                                                child: Text(user.name ?? 'John Doe', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                              ),
+                                              Text('${context.read<FeedService>().getDuration(publication.date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium),
                                             ],
                                           ),
                                         ],
@@ -162,9 +180,6 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                           ),
                                         ),
                                         showVideoProgressIndicator: true,
-                                        onReady: () {
-                                          print('Player is ready.');
-                                        },
                                       )
                                   ],
                                 ),
@@ -186,9 +201,8 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text.rich(
                                           TextSpan(
-                                            text: user.pseudo ?? _extractPseudo(user.name ?? 'John Doe'),
-                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
                                             children: [
+                                              TextSpan(text: user.pseudo ?? _extractPseudo(user.name ?? 'John Doe'), style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)),
                                               const TextSpan(text: ' '),
                                               TextSpan(text: publicationItem.content ?? 'Content of the description', style: Theme.of(context).primaryTextTheme.bodyMedium),
                                             ],
@@ -200,14 +214,21 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                                      child: Text.rich(
-                                        TextSpan(
-                                          text: comments.length.toString(),
-                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
-                                          children: [
-                                            const TextSpan(text: ' '),
-                                            TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
-                                          ],
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            commentsOpen = !commentsOpen;
+                                          });
+                                        },
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: comments.length.toString(),
+                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
+                                            children: [
+                                              const TextSpan(text: ' '),
+                                              TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -220,7 +241,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: comments.length,
+                                          itemCount: commentsOpen ? comments.length : 2,
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -274,13 +295,23 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         contentPadding: const EdgeInsets.only(left: 48.0, top: 8.0, right: 4.0, bottom: 8.0),
                                       ),
                                     ),
-                                    const Positioned(
+                                    Positioned(
                                       top: 10.0,
                                       left: 8.0,
-                                      child: CircleAvatar(
-                                        radius: 14.0,
-                                        backgroundImage: NetworkImage(
-                                          'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed('/home', arguments: supabaseUser!.id);
+                                        },
+                                        child: FutureBuilder(
+                                          future: _extractProfilePicUser(),
+                                          builder: (context, snapshot) {
+                                            return CircleAvatar(
+                                              radius: 14.0,
+                                              backgroundImage: NetworkImage(
+                                                snapshot.hasData ? snapshot.data! : 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/amanda_wilson/amanda1.png',
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),

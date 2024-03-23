@@ -24,6 +24,19 @@ final class FetchProfileSuccess extends ProfileState {
   List<Object> get props => [fetchAllSuccess, fetchStoriesSuccess, fetchPicsSuccess, fetchDescriptionSuccess, fetchContactSuccess];
 }
 
+final class FetchProfileUserSuccess extends ProfileState {
+  const FetchProfileUserSuccess({required this.fetchStoriesSuccess, required this.fetchPicsSuccess, required this.fetchAllSuccess, required this.fetchDescriptionSuccess, required this.fetchContactSuccess});
+
+  final CustomUser fetchDescriptionSuccess;
+  final Map<String, dynamic> fetchContactSuccess;
+  final Map<String, dynamic> fetchPicsSuccess;
+  final Map<String, dynamic> fetchStoriesSuccess;
+  final Map<String, dynamic> fetchAllSuccess;
+
+  @override
+  List<Object> get props => [fetchAllSuccess, fetchStoriesSuccess, fetchPicsSuccess, fetchDescriptionSuccess, fetchContactSuccess];
+}
+
 final class FetchFailure extends ProfileState {
   const FetchFailure({required this.error});
   final String error;

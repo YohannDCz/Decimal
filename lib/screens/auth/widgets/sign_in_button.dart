@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../../config/theme.dart';
 
@@ -12,7 +13,7 @@ class SignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bodyMedium = Theme.of(context).primaryTextTheme.bodyMedium;
+    var bodyMedium = Theme.of(context).primaryTextTheme.bodyLarge;
 
     return Container(
       margin: const EdgeInsets.all(8.0),
@@ -31,6 +32,7 @@ class SignInButton extends StatelessWidget {
                 icon,
                 color: AppColors.primaryText,
               ),
+              const Gap(8),
               width8,
               Expanded(child: SizedBox(child: Text(label, style: bodyMedium))),
             ],
