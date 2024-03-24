@@ -7,11 +7,12 @@ import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileService {
   Future<List<PublicationModel>> getPublications(String publication, String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).eq('user_uuid', user_uuid).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).eq('user_uuid', user_uuid).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -39,7 +40,7 @@ class ProfileService {
   Future<List<CustomUser>> getPublicationUsers(String publicationType, String user_uuid) async {
     try {
       // Obtention des publications filtrées par le type spécifié.
-      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).eq('user_uuid', user_uuid).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).eq('user_uuid', user_uuid).limit(5).order('date_of_publication', ascending: false);
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
@@ -50,7 +51,7 @@ class ProfileService {
 
   Future<List<List<CommentModel>>> getComments(String publicationType, String user_uuid) async {
     try {
-      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).eq('user_uuid', user_uuid).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).eq('user_uuid', user_uuid).limit(5).order('date_of_publication', ascending: false);
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
@@ -154,15 +155,26 @@ class ProfileService {
     final List<CustomUser> users = [];
 
     try {
-      final response = await supabaseClient.from(contactType).select().eq('user_uuid', user_uuid);
+      final response = await supabaseClient.from(contactType).select().eq('user_uuid', user_uuid).limit(6);
       contacts = (response as List).map((e) => ContactModel.fromMap(e as Map<String, dynamic>)).toList();
 
       for (var contact in contacts) {
-        final response = await supabaseClient.from('users').select().eq('uuid', contact.contact_uuid).single();
+        final response = await supabaseClient.from('users').select('uuid, name, profile_picture').eq('uuid', contact.contact_uuid).single();
         final user = CustomUser.fromMap(response);
         users.add(user);
       }
       return users;
+    } catch (e) {
+      debugPrint('Unable to get the list of user: $e');
+      throw Exception('Unable to get contacts: $e');
+    }
+  }
+
+  Future<int> getContactsNumber(String contactType, String user_uuid) async {
+    try {
+      final countResponse = await supabaseClient.from(contactType).select('user_uuid', const FetchOptions(count: CountOption.exact)).eq('user_uuid', user_uuid);
+      final int count = (countResponse as PostgrestResponse).count ?? 0;
+      return count;
     } catch (e) {
       debugPrint('Unable to get the list of user: $e');
       throw Exception('Unable to get contacts: $e');
@@ -179,6 +191,19 @@ class ProfileService {
     } catch (e) {
       debugPrint('Unable to get the contacts data: $e');
       throw Exception('Unable to get the contacts data: $e');
+    }
+  }
+
+  Future<Map<String, int>> getContactsNumberData(String user_uuid) async {
+    try {
+      final int contactsNumber = await getContactsNumber("contacts", user_uuid);
+      final int followersNumber = await getContactsNumber("followers", user_uuid);
+      final int followingsNumber = await getContactsNumber("followings", user_uuid);
+      final Map<String, int> contactsNumberData = {'contacts': contactsNumber, 'followers': followersNumber, 'followings': followingsNumber};
+      return contactsNumberData;
+    } catch (e) {
+      debugPrint('Unable to get the contacts number data: $e');
+      throw Exception('Unable to get the contacts number data: $e');
     }
   }
 

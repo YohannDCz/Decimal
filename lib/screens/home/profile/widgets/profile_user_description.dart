@@ -1,6 +1,6 @@
 import 'package:decimal/bloc/bloc/profile_bloc.dart';
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,10 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
   late List<CustomUser> contacts;
   late List<CustomUser> followers;
   late List<CustomUser> followings;
-  late List<PublicationModel> publicationItems;
+  late List<PublicationItemModel> publicationItems;
+  late int? contactsNumber;
+  late int? followersNumber;
+  late int? followingsNumber;
 
   @override
   initState() {
@@ -31,6 +34,9 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
     followers = [];
     followings = [];
     publicationItems = [];
+    contactsNumber = 0;
+    followersNumber = 0;
+    followingsNumber = 0;
   }
 
   @override
@@ -44,6 +50,9 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
             followers = state.fetchContactSuccess["followers"];
             followings = state.fetchContactSuccess["followings"];
             publicationItems = state.fetchAllSuccess['publicationItems'];
+            contactsNumber = state.fetchContactsNumberSuccess['contacts'];
+            followersNumber = state.fetchContactsNumberSuccess['followers'];
+            followingsNumber = state.fetchContactsNumberSuccess['followings'];
           });
         }
       },
@@ -128,19 +137,19 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
                         Column(
                           children: [
                             Text('Followers'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(followers.length.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                            Text(followersNumber.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                           ],
                         ),
                         Column(
                           children: [
                             Text('Contacts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(contacts.length.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                            Text(contactsNumber.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                           ],
                         ),
                         Column(
                           children: [
                             Text('Following'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(followings.length.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                            Text(followingsNumber.toString(), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                           ],
                         ),
                       ],

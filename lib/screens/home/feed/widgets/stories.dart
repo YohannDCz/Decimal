@@ -15,8 +15,7 @@ class Stories extends StatefulWidget {
   State<Stories> createState() => _StoriesState();
 }
 
-class _StoriesState extends State<Stories>  {
-
+class _StoriesState extends State<Stories> {
   late List<PublicationModel> publications;
   late List<PublicationItemModel> publicationItems;
   late List<CustomUser> users;
@@ -60,9 +59,9 @@ class _StoriesState extends State<Stories>  {
                       mainAxisSpacing: 4.0,
                     ),
                     shrinkWrap: true,
-                    itemCount: state is FetchLoading ? 6 : 18,
+                    itemCount: state is FetchLoading ? 6 : 5,
                     itemBuilder: (context, index) {
-                      if (publications.isNotEmpty && index < publications.length) {
+                      if (publicationItems.isNotEmpty && index < publicationItems.length) {
                         return Hero(
                           tag: 'MyHero${publicationItems[index].id}',
                           child: Material(
@@ -73,7 +72,7 @@ class _StoriesState extends State<Stories>  {
                                 child: AspectRatio(
                                   aspectRatio: 16 / 9,
                                   child: VideoPlayer(
-                                    VideoPlayerController.networkUrl(Uri.parse(publicationItems[index].url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4?t=2024-03-19T14%3A15%3A20.129Z"))..initialize(),
+                                    VideoPlayerController.networkUrl(Uri.parse(publicationItems[index].url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4"))..initialize(),
                                   ),
                                 ),
                               ),

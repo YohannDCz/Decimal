@@ -18,8 +18,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final fetchAllSuccess = await profileService.getPublicationsData(event.user_id);
         final fetchStoriesSuccess = await profileService.getStoriesData(event.user_id);
         final fetchPicsSuccess = await profileService.getPicsData(event.user_id);
+        final fetchContactcNumberSuccess = await profileService.getContactsNumberData(event.user_id);
 
-        emit(FetchProfileSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
+        emit(FetchProfileSuccess(
+          fetchAllSuccess: fetchAllSuccess,
+          fetchStoriesSuccess: fetchStoriesSuccess,
+          fetchPicsSuccess: fetchPicsSuccess,
+          fetchDescriptionSuccess: fetchDescriptionSuccess,
+          fetchContactSuccess: fetchContactSuccess,
+          fetchContactcNumberSuccess: fetchContactcNumberSuccess,
+        ));
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
       }
@@ -34,8 +42,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final fetchAllSuccess = await profileService.getPublicationsData(event.user_id);
         final fetchStoriesSuccess = await profileService.getStoriesData(event.user_id);
         final fetchPicsSuccess = await profileService.getPicsData(event.user_id);
+        final fetchContactsNumberSuccess = await profileService.getContactsNumberData(event.user_id);
 
-        emit(FetchProfileUserSuccess(fetchAllSuccess: fetchAllSuccess, fetchStoriesSuccess: fetchStoriesSuccess, fetchPicsSuccess: fetchPicsSuccess, fetchDescriptionSuccess: fetchDescriptionSuccess, fetchContactSuccess: fetchContactSuccess));
+        emit(FetchProfileUserSuccess(
+          fetchAllSuccess: fetchAllSuccess,
+          fetchStoriesSuccess: fetchStoriesSuccess,
+          fetchPicsSuccess: fetchPicsSuccess,
+          fetchDescriptionSuccess: fetchDescriptionSuccess,
+          fetchContactSuccess: fetchContactSuccess,
+          fetchContactsNumberSuccess: fetchContactsNumberSuccess,
+        ));
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
       }

@@ -64,10 +64,10 @@ class _HomeState extends State<Home> {
     return SafeArea(
       child: Scaffold(
         body: IndexedStack(
-          index: isOffline ? 3 : currentIndex, // Si hors ligne, affichez l'écran hors connexion
+          index: currentIndex, // Si hors ligne, affichez l'écran hors connexion
           children: _children,
         ),
-        
+
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: AppColors.black,
           currentIndex: currentIndex,

@@ -368,7 +368,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                              child: Reactions(container: false, publication_id: 1),
+                              child: Reactions(container: false),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),

@@ -1,4 +1,5 @@
 {
 	"java.configuration.updateBuildConfiguration": "automatic",
-	"editor.accessibilitySupport": "on"
+	"editor.accessibilitySupport": "on",
+	"cmake.sourceDirectory": "/Users/yohannd/Desktop/Decimal/windows/flutter"
 }

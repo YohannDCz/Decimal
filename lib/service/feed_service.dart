@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class FeedService {
   Future<List<PublicationModel>> getPublications(String publication) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -36,7 +36,7 @@ class FeedService {
   Future<List<CustomUser>> getPublicationUsers(String publicationType) async {
     try {
       // Obtention des publications filtrées par le type spécifié.
-      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).limit(5).order('date_of_publication', ascending: false);
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
@@ -47,7 +47,7 @@ class FeedService {
 
   Future<List<List<CommentModel>>> getComments(String publicationType) async {
     try {
-      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).limit(18).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).limit(5).order('date_of_publication', ascending: false);
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
@@ -148,6 +148,9 @@ class FeedService {
 
   Future<int> getReactions(String reactionType, int? publicationId) async {
     try {
+      if(publicationId == null) {
+        throw Exception('Publication ID is null');
+      }
       final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
       return response.length;
     } catch (e) {

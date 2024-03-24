@@ -37,7 +37,7 @@ class StoryWidget extends StatelessWidget {
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: VideoPlayer(
-                    VideoPlayerController.networkUrl(Uri.parse(_publicationItem.url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4?t=2024-03-19T14%3A15%3A20.129Z"))
+                    VideoPlayerController.networkUrl(Uri.parse(_publicationItem.url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4"))
                       ..initialize()
                       ..play(),
                   ),

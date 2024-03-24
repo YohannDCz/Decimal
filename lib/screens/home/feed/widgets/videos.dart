@@ -205,7 +205,7 @@ class _VideosState extends State<Videos> {
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.only(top: 8.0, left: 8.0),
-                                    child: Reactions(container: false, publication_id: 1),
+                                    child: Reactions(container: false),
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,

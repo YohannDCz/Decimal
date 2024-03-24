@@ -171,7 +171,7 @@ class _PostsState extends State<Posts> {
                                   ),
                                   const Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                                    child: Reactions(container: false, publication_id: 1),
+                                    child: Reactions(container: false),
                                   ),
                                 ],
                               ),

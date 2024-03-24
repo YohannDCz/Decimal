@@ -79,7 +79,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: state is FetchLoading ? 1 : 18,
+                itemCount: state is FetchLoading ? 1 : publications.length,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
                     late final PublicationModel publication = publications[index];
@@ -376,7 +376,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                              child: Reactions(container: false, publication_id: 1),
+                              child: Reactions(container: false),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),

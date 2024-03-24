@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:decimal/bloc/bloc/profile_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/provider.dart';
@@ -246,7 +248,7 @@ class _ProfileUserPublicationsState extends State<ProfileUserPublications> {
                                         child: ListView.builder(
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: commentsOpen ? comments.length : 3,
+                                          itemCount: commentsOpen ? comments.length : min(comments.length, 3),
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: const EdgeInsets.only(bottom: 8.0),
@@ -382,7 +384,7 @@ class _ProfileUserPublicationsState extends State<ProfileUserPublications> {
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                              child: Reactions(container: false, publication_id: 1),
+                              child: Reactions(container: false),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
