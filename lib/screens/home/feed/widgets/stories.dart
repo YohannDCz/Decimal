@@ -59,7 +59,7 @@ class _StoriesState extends State<Stories> {
                       mainAxisSpacing: 4.0,
                     ),
                     shrinkWrap: true,
-                    itemCount: state is FetchLoading ? 6 : 5,
+                    itemCount: state is FetchLoading ? 6 : publicationItems.length,
                     itemBuilder: (context, index) {
                       if (publicationItems.isNotEmpty && index < publicationItems.length) {
                         return Hero(

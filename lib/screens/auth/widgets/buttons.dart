@@ -5,10 +5,12 @@ class Buttons extends StatelessWidget {
   const Buttons({
     super.key,
     required this.onPressed,
+    required this.buttonText,
   });
-  
+
   final VoidCallback onPressed;
-  
+  final String buttonText;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,7 +38,7 @@ class Buttons extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Text(
-                'Continue',
+                buttonText,
                 style: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
               ),
             ),

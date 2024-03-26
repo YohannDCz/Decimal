@@ -1,55 +1,98 @@
+import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProfilePicsWidget extends StatelessWidget {
-  const ProfilePicsWidget({super.key, required String url}) : _url = url;
+class ProfilePicWidget extends StatefulWidget {
+  const ProfilePicWidget({super.key, required String user_uuid}) : _user_uuid = user_uuid;
 
-  final String _url;
+  final String _user_uuid;
+
+  @override
+  State<ProfilePicWidget> createState() => _ProfilePicWidgetState();
+}
+
+class _ProfilePicWidgetState extends State<ProfilePicWidget> {
+  String? profilePictureUrl;
+
+  @override
+  initState() {
+    super.initState();
+    BlocProvider.of<ProfileContentBloc>(context).add(GetProfile());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.black,
-        body: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                top: 0,
-                child: Hero(
-                  tag: 'MyHero$_url',
-                  child: Image.network(
-                    _url,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 16.0,
-                left: 16.0,
-                child: IconButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black.withOpacity(0.25)),
-                  ),
-                  icon: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: AppColors.white,
+    return BlocConsumer<ProfileContentBloc, ProfileContentState>(listener: (context, state) {
+      if (state is ProfileContentSuccess) {
+        setState(() {
+          profilePictureUrl = state.user!.profile_picture;
+        });
+        BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(widget._user_uuid));
+      }
+    }, builder: (context, state) {
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: AppColors.black,
+          body: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Stack(
+              children: [
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  child: Hero(
+                    tag: 'MyHeroProfilePic',
+                    child: Image.network(
+                      profilePictureUrl ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  onPressed: () => Navigator.of(context).pop(),
                 ),
-              )
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.black.withOpacity(0.25)),
+                      ),
+                      icon: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: AppColors.white,
+                        ),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    Material(
+                      elevation: 4.0,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      color: AppColors.black,
+                      child: CircleAvatar(
+                        radius: 16.0,
+                        backgroundColor: AppColors.white,
+                        child: IconButton(
+                          onPressed: () async {
+                            BlocProvider.of<ProfileContentBloc>(context).add(UploadProfilePicture());
+                          },
+                          icon: const Icon(Icons.edit, size: 16),
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

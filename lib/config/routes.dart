@@ -7,6 +7,7 @@ import 'package:decimal/screens/auth/signin_email.dart';
 import 'package:decimal/screens/auth/signup_email.dart';
 import 'package:decimal/screens/home/home.dart';
 import 'package:decimal/screens/home/profile/profile.dart';
+import 'package:decimal/screens/home/widgets/cover_pic_widget.dart';
 import 'package:decimal/screens/home/widgets/pic_widget.dart';
 import 'package:decimal/screens/home/widgets/profile_pics_widget.dart';
 import 'package:decimal/screens/home/widgets/story_widget.dart';
@@ -26,9 +27,13 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       final userUuid = settings.arguments as String;
       return MaterialPageRoute(builder: (context) => Profile(user_uuid: userUuid));
 
-    case '/profile_pics_widget':
-      final url = settings.arguments as String;
-      return MaterialPageRoute(builder: (context) => ProfilePicsWidget(url: url));
+    case '/profile_pic_widget':
+      final user_uuid = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => ProfilePicWidget(user_uuid: user_uuid));
+
+    case '/cover_pic_widget':
+      final user_uuid = settings.arguments as String;
+      return MaterialPageRoute(builder: (context) => CoverPicWidget(user_uuid: user_uuid));
 
     case '/story_widget':
       final args = settings.arguments as Map;

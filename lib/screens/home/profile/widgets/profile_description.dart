@@ -1,4 +1,6 @@
 import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,11 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
   late List<CustomUser>? contacts;
   late List<CustomUser>? followers;
   late List<CustomUser>? followings;
+
+  bool isEditing = false;
+  TextEditingController biographyController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController pseudoController = TextEditingController();
 
   @override
   initState() {
@@ -40,6 +47,9 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
             contacts = state.fetchContactSuccess["contacts"];
             followers = state.fetchContactSuccess["followers"];
             followings = state.fetchContactSuccess["followings"];
+            nameController.text = user?.name ?? '';
+            pseudoController.text = user?.pseudo ?? '';
+            biographyController.text = user?.biography ?? '';
           });
         }
       },
@@ -56,7 +66,7 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed('/profile_pics_widget', arguments: user?.cover_picture);
+                        Navigator.of(context).pushNamed('/cover_pic_widget', arguments: user?.id);
                       },
                       child: Container(
                         height: 276.0,
@@ -73,7 +83,7 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed('/profile_pics_widget', arguments: user?.profile_picture);
+                          Navigator.of(context).pushNamed('/profile_pic_widget', arguments: user?.id);
                         },
                         child: Container(
                           width: 100.0,
@@ -92,63 +102,148 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                   ],
                 ),
               ),
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(24.0), bottomRight: Radius.circular(24.0)),
-                ),
-                child: Column(
-                  children: [
-                    const Gap(8),
-                    Text(user?.name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold)),
-                    const Gap(4),
-                    Text.rich(
-                      TextSpan(
-                        text: '@',
-                        style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText),
-                        children: [
-                          TextSpan(text: user?.pseudo ?? (user?.name ?? '[user_pseudo]').toLowerCase().replaceAll(' ', ''), style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
-                        ],
-                      ),
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(24.0), bottomRight: Radius.circular(24.0)),
                     ),
-                    const Gap(16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
                       children: [
-                        Column(
+                        const Gap(8),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6.0, right: 12.0, bottom: 4.0, left: 12.0),
+                          child: TextField(
+                            readOnly: !isEditing,
+                            controller: nameController,
+                            style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            autofocus: true,
+                            
+                            decoration: InputDecoration(
+                              isDense: true,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                              hintText: user?.name != null
+                                  ? user!.name!.isEmpty
+                                      ? isEditing
+                                          ? 'Add a name'
+                                          : ''
+                                      : ''
+                                  : '',
+                              hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
+                            ),
+                          ),
+                        ),
+                        TextField(
+                          readOnly: !isEditing,
+                          controller: pseudoController,
+                          style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                            hintText: user?.pseudo != null
+                                ? user!.pseudo!.isEmpty
+                                    ? isEditing
+                                        ? 'Add a pseudo'
+                                        : ''
+                                    : ''
+                                : '',
+                            hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
+                          ),
+                        ),
+                        const Gap(24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('Posts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text('0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                            Column(
+                              children: [
+                                Text('Posts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
+                                Text('0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('Followers'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
+                                Text(followers?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('Contacts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
+                                Text(contacts?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('Following'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
+                                Text(followings?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                              ],
+                            ),
                           ],
                         ),
-                        Column(
-                          children: [
-                            Text('Followers'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(followers?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text('Contacts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(contacts?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text('Following'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                            Text(followings?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
-                          ],
+                        const Gap(16),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 6.0, right: 12.0, bottom: 16.0, left: 12.0),
+                            child: TextField(
+                              readOnly: !isEditing,
+                              controller: biographyController,
+                              style: Theme.of(context).primaryTextTheme.bodyMedium,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                hintText: user?.biography != null
+                                    ? user!.biography!.isEmpty
+                                        ? isEditing
+                                            ? 'Add a biography'
+                                            : ''
+                                        : ''
+                                    : '',
+                                hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    const Gap(16),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0, right: 12.0, bottom: 16.0, left: 12.0),
-                      child: Text(user?.biography ?? '[user_biography]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                  ),
+                  Positioned(
+                    right: 8.0,
+                    top: 8.0,
+                    child: Material(
+                      elevation: 4.0,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      color: AppColors.black,
+                      child: CircleAvatar(
+                        radius: 16.0,
+                        backgroundColor: AppColors.white,
+                        child: IconButton(
+                          onPressed: () {
+                            if (isEditing) {
+                              BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(id: supabaseUser!.id, name: nameController.text, pseudo: pseudoController.text, biography: biographyController.text)));
+                            }
+                            setState(() {
+                              isEditing = !isEditing;
+                            });
+                          },
+                          icon: const Icon(Icons.edit, size: 16),
+                          color: AppColors.black,
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

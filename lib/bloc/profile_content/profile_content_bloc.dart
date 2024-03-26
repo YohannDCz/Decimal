@@ -82,6 +82,37 @@ class ProfileContentBloc extends Bloc<ProfileContentEvent, ProfileContentState> 
       }
     });
 
+    on<UpdateName>((event, emit) async {
+      emit(ProfileContentLoading());
+      try {
+        if (state.user == null) {
+          final user = await profileContentService.getProfile(supabaseUser!.id);
+          final updatedUser = user.copyWith(name: event.name);
+          add(UpdateProfile(updatedUser));
+        } else {
+          final updatedUser = state.user!.copyWith(name: event.name);
+          add(UpdateProfile(updatedUser));
+        }
+      } catch (e) {
+        emit(ProfileContentFailure(error: e.toString()));
+      }
+    });
+
+    on<UpdatePseudo>((event, emit) async {
+      emit(ProfileContentLoading());
+      try {
+        if (state.user == null) {
+          final user = await profileContentService.getProfile(supabaseUser!.id);
+          final updatedUser = user.copyWith(pseudo: event.pseudo);
+          add(UpdateProfile(updatedUser));
+        } else {
+          final updatedUser = state.user!.copyWith(pseudo: event.pseudo);
+          add(UpdateProfile(updatedUser));
+        }
+      } catch (e) {
+        emit(ProfileContentFailure(error: e.toString()));
+      }
+    });
   }
   ProfileContentService profileContentService;
 }

@@ -24,6 +24,24 @@ final class UploadProfilePicture extends ProfileContentEvent {}
 
 final class UploadCoverPicture extends ProfileContentEvent {}
 
+final class UpdateName extends ProfileContentEvent {
+  const UpdateName(this.name);
+
+  final String name;
+
+  @override
+  List<Object> get props => [name];
+}
+
+final class UpdatePseudo extends ProfileContentEvent {
+  const UpdatePseudo(this.pseudo);
+
+  final String pseudo;
+
+  @override
+  List<Object> get props => [pseudo];
+}
+
 final class GetContacts extends ProfileContentEvent {}
 
 final class GetFollowers extends ProfileContentEvent {}

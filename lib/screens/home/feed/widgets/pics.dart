@@ -60,7 +60,7 @@ class _PicsState extends State<Pics> {
                         mainAxisSpacing: 2.0,
                       ),
                       shrinkWrap: true,
-                      itemCount: 18,
+                      itemCount: state is FetchLoading ? 18 : publicationItems.length,
                       itemBuilder: (context, index) {
                         if (publicationItems.isNotEmpty && index < publicationItems.length) {
                           return Hero(

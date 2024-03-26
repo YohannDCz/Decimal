@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
 
+import 'package:decimal/bloc/authentication/authentication_bloc.dart';
 import 'package:decimal/bloc/bloc/profile_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
@@ -38,45 +39,48 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      builder: (context, state) {
-        return widget.user_uuid != supabaseUser!.id
-            ? Scaffold(
-                appBar: AppBar(
-                  title: const Text('Profile'),
-                ),
-                body: SafeArea(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      color: AppColors.primaryBackground,
-                      child: const Column(
-                        children: [
-                          ProfileUserDescription(),
-                          ProfileUserStories(),
-                          ProfileUserPics(),
-                          ProfileUserContacts(),
-                          ProfileUserPublications(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : SingleChildScrollView(
+    return widget.user_uuid != supabaseUser!.id
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text('Profile'),
+            ),
+            body: SafeArea(
+              child: SingleChildScrollView(
                 child: Container(
                   color: AppColors.primaryBackground,
                   child: const Column(
                     children: [
-                      ProfileDescription(),
-                      ProfileStories(),
-                      ProfilePics(),
-                      ProfileContacts(),
-                      ProfilePublications(),
+                      ProfileUserDescription(),
+                      ProfileUserStories(),
+                      ProfileUserPics(),
+                      ProfileUserContacts(),
+                      ProfileUserPublications(),
                     ],
                   ),
                 ),
-              );
-      },
-    );
+              ),
+            ),
+          )
+        : SingleChildScrollView(
+            child: Container(
+              color: AppColors.primaryBackground,
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
+                      Navigator.of(context).pushNamed('/signin');
+                    },
+                    child: const Text('Sign Out'),
+                  ),
+                  const ProfileDescription(),
+                  const ProfileStories(),
+                  const ProfilePics(),
+                  const ProfileContacts(),
+                  const ProfilePublications(),
+                ],
+              ),
+            ),
+          );
   }
 }

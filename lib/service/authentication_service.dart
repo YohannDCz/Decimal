@@ -21,16 +21,20 @@ class AuthenticationService {
   late final GoTrueClient supabaseAuth;
   late final User? supabaseUser;
 
-  Future createTableEntry(email) async {
+  Future createTableEntry() async {
     if (supabaseAuth.currentSession != null) {
-      
       var userToInsert = {
         'uuid': supabaseUser!.id,
-        'email': email,
+        'email': supabaseUser!.email,
       };
       // Perform the insert query
+      try {
       var response = await supabaseClient.from('users').upsert([userToInsert]);
       return response;
+      } catch (e) {
+        print("Erreur lors de la création de l'entrée dans la table : $e");
+        throw "Erreur lors de la création de l'entrée dans la table : $e";
+      }
     }
     return null;
   }
@@ -155,30 +159,28 @@ class AuthenticationService {
   }
 
   Future signInWithTwitter() async {
-    final response = await supabaseAuth.signInWithOAuth(
-      redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
-      Provider.twitter,
-    );
-
-    if (response) {
-      final user = supabaseUser;
-      if (user != null) {
-        // L'email peut être null si l'utilisateur n'a pas autorisé l'accès à son email
-        final email = user.email;
-        await createTableEntry(email);
-        debugPrint('Email de l\'utilisateur: $email');
-      } else {
-        throw 'Erreur: Aucun utilisateur connecté';
-      }
-    } else {
-      throw 'Erreur de connexion';
+    try {
+      await supabaseAuth.signInWithOAuth(
+        redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
+        Provider.twitter,
+      );
+    } catch (e) {
+      throw "Erreur lors de la connexion avec Twitter : $e";
     }
   }
 
   Future<bool> getUser() async {
+    if (supabaseUser?.id == null) {
+      return false;
+    }
+
     try {
-      await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
-      return true;
+      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single().execute();
+      if (response.data != null) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       return false;
     }

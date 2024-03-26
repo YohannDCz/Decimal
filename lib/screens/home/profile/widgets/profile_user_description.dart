@@ -61,6 +61,7 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
           enabled: user.id == "1",
           child: Column(
             children: [
+              if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
               SizedBox(
                 width: double.infinity,
                 height: 276.0,
@@ -68,7 +69,7 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed('/profile_pics_widget', arguments: user.cover_picture);
+                        Navigator.of(context).pushNamed('/cover_pic_widget', arguments: user.cover_picture);
                       },
                       child: Container(
                         height: 276.0,
@@ -85,7 +86,7 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed('/profile_pics_widget', arguments: user.profile_picture);
+                          Navigator.of(context).pushNamed('/profile_pic_widget', arguments: user.profile_picture);
                         },
                         child: Container(
                           width: 100.0,
@@ -155,10 +156,12 @@ class _ProfileUserDescriptionState extends State<ProfileUserDescription> {
                       ],
                     ),
                     const Gap(16),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0, right: 12.0, bottom: 16.0, left: 12.0),
-                      child: Text(user.biography ?? '[user_biography]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                    ),
+                    user.biography != null
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 6.0, right: 12.0, bottom: 16.0, left: 12.0),
+                            child: Text(user.biography!, style: Theme.of(context).primaryTextTheme.bodyMedium),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),

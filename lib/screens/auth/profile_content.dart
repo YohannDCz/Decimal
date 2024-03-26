@@ -22,6 +22,9 @@ class _ProfileContentState extends State<ProfileContent> {
   TextEditingController pseudoController = TextEditingController();
   String? coverPictureUrl;
   String? profilePictureUrl;
+  String buttontext = 'Validate';
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   initState() {
@@ -34,11 +37,7 @@ class _ProfileContentState extends State<ProfileContent> {
     return BlocConsumer<ProfileContentBloc, ProfileContentState>(
       listener: (context, state) {
         if (state is ProfileContentSuccess) {
-          debugPrint("OOOK");
           setState(() {
-            firstNameController.text = state.user!.name!.split(" ").first;
-            lastNameController.text = state.user!.name!.split(' ').skip(1).join(' ');
-            pseudoController.text = state.user!.pseudo!;
             coverPictureUrl = state.user!.cover_picture;
             profilePictureUrl = state.user!.profile_picture;
           });
@@ -50,35 +49,49 @@ class _ProfileContentState extends State<ProfileContent> {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(gradient: AppColors.gradient),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ProfileHeader(
-                  coverPictureUrl: coverPictureUrl,
-                  profilePictureUrl: profilePictureUrl,
-                  name: "${firstNameController.text} ${lastNameController.text}",
-                  pseudo: pseudoController.text,
-                ),
-                ProfileForm(
-                  coverPictureUrl: coverPictureUrl,
-                  profilePictureUrl: profilePictureUrl,
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController,
-                  pseudoController: pseudoController,
-                ),
-                Buttons(onPressed: () {
-                  BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(
-                    id: supabaseUser!.id,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ProfileHeader(
+                    coverPictureUrl: coverPictureUrl,
+                    profilePictureUrl: profilePictureUrl,
                     name: "${firstNameController.text} ${lastNameController.text}",
                     pseudo: pseudoController.text,
-                    profile_picture: profilePictureUrl,
-                    cover_picture: coverPictureUrl,
-                  )));
-                }),
-                const Gap(4),
-              ],
+                  ),
+                  ProfileForm(
+                    coverPictureUrl: coverPictureUrl,
+                    profilePictureUrl: profilePictureUrl,
+                    firstNameController: firstNameController,
+                    lastNameController: lastNameController,
+                    pseudoController: pseudoController,
+                  ),
+                  Buttons(
+                    buttonText: buttontext,
+                    onPressed: () {
+                      if (buttontext == 'Continue') {
+                        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                      }
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          buttontext = 'Continue';
+                        });
+                        BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(
+                          id: supabaseUser!.id,
+                          name: "${firstNameController.text} ${lastNameController.text}",
+                          pseudo: pseudoController.text,
+                          profile_picture: profilePictureUrl,
+                          cover_picture: coverPictureUrl,
+                        )));
+                      }
+                    },
+                  ),
+                  const Gap(4),
+                ],
+              ),
             ),
           ),
         );

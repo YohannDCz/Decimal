@@ -26,8 +26,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signUpWithEmail(event.user);
-        emit(AuthenticationSuccess(userExist: false));
-        await authenticationService.createTableEntry(supabaseUser!.email);
+        if (supabaseUser != null) {
+          await Future.delayed(const Duration(seconds: 1), await authenticationService.createTableEntry());
+          emit(AuthenticationSuccess(userExist: false));
+        }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
       }
@@ -44,13 +46,14 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       try {
         await authenticationService.signInWithGoogle();
         bool response = await authenticationService.getUser();
+        print(response);
         if (response) {
           emit(AuthenticationSuccess(userExist: true));
         } else {
-          emit(AuthenticationSuccess(userExist: false));
-        }
-        if (supabaseUser != null) {
-          await authenticationService.createTableEntry(supabaseUser!.email);
+          if (supabaseSession != null) {
+            await Future.delayed(const Duration(seconds: 1), await authenticationService.createTableEntry());
+            emit(AuthenticationSuccess(userExist: false));
+          }
         }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
@@ -66,10 +69,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         if (response) {
           emit(AuthenticationSuccess(userExist: true));
         } else {
+          if (supabaseUser != null) {
+            await Future.delayed(const Duration(seconds: 1), await authenticationService.createTableEntry());
+          }
           emit(AuthenticationSuccess(userExist: false));
-        }
-        if (supabaseUser != null) {
-          await authenticationService.createTableEntry(supabaseUser!.email);
         }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));
@@ -85,10 +88,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
         if (response) {
           emit(AuthenticationSuccess(userExist: true));
         } else {
+          if (supabaseUser != null) {
+            await Future.delayed(const Duration(seconds: 1), await authenticationService.createTableEntry());
+          }
           emit(AuthenticationSuccess(userExist: false));
-        }
-        if (supabaseUser != null) {
-          await authenticationService.createTableEntry(supabaseUser!.email);
         }
       } catch (e) {
         emit(AuthenticationFailure(error: e.toString()));

@@ -70,7 +70,7 @@ class _VideosState extends State<Videos> {
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: state is FetchLoading ? 3 : 18,
+                      itemCount: state is FetchLoading ? 3 : publications.length,
                       itemBuilder: (context, index) {
                         if (publications.isNotEmpty && index < publications.length) {
                           return Padding(

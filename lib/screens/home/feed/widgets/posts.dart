@@ -57,7 +57,7 @@ class _PostsState extends State<Posts> {
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 10,
+                      itemCount: state is FetchLoading ? 4 : publicationItems.length,
                       itemBuilder: (context, index) {
                         if (publicationItems.isNotEmpty && index < publicationItems.length) {
                           final CustomUser user = users[index];

@@ -6,9 +6,9 @@ import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class FeedService {
-  Future<List<PublicationModel>> getPublications(String publication) async {
+  Future<List<PublicationModel>> getPublications(String publication, int limit) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(limit).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -17,9 +17,9 @@ class FeedService {
     }
   }
 
-  Future<List<PublicationItemModel>> getPublicationItems(String publication) async {
+  Future<List<PublicationItemModel>> getPublicationItems(String publication, int limit) async {
     try {
-      final List<PublicationModel> publications = await getPublications(publication);
+      final List<PublicationModel> publications = await getPublications(publication, limit);
       final List<PublicationItemModel> publicationItems = [];
       for (var items in publications) {
         final response = await supabaseClient.from(publication).select().eq('publication_id', items.id).single();
@@ -33,10 +33,10 @@ class FeedService {
     }
   }
 
-  Future<List<CustomUser>> getPublicationUsers(String publicationType) async {
+  Future<List<CustomUser>> getPublicationUsers(String publicationType, int limit) async {
     try {
       // Obtention des publications filtrées par le type spécifié.
-      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('users(*)').eq('type', publicationType).limit(limit).order('date_of_publication', ascending: false);
       List<CustomUser> publicationUsers = (response as List).map((e) => CustomUser.fromMap(e["users"] as Map<String, dynamic>)).toList();
       return publicationUsers;
     } catch (e) {
@@ -45,9 +45,9 @@ class FeedService {
     }
   }
 
-  Future<List<List<CommentModel>>> getComments(String publicationType) async {
+  Future<List<List<CommentModel>>> getComments(String publicationType, int limit) async {
     try {
-      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from('publications').select('comments(*)').eq('type', publicationType).limit(limit).order('date_of_publication', ascending: false);
       final comments = (response as List).map((e) => (e["comments"] as List).map((e) => CommentModel.fromMap(e as Map<String, dynamic>)).toList()).toList();
       return comments;
     } catch (e) {
@@ -56,8 +56,8 @@ class FeedService {
     }
   }
 
-  Future<List<List<CustomUser>>> getCommentUsers(String publicationType) async {
-    final allComments = await getComments(publicationType);
+  Future<List<List<CustomUser>>> getCommentUsers(String publicationType, int limit) async {
+    final allComments = await getComments(publicationType, limit);
     final List<List<CustomUser>> allUsers = [];
     try {
       for (var comments in allComments) {
@@ -148,7 +148,7 @@ class FeedService {
 
   Future<int> getReactions(String reactionType, int? publicationId) async {
     try {
-      if(publicationId == null) {
+      if (publicationId == null) {
         throw Exception('Publication ID is null');
       }
       final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
@@ -180,11 +180,11 @@ class FeedService {
 
   Future<Map<String, dynamic>> getStoriesData() async {
     try {
-      final publications = await getPublications("stories");
-      final stories = await getPublicationItems("stories");
-      final users = await getPublicationUsers("stories");
-      final comments = await getComments("stories");
-      final commentsUsers = await getCommentUsers("stories");
+      final publications = await getPublications("stories", 5);
+      final stories = await getPublicationItems("stories", 5);
+      final users = await getPublicationUsers("stories", 5);
+      final comments = await getComments("stories", 5);
+      final commentsUsers = await getCommentUsers("stories", 5);
       final storiesData = {'publications': publications, 'stories': stories, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
       return storiesData;
     } catch (e) {
