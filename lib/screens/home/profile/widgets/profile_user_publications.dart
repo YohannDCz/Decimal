@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/provider.dart';
 import 'package:decimal/config/theme.dart';

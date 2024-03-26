@@ -13,6 +13,7 @@ class PublicationItemModel extends Equatable {
     this.title,
     this.content,
     this.tags,
+    this.duration,
   });
 
   final int id;
@@ -21,6 +22,7 @@ class PublicationItemModel extends Equatable {
   final String? title;
   final String? content;
   final List<String>? tags;
+  final int? duration;
 
   factory PublicationItemModel.fromMap(Map<String, dynamic> map) {
     return PublicationItemModel(
@@ -30,6 +32,7 @@ class PublicationItemModel extends Equatable {
       title: map['title'] != null ? map['title'] as String : "",
       content: map["content"] != null ? map['content'] as String : "",
       tags: map['tags'] != null ? List<String>.from(map['tags'].map((e) => e.toString())) : [],
+      duration: map['duration'] != null ? map['duration'] as int : 0,
     );
   }
 
@@ -43,6 +46,7 @@ class PublicationItemModel extends Equatable {
       'title': title,
       'content': content,
       'tags': tags,
+      'duration': duration,
     };
   }
 
@@ -55,6 +59,7 @@ class PublicationItemModel extends Equatable {
     String? title,
     String? content,
     List<String>? tags,
+    int? duration,
   }) {
     return PublicationItemModel(
       id: id ?? this.id,
@@ -63,9 +68,10 @@ class PublicationItemModel extends Equatable {
       title: title ?? this.title,
       content: content ?? this.content,
       tags: tags ?? this.tags,
+      duration: duration ?? this.duration,
     );
   }
 
   @override
-  List<Object?> get props => [id, publication_id, url, content, tags, title];
+  List<Object?> get props => [id, publication_id, url, content, tags, title, duration];
 }

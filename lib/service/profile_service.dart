@@ -12,7 +12,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProfileService {
   Future<List<PublicationModel>> getPublications(String publication, String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).eq('user_uuid', user_uuid).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_repost', null).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -82,7 +82,7 @@ class ProfileService {
 
   Future<List<PublicationModel>> getAllPublications(String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('user_uuid', user_uuid).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().is_('user_uuid_repost', null).eq('user_uuid', user_uuid).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {

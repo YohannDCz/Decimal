@@ -1,4 +1,4 @@
-import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';

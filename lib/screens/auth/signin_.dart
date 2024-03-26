@@ -22,21 +22,21 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-    // StreamSubscription<AuthState>? _authSubscription;
+    StreamSubscription<AuthState>? _authSubscription;
 
   @override
   initState() {
     super.initState();
-    // _authSubscription =  supabaseAuth.onAuthStateChange.listen((auth) {
-    //   if (auth.session != null) {
-    //     Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-    //   }
-    // });
+    _authSubscription =  supabaseAuth.onAuthStateChange.listen((auth) {
+      if (auth.session != null) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      }
+    });
   }
 
   @override
   dispose() {
-    // _authSubscription?.cancel();
+    _authSubscription?.cancel();
     super.dispose();
   }
 

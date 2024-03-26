@@ -1,11 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:decimal/bloc/reaction/reaction_bloc.dart';
 import 'package:decimal/config/theme.dart';
-import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/reaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Reactions extends StatelessWidget {
+class Reactions extends StatefulWidget {
   const Reactions({super.key, this.container = true, this.vertical = false, this.publication_id});
 
   final bool container;
@@ -13,112 +14,146 @@ class Reactions extends StatelessWidget {
   final bool vertical;
 
   @override
+  State<Reactions> createState() => _ReactionsState();
+}
+
+class _ReactionsState extends State<Reactions> {
+  bool addedLike = false;
+  bool addedLove = false;
+  bool isReposted = false;
+  @override
   Widget build(BuildContext context) {
     Future<int>? reactionsCount(String reactionType) async {
-      return await context.read<FeedService>().getReactions(reactionType, publication_id);
+      return await context.read<ReactionService>().getReactions(reactionType, widget.publication_id);
     }
 
     return Container(
       decoration: BoxDecoration(
-        color: container ? AppColors.black.withOpacity(0.5) : Colors.transparent,
+        color: widget.container ? AppColors.black.withOpacity(0.5) : Colors.transparent,
         borderRadius: BorderRadius.circular(99.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: !vertical
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+        child: !widget.vertical
             ? Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.thumb_up, color: AppColors.customColor1, size: 20.0),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2.0),
-                          child: SizedBox(
-                            width: 36.0,
-                            child: FutureBuilder<int>(
-                              future: reactionsCount('likes'),
-                              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                return Text(
-                                  snapshot.hasData ? snapshot.data.toString() : "0",
-                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
-                                );
-                              },
-                            ),
+                  Row(
+                    children: [
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            if (!addedLike) {
+                              setState(() {
+                                addedLike = true;
+                              });
+                              BlocProvider.of<ReactionBloc>(context).add(AddReaction('likes', widget.publication_id!));
+                            } else {
+                              BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('likes', widget.publication_id!));
+                              setState(() {
+                                addedLike = false;
+                              });
+                            }
+                          },
+                          icon: Icon(Icons.thumb_up, color: addedLike ? AppColors.customColor1 : AppColors.customColor1.withOpacity(0.5), size: 20.0)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: SizedBox(
+                          width: 24.0,
+                          child: FutureBuilder<int>(
+                            future: reactionsCount('likes'),
+                            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                              return Text(
+                                snapshot.hasData ? snapshot.data.toString() : "0",
+                                style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.favorite, color: AppColors.customColor2, size: 20.0),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2.0),
-                          child: SizedBox(
-                            width: 36.0,
-                            child: FutureBuilder<int>(
-                              future: reactionsCount('loves'),
-                              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                return Text(
-                                  snapshot.hasData ? snapshot.data.toString() : "0",
-                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
-                                );
-                              },
-                            ),
+                  Row(
+                    children: [
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            if (!addedLove) {
+                              setState(() {
+                                addedLove = true;
+                              });
+                              BlocProvider.of<ReactionBloc>(context).add(AddReaction('loves', widget.publication_id!));
+                            } else {
+                              BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('loves', widget.publication_id!));
+                              setState(() {
+                                addedLove = false;
+                              });
+                            }
+                          },
+                          icon: Icon(Icons.favorite, color: addedLove ? AppColors.customColor2 : AppColors.customColor2.withOpacity(0.5), size: 20.0)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: SizedBox(
+                          width: 24.0,
+                          child: FutureBuilder<int>(
+                            future: reactionsCount('loves'),
+                            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                              return Text(
+                                snapshot.hasData ? snapshot.data.toString() : "0",
+                                style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.mode_comment, color: AppColors.customColor3, size: 20.0),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2.0),
-                          child: SizedBox(
-                            width: 36.0,
-                            child: FutureBuilder<int>(
-                              future: reactionsCount('comments'),
-                              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                return Text(
-                                  snapshot.hasData ? snapshot.data.toString() : "0",
-                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
-                                );
-                              },
-                            ),
+                  Row(
+                    children: [
+                      IconButton(padding: EdgeInsets.zero, onPressed: () {}, icon: Icon(Icons.mode_comment, color: AppColors.customColor3, size: 20.0)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: SizedBox(
+                          width: 24.0,
+                          child: FutureBuilder<int>(
+                            future: reactionsCount('comments'),
+                            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                              return Text(
+                                snapshot.hasData ? snapshot.data.toString() : "0",
+                                style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.repeat, color: AppColors.customColor4, size: 20.0),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 2.0),
-                          child: SizedBox(
-                            width: 36.0,
-                            child: FutureBuilder<int>(
-                              future: reactionsCount('reposts'),
-                              builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                return Text(
-                                  snapshot.hasData ? snapshot.data.toString() : "0",
-                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
-                                );
-                              },
-                            ),
+                  Row(
+                    children: [
+                      IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            BlocProvider.of<ReactionBloc>(context).add(AddRepost(widget.publication_id!));
+                            setState(() {
+                              isReposted = true;
+                            });
+                          },
+                          icon: Icon(Icons.repeat, color: isReposted ? AppColors.customColor4 : AppColors.customColor4.withOpacity(0.5), size: 20.0)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: SizedBox(
+                          width: 24.0,
+                          child: FutureBuilder<int>(
+                            future: reactionsCount('reposts'),
+                            builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                              return Text(
+                                snapshot.hasData ? snapshot.data.toString() : "0",
+                                style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -135,7 +170,7 @@ class Reactions extends StatelessWidget {
                           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                             return Text(
                               snapshot.hasData ? snapshot.data.toString() : "0",
-                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
+                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
                             );
                           },
                         ),
@@ -152,7 +187,7 @@ class Reactions extends StatelessWidget {
                           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                             return Text(
                               snapshot.hasData ? snapshot.data.toString() : "0",
-                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
+                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
                             );
                           },
                         ),
@@ -169,7 +204,7 @@ class Reactions extends StatelessWidget {
                           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                             return Text(
                               snapshot.hasData ? snapshot.data.toString() : "0",
-                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
+                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
                             );
                           },
                         ),
@@ -186,7 +221,7 @@ class Reactions extends StatelessWidget {
                           builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                             return Text(
                               snapshot.hasData ? snapshot.data.toString() : "0",
-                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: container ? AppColors.white : AppColors.black),
+                              style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: widget.container ? AppColors.white : AppColors.black),
                             );
                           },
                         ),

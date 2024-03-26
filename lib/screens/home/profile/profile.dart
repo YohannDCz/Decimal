@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
 
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
-import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_contacts.dart';

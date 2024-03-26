@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class FeedService {
   Future<List<PublicationModel>> getPublications(String publication, int limit) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(limit).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_repost', null).limit(limit).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -78,7 +78,7 @@ class FeedService {
 
   Future<List<PublicationModel>> getAllPublications() async {
     try {
-      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').is_('user_uuid_repost', null).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -146,18 +146,7 @@ class FeedService {
     }
   }
 
-  Future<int> getReactions(String reactionType, int? publicationId) async {
-    try {
-      if (publicationId == null) {
-        throw Exception('Publication ID is null');
-      }
-      final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
-      return response.length;
-    } catch (e) {
-      debugPrint('Unable to get the reactions: $e');
-      throw Exception('Unable to get the reactions: $e');
-    }
-  }
+  
 
   String? getDuration(DateTime? time) {
     final duration = DateTime(2029).difference(time!);

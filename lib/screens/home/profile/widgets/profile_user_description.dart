@@ -1,4 +1,4 @@
-import 'package:decimal/bloc/bloc/profile_bloc.dart';
+import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/user_model.dart';

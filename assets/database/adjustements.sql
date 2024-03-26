@@ -14,5 +14,4 @@ DELETE FROM videos WHERE publication_id > 420;
 
 DELETE FROM vids WHERE publication_id > 420;
 
-
 DELETE FROM publications WHERE id > 420;

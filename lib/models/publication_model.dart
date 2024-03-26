@@ -12,6 +12,7 @@ class PublicationModel extends Equatable {
     required this.date_of_publication,
     required this.location,
     required this.user_uuid,
+    required this.user_uuid_repost,
   });
 
   final int id;
@@ -19,6 +20,7 @@ class PublicationModel extends Equatable {
   final DateTime date_of_publication;
   final String location;
   final String user_uuid;
+  final String user_uuid_repost;
 
   factory PublicationModel.fromMap(Map<String, dynamic> map) {
     return PublicationModel(
@@ -27,6 +29,7 @@ class PublicationModel extends Equatable {
       date_of_publication: map['date_of_publication'] != null ? DateTime.parse(map['date_of_publication'] as String) : DateTime(2029),
       location: map["location"] != null ? map['location'] as String : "",
       user_uuid: map['user_uuid'] != null ? map['user_uuid'] as String : "",
+      user_uuid_repost: map['user_uuid_repost'] != null ? map['user_uuid_repost'] as String : "",
     );
   }
 
@@ -39,6 +42,7 @@ class PublicationModel extends Equatable {
       'date_of_publication': date_of_publication,
       'location': location,
       'user_uuid': user_uuid,
+      'user_uuid_repost': user_uuid_repost,
     };
   }
 
@@ -50,6 +54,7 @@ class PublicationModel extends Equatable {
     DateTime? date_of_publication,
     String? location,
     String? user_uuid,
+    String? user_uuid_repost,
   }) {
     return PublicationModel(
       id: id ?? this.id,
@@ -57,9 +62,10 @@ class PublicationModel extends Equatable {
       date_of_publication: date_of_publication ?? this.date_of_publication,
       location: location ?? this.location,
       user_uuid: user_uuid ?? this.user_uuid,
+      user_uuid_repost: user_uuid_repost ?? this.user_uuid_repost,
     );
   }
 
   @override
-  List<Object?> get props => [id, type, date_of_publication, location, user_uuid];
+  List<Object?> get props => [id, type, date_of_publication, location, user_uuid, user_uuid_repost];
 }
