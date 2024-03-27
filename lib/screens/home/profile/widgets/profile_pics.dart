@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
@@ -7,9 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfilePics extends StatefulWidget {
-  const ProfilePics({
-    super.key,
-  });
+  const ProfilePics(this.user_uuid, {super.key});
+    
+  final String user_uuid;
 
   @override
   State<ProfilePics> createState() => _ProfilePicsState();
@@ -30,13 +33,24 @@ class _ProfilePicsState extends State<ProfilePics> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          setState(
-            () {
-              publications = state.fetchPicsSuccess['publications'];
-              pics = state.fetchPicsSuccess['pics'];
-            },
-          );
+        if (widget.user_uuid != supabaseUser!.id) {
+          if (state is FetchProfileUserSuccess) {
+            setState(
+              () {
+                publications = state.fetchPicsSuccess['publications'];
+                pics = state.fetchPicsSuccess['pics'];
+              },
+            );
+          }
+        } else {
+          if (state is FetchProfileSuccess) {
+            setState(
+              () {
+                publications = state.fetchPicsSuccess['publications'];
+                pics = state.fetchPicsSuccess['pics'];
+              },
+            );
+          }
         }
       },
       builder: (context, state) {

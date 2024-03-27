@@ -1,4 +1,6 @@
-import 'package:decimal/bloc/profile/profile_bloc.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:decimal/bloc/profile/profile_bloc.dart' as pro;
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
@@ -19,18 +21,15 @@ class _CoverPicWidgetState extends State<CoverPicWidget> {
   @override
   initState() {
     super.initState();
-    BlocProvider.of<ProfileContentBloc>(context).add(GetProfile());
+    BlocProvider.of<pro.ProfileBloc>(context).add(pro.GetProfile(widget._user_uuid));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileContentBloc, ProfileContentState>(
+    return BlocConsumer<pro.ProfileBloc, pro.ProfileState>(
       listener: (context, state) {
-        if (state is ProfileContentSuccess) {
-          setState(() {
-            coverPictureUrl = state.user!.cover_picture;
-          });
-          BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(widget._user_uuid));
+        if (state is pro.GetProfileSuccess) {
+          coverPictureUrl = state.profile.cover_picture;
         }
       },
       builder: (context, state) {
@@ -48,7 +47,7 @@ class _CoverPicWidgetState extends State<CoverPicWidget> {
                     right: 0,
                     top: 0,
                     child: Hero(
-                      tag: 'MyHeroCoverPic}',
+                      tag: 'MyHeroCoverPic',
                       child: Image.network(
                         coverPictureUrl ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-26T12%3A04%3A29.640Z",
                         fit: BoxFit.contain,

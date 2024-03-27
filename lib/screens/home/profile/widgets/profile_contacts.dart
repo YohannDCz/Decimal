@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfileContacts extends StatefulWidget {
-  const ProfileContacts({
-    super.key,
-  });
+  const ProfileContacts(this.user_uuid, {super.key});
 
+  final String user_uuid;
+  
   @override
   State<ProfileContacts> createState() => _ProfileContactsState();
 }
@@ -27,10 +30,18 @@ class _ProfileContactsState extends State<ProfileContacts> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          setState(() {
-            contacts = state.fetchContactSuccess['contacts'];
-          });
+        if (widget.user_uuid != supabaseUser!.id) {
+          if (state is FetchProfileUserSuccess) {
+            setState(() {
+              contacts = state.fetchContactSuccess['contacts'];
+            });
+          }
+        } else {
+          if (state is FetchProfileSuccess) {
+            setState(() {
+              contacts = state.fetchContactSuccess['contacts'];
+            });
+          }
         }
       },
       builder: (context, state) {

@@ -31,3 +31,11 @@ final class FetchProfileUserContent extends ProfileEvent {
   List<Object> get props => [user_id];
 }
 
+final class GetProfile extends ProfileEvent {
+  final String user_uuid;
+
+  const GetProfile(this.user_uuid);
+
+  @override
+  List<Object> get props => [user_uuid];
+}

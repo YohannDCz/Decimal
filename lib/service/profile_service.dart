@@ -1,10 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/contact_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/reaction_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,7 +15,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProfileService {
   Future<List<PublicationModel>> getPublications(String publication, String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_repost', null).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -82,7 +85,8 @@ class ProfileService {
 
   Future<List<PublicationModel>> getAllPublications(String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().is_('user_uuid_repost', null).eq('user_uuid', user_uuid).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('user_uuid', user_uuid).or('type.eq.posts, type.eq.pics, type.eq.videos').limit(5).order('date_of_publication', ascending: false);
+
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -94,11 +98,23 @@ class ProfileService {
   Future<List<PublicationItemModel>> getAllPublicationItems(String user_uuid) async {
     try {
       final List<PublicationModel> publications = await getAllPublications(user_uuid);
+      if (publications.isEmpty) {
+        return [];
+      }
       final List<PublicationItemModel> publicationItems = [];
-      for (var items in publications) {
-        final response = await supabaseClient.from(items.type).select().eq('publication_id', items.id).single();
-        final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
-        publicationItems.add(publicationModel);
+      log(publications.toString());
+      for (var item in publications) {
+        if (item.user_uuid_original_publication != null) {
+          final response = await supabaseClient.from("reposts").select().eq('publication_id', item.id).single();
+          final repostModel = ReactionModel.fromMap(response as Map<String, dynamic>);
+          final response1 = await supabaseClient.from(item.type).select().eq('publication_id', repostModel.publication_id_original).single();
+          final publicationModel = PublicationItemModel.fromMap(response1 as Map<String, dynamic>);
+          publicationItems.add(publicationModel);
+        } else {
+          final response = await supabaseClient.from(item.type).select().eq('publication_id', item.id).single();
+          final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+          publicationItems.add(publicationModel);
+        }
       }
       return publicationItems;
     } catch (e) {

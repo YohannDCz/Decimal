@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/constants.dart';
@@ -9,7 +11,9 @@ import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfileDescription extends StatefulWidget {
-  const ProfileDescription({super.key});
+  const ProfileDescription(this.user_uuid, {super.key});
+
+  final String user_uuid;
 
   @override
   State<ProfileDescription> createState() => _ProfileDescriptionState();
@@ -41,16 +45,30 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          setState(() {
-            user = state.fetchDescriptionSuccess;
-            contacts = state.fetchContactSuccess["contacts"];
-            followers = state.fetchContactSuccess["followers"];
-            followings = state.fetchContactSuccess["followings"];
-            nameController.text = user?.name ?? '';
-            pseudoController.text = user?.pseudo ?? '';
-            biographyController.text = user?.biography ?? '';
-          });
+        if (widget.user_uuid != supabaseUser!.id) {
+          if (state is FetchProfileUserSuccess) {
+            setState(() {
+              user = state.fetchDescriptionSuccess;
+              contacts = state.fetchContactSuccess["contacts"];
+              followers = state.fetchContactSuccess["followers"];
+              followings = state.fetchContactSuccess["followings"];
+              nameController.text = user?.name ?? '';
+              pseudoController.text = user?.pseudo ?? '';
+              biographyController.text = user?.biography ?? '';
+            });
+          }
+        } else {
+          if (state is FetchProfileSuccess) {
+            setState(() {
+              user = state.fetchDescriptionSuccess;
+              contacts = state.fetchContactSuccess["contacts"];
+              followers = state.fetchContactSuccess["followers"];
+              followings = state.fetchContactSuccess["followings"];
+              nameController.text = user?.name ?? '';
+              pseudoController.text = user?.pseudo ?? '';
+              biographyController.text = user?.biography ?? '';
+            });
+          }
         }
       },
       builder: (context, state) {
@@ -121,7 +139,6 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                             style: Theme.of(context).primaryTextTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                             autofocus: true,
-                            
                             decoration: InputDecoration(
                               isDense: true,
                               enabledBorder: InputBorder.none,
@@ -217,7 +234,7 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                       ],
                     ),
                   ),
-                  Positioned(
+                  widget.user_uuid == supabaseUser!.id ? Positioned(
                     right: 8.0,
                     top: 8.0,
                     child: Material(
@@ -242,7 +259,7 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                         ),
                       ),
                     ),
-                  ),
+                  ) : const SizedBox.shrink(),
                 ],
               ),
             ],

@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:decimal/bloc/feed/feed_bloc.dart';
+import 'package:decimal/bloc/reaction/reaction_bloc.dart';
 import 'package:decimal/config/constants.dart';
+import 'package:decimal/config/provider.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -8,8 +12,10 @@ import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
 import 'package:decimal/service/profile_content_service.dart';
+import 'package:decimal/service/reaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -28,6 +34,9 @@ class _FeedPublicationsState extends State<FeedPublications> {
   late List<CustomUser> users;
   late List<List<CommentModel>> commentsAll;
   late List<List<CustomUser>> commentsUsers;
+  late List<FocusNode> focusNodes;
+  late List<TextEditingController> controllers;
+  late List<bool> commentsOpen;
 
   String _extractId(String url) {
     String videoId = url.split('?')[0].substring('https://youtu.be/'.length);
@@ -47,13 +56,15 @@ class _FeedPublicationsState extends State<FeedPublications> {
     users = [];
     commentsAll = [];
     commentsUsers = [];
-
-    BlocProvider.of<FeedBloc>(context).add(FetchAllPublications());
   }
 
   Future<String> _extractProfilePicUser() async {
     CustomUser user = await context.read<ProfileContentService>().getProfile(supabaseUser!.id);
     return user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z';
+  }
+
+  Future<Map<String, dynamic>> _getComments(int publicationId) async {
+    return await context.read<ReactionService>().getCommentsAndUsers('comments', publicationId);
   }
 
   @override
@@ -67,6 +78,9 @@ class _FeedPublicationsState extends State<FeedPublications> {
           commentsAll = state.fetchAllSuccess['comments'];
           commentsUsers = state.fetchAllSuccess['commentsUsers'];
         }
+        focusNodes = List.generate(publications.length, (index) => FocusNode());
+        controllers = List.generate(publications.length, (index) => TextEditingController());
+        commentsOpen = List.generate(publications.length, (index) => false);
       },
       builder: (context, state) {
         return Skeletonizer(
@@ -85,12 +99,9 @@ class _FeedPublicationsState extends State<FeedPublications> {
                     late final PublicationModel publication = publications[index];
                     late final PublicationItemModel publicationItem = publicationItems[index];
                     late final CustomUser user = users[index];
-                    late final List<CommentModel> comments = commentsAll[index];
-                    late final List<CustomUser> commentUsers = commentsUsers[index];
 
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
 
-                    bool commentsOpen = false;
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
@@ -166,7 +177,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                           Positioned(
                                             bottom: 8.0,
                                             left: 8.0,
-                                            child: Reactions(publication_id: publication.id),
+                                            child: Reactions(publication_id: publication.id, commentFocusNode: focusNodes[index]),
                                           ),
                                         ],
                                       )
@@ -188,7 +199,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                             if (publication.type != 'pics' && isNotDirty)
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                child: Reactions(container: false, publication_id: publication.id),
+                                child: Reactions(container: false, publication_id: publication.id, commentFocusNode: focusNodes[index]),
                               ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
@@ -210,59 +221,76 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         ),
                                       ),
                                     ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            commentsOpen = !commentsOpen;
-                                          });
-                                        },
-                                        child: Text.rich(
-                                          TextSpan(
-                                            text: comments.length.toString(),
-                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
-                                            children: [
-                                              const TextSpan(text: ' '),
-                                              TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (comments.isNotEmpty)
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: commentsOpen ? comments.length : 2,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(bottom: 8.0),
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? 'John Doe'),
-                                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                                  children: [
-                                                    const TextSpan(text: ' '),
-                                                    TextSpan(
-                                                      text: comments[index].content,
-                                                      style: Theme.of(context).primaryTextTheme.bodyMedium,
-                                                    ),
-                                                  ],
+                                  FutureBuilder<Map<String, dynamic>>(
+                                    future: _getComments(publication.id),
+                                    builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                                      var comments = [];
+                                      var commentUsers = [];
+                                      if (snapshot.hasData) {
+                                        comments = snapshot.data!['comments'] ?? [];
+                                        commentUsers = snapshot.data!['users'] ?? [];
+                                      }
+                                      return Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    commentsOpen[index] = !commentsOpen[index];
+                                                  });
+                                                },
+                                                child: Text.rich(
+                                                  TextSpan(
+                                                    text: comments.length.toString(),
+                                                    style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
+                                                    children: [
+                                                      const TextSpan(text: ' '),
+                                                      TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                            ),
+                                          ),
+                                          if (comments.isNotEmpty && commentUsers.isNotEmpty)
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  itemCount: commentsOpen[index] ? comments.length : min(comments.length, 3),
+                                                  itemBuilder: (context, index) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? 'John Doe'),
+                                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                                          children: [
+                                                            const TextSpan(text: ' '),
+                                                            TextSpan(
+                                                              text: comments[index].content,
+                                                              style: Theme.of(context).primaryTextTheme.bodyMedium,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          else
+                                            const SizedBox.shrink()
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -273,13 +301,20 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                 child: Stack(
                                   children: [
                                     TextField(
+                                      controller: controllers[index],
+                                      focusNode: focusNodes[index],
                                       decoration: InputDecoration(
                                         isDense: true,
                                         filled: true,
                                         fillColor: AppColors.primaryBackground,
                                         hintText: 'Write a comment...',
                                         hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
-                                        suffixIcon: IconButton(icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0), onPressed: () {}),
+                                        suffixIcon: IconButton(
+                                            icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0),
+                                            onPressed: () {
+                                              BlocProvider.of<ReactionBloc>(context).add(AddComment(publication.id, controllers[index].text));
+                                              setState(() {});
+                                            }),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(99.0),
                                           borderSide: const BorderSide(color: Colors.transparent),
@@ -300,7 +335,8 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                       left: 8.0,
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.of(context).pushNamed('/home', arguments: supabaseUser!.id);
+                                          Provider.of<NavBar>(context, listen: false).currentIndex = 0;
+                                          Navigator.of(context).pushNamed('/home');
                                         },
                                         child: FutureBuilder(
                                           future: _extractProfilePicUser(),

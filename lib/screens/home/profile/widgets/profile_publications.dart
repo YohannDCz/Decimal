@@ -1,4 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:math';
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/bloc/reaction/reaction_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/provider.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
@@ -7,6 +13,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
 import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/reaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +21,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ProfilePublications extends StatefulWidget {
-  const ProfilePublications({
-    super.key,
-  });
+  const ProfilePublications(this.user_uuid, {Key? key}) : super(key: key);
+
+  final String user_uuid;
 
   @override
   State<ProfilePublications> createState() => _ProfilePublicationsState();
@@ -29,6 +36,9 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
   late List<CustomUser> users;
   late List<List<CommentModel>> commentsAll;
   late List<List<CustomUser>> commentsUsers;
+  late List<FocusNode> focusNodes;
+  late List<TextEditingController> controllers;
+  late List<bool> commentsOpen;
 
   String _extractId(String url) {
     String videoId = url.split('?')[0].substring('https://youtu.be/'.length);
@@ -37,6 +47,10 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
 
   String _extractPseudo(String pseudo) {
     return pseudo.toLowerCase().replaceAll(' ', '');
+  }
+
+  Future<Map<String, dynamic>> _getComments(int publicationId) async {
+    return await context.read<ReactionService>().getCommentsAndUsers('comments', publicationId);
   }
 
   @override
@@ -54,15 +68,34 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          setState(() {
-            user = state.fetchDescriptionSuccess;
-            publications = state.fetchAllSuccess['publications'];
-            publicationItems = state.fetchAllSuccess['publicationItems'];
-            users = state.fetchAllSuccess['users'];
-            commentsAll = state.fetchAllSuccess['comments'];
-            commentsUsers = state.fetchAllSuccess['commentsUsers'];
-          });
+        if (widget.user_uuid != supabaseUser!.id) {
+          if (state is FetchProfileUserSuccess) {
+            setState(() {
+              user = state.fetchDescriptionSuccess;
+              publications = state.fetchAllSuccess['publications'];
+              publicationItems = state.fetchAllSuccess['publicationItems'];
+              users = state.fetchAllSuccess['users'];
+              commentsAll = state.fetchAllSuccess['comments'];
+              commentsUsers = state.fetchAllSuccess['commentsUsers'];
+            });
+            focusNodes = List.generate(publications.length, (index) => FocusNode());
+            controllers = List.generate(publications.length, (index) => TextEditingController());
+            commentsOpen = List.generate(publications.length, (index) => false);
+          }
+        } else {
+          if (state is FetchProfileSuccess) {
+            setState(() {
+              user = state.fetchDescriptionSuccess;
+              publications = state.fetchAllSuccess['publications'];
+              publicationItems = state.fetchAllSuccess['publicationItems'];
+              users = state.fetchAllSuccess['users'];
+              commentsAll = state.fetchAllSuccess['comments'];
+              commentsUsers = state.fetchAllSuccess['commentsUsers'];
+            });
+            focusNodes = List.generate(publications.length, (index) => FocusNode());
+            controllers = List.generate(publications.length, (index) => TextEditingController());
+            commentsOpen = List.generate(publications.length, (index) => false);
+          }
         }
       },
       builder: (context, state) {
@@ -82,10 +115,8 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                     PublicationModel publication = publications[index];
                     PublicationItemModel publicationItem = publicationItems[index];
                     CustomUser user = users[index];
-                    List<CommentModel> comments = commentsAll[index];
-                    List<CustomUser> commentUsers = commentsUsers[index];
+
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
-                    bool commentsOpen = false;
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
@@ -116,6 +147,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                                   user.profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-20T07%3A27%3A00.569Z',
                                                   width: 48.0,
                                                   height: 48.0,
+                                                  fit: BoxFit.cover,
                                                 ),
                                               ),
                                             ),
@@ -161,7 +193,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                           Positioned(
                                             bottom: 8.0,
                                             left: 8.0,
-                                            child: Reactions(publication_id: publication.id),
+                                            child: Reactions(publication_id: publication.id, commentFocusNode: focusNodes[index]),
                                           ),
                                         ],
                                       )
@@ -183,7 +215,7 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                             if (publication.type != 'pics' && isNotDirty)
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                                child: Reactions(container: false, publication_id: publication.id),
+                                child: Reactions(container: false, publication_id: publication.id, commentFocusNode: focusNodes[index]),
                               ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
@@ -206,59 +238,76 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                         ),
                                       ),
                                     ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            commentsOpen = !commentsOpen;
-                                          });
-                                        },
-                                        child: Text.rich(
-                                          TextSpan(
-                                            text: comments.length.toString(),
-                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
-                                            children: [
-                                              const TextSpan(text: ' '),
-                                              TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (comments.isNotEmpty)
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: commentsOpen ? comments.length : 2,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(bottom: 8.0),
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? '[user_pseudo]'),
-                                                  style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                                  children: [
-                                                    const TextSpan(text: ' '),
-                                                    TextSpan(
-                                                      text: comments[index].content,
-                                                      style: Theme.of(context).primaryTextTheme.bodyMedium,
-                                                    ),
-                                                  ],
+                                  FutureBuilder<Map<String, dynamic>>(
+                                    future: _getComments(publication.id),
+                                    builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                                      var comments = [];
+                                      var commentUsers = [];
+                                      if (snapshot.hasData) {
+                                        comments = snapshot.data!['comments'] ?? [];
+                                        commentUsers = snapshot.data!['users'] ?? [];
+                                      }
+                                      return Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    commentsOpen[index] = !commentsOpen[index];
+                                                  });
+                                                },
+                                                child: Text.rich(
+                                                  TextSpan(
+                                                    text: comments.length.toString(),
+                                                    style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3),
+                                                    children: [
+                                                      const TextSpan(text: ' '),
+                                                      TextSpan(text: 'COMMENTS', style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(color: AppColors.accent3)),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                            ),
+                                          ),
+                                          if (comments.isNotEmpty && commentUsers.isNotEmpty)
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  itemCount: commentsOpen[index] ? comments.length : min(comments.length, 3),
+                                                  itemBuilder: (context, index) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          text: commentUsers[index].pseudo ?? _extractPseudo(commentUsers[index].name ?? 'John Doe'),
+                                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                                          children: [
+                                                            const TextSpan(text: ' '),
+                                                            TextSpan(
+                                                              text: comments[index].content,
+                                                              style: Theme.of(context).primaryTextTheme.bodyMedium,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          else
+                                            const SizedBox.shrink()
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -269,13 +318,19 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                 child: Stack(
                                   children: [
                                     TextField(
+                                      focusNode: focusNodes[index],
                                       decoration: InputDecoration(
                                         isDense: true,
                                         filled: true,
                                         fillColor: AppColors.primaryBackground,
                                         hintText: 'Write a comment...',
                                         hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
-                                        suffixIcon: IconButton(icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0), onPressed: () {}),
+                                        suffixIcon: IconButton(
+                                            icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0),
+                                            onPressed: () {
+                                              BlocProvider.of<ReactionBloc>(context).add(AddComment(publication.id, controllers[index].text));
+                                              setState(() {});
+                                            }),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(99.0),
                                           borderSide: const BorderSide(color: Colors.transparent),

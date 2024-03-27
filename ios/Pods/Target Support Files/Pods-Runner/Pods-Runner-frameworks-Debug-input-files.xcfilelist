@@ -6,6 +6,7 @@ ${BUILT_PRODUCTS_DIR}/app_links/app_links.framework
 ${BUILT_PRODUCTS_DIR}/connectivity/connectivity.framework
 ${BUILT_PRODUCTS_DIR}/flutter_appauth/flutter_appauth.framework
 ${BUILT_PRODUCTS_DIR}/flutter_inappwebview_ios/flutter_inappwebview_ios.framework
+${BUILT_PRODUCTS_DIR}/flutter_keyboard_visibility/flutter_keyboard_visibility.framework
 ${BUILT_PRODUCTS_DIR}/flutter_native_splash/flutter_native_splash.framework
 ${BUILT_PRODUCTS_DIR}/image_picker_ios/image_picker_ios.framework
 ${BUILT_PRODUCTS_DIR}/path_provider_foundation/path_provider_foundation.framework

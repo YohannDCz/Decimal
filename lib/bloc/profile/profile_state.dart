@@ -11,6 +11,15 @@ final class ProfileInitial extends ProfileState {}
 
 final class FetchLoading extends ProfileState {}
 
+final class GetProfileSuccess extends ProfileState {
+  const GetProfileSuccess({required this.profile});
+
+  final CustomUser profile;
+
+  @override
+  List<Object> get props => [profile];
+}
+
 final class FetchProfileSuccess extends ProfileState {
   const FetchProfileSuccess({
     required this.fetchStoriesSuccess,

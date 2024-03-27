@@ -47,7 +47,7 @@ class _FeedStoriesState extends State<FeedStories> {
       },
       builder: (context, state) {
         return Skeletonizer(
-          enabled: publications.isEmpty,
+          enabled: state is FetchLoading,
           ignoreContainers: true,
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0),

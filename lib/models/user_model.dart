@@ -30,8 +30,8 @@ class CustomUser extends Equatable {
   factory CustomUser.fromMap(Map<String, dynamic> map) {
     return CustomUser(
       id: map["uuid"] != null ? map['uuid'] as String : "",
-      profile_picture: map['profile_picture'] != null ? map['profile_picture'] as String : "",
-      cover_picture: map['cover_picture'] != null ? map['cover_picture'] as String : "",
+      profile_picture: map['profile_picture'] != null ? map['profile_picture'] as String : 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z',
+      cover_picture: map['cover_picture'] != null ? map['cover_picture'] as String : 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z',
       name: map["name"] != null ? map['name'] as String : "",
       pseudo: map['pseudo'] != null ? map['pseudo'] as String : null,
       biography: map['biography'] != null ? map['biography'] as String : null,

@@ -11,12 +11,16 @@ class ReactionModel extends Equatable {
     required this.publication_id,
     required this.user_uuid,
     required this.date_of_reaction,
+    this.content,
+    this.publication_id_original
   });
 
   final int id;
   final int publication_id;
   final String user_uuid;
   final DateTime date_of_reaction;
+  final String? content;
+  final int? publication_id_original;
 
   factory ReactionModel.fromMap(Map<String, dynamic> map) {
     return ReactionModel(
@@ -24,6 +28,8 @@ class ReactionModel extends Equatable {
       publication_id: map["publication_id"] != null ? map['publication_id'] as int : 0,
       user_uuid: map['user_uuid'] != null ? map['user_uuid'] as String : "",
       date_of_reaction: map['date_of_reaction'] != null ? DateTime.parse(map['date_of_reaction'].toString()) : DateTime.now(),
+      content: map['content'] != null ? map['content'] as String : "",
+      publication_id_original: map['publication_id_original'] != null ? map['publication_id_original'] as int : 0,
     );
   }
 
@@ -35,6 +41,8 @@ class ReactionModel extends Equatable {
       'publication_id': publication_id,
       'user_uuid': user_uuid,
       'date_of_reaction': date_of_reaction,
+      'content': content,
+      'publication_id_original': publication_id_original,
     };
   }
 
@@ -46,15 +54,18 @@ class ReactionModel extends Equatable {
     String? user_uuid,
     String? content,
     DateTime? date_of_reaction,
+    int? publication_id_original,
   }) {
     return ReactionModel(
       id: id ?? this.id,
       publication_id: publication_id ?? this.publication_id,
       user_uuid: user_uuid ?? this.user_uuid,
       date_of_reaction: date_of_reaction ?? this.date_of_reaction,
+      content: content ?? this.content,
+      publication_id_original: publication_id_original ?? this.publication_id_original,
     );
   }
 
   @override
-  List<Object?> get props => [id, publication_id, user_uuid, date_of_reaction];
+  List<Object?> get props => [id, publication_id, user_uuid, date_of_reaction, publication_id_original, content];
 }

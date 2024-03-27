@@ -56,6 +56,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(FetchFailure(error: e.toString()));
       }
     });
+
+     on<GetProfile>((event, emit) async {
+      emit(FetchLoading());
+
+      try {
+        final profile = await profileContentService.getProfile(event.user_uuid);
+
+        emit(GetProfileSuccess(profile: profile));
+      } catch (e) {
+        emit(FetchFailure(error: e.toString()));
+      }
+    });
   }
 
   ProfileService profileService;

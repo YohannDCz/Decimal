@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class FeedService {
   Future<List<PublicationModel>> getPublications(String publication, int limit) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_repost', null).limit(limit).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_original_publication', null).limit(limit).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -78,7 +78,7 @@ class FeedService {
 
   Future<List<PublicationModel>> getAllPublications() async {
     try {
-      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').is_('user_uuid_repost', null).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').is_('user_uuid_original_publication', null).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -145,8 +145,6 @@ class FeedService {
       throw Exception('Unable to get all the comments: $e');
     }
   }
-
-  
 
   String? getDuration(DateTime? time) {
     final duration = DateTime(2029).difference(time!);

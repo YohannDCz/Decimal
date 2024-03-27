@@ -9,11 +9,6 @@ import 'package:decimal/screens/home/profile/widgets/profile_description.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_pics.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_publications.dart';
 import 'package:decimal/screens/home/profile/widgets/profile_stories.dart';
-import 'package:decimal/screens/home/profile/widgets/profile_user_contacts.dart';
-import 'package:decimal/screens/home/profile/widgets/profile_user_description.dart';
-import 'package:decimal/screens/home/profile/widgets/profile_user_pics.dart';
-import 'package:decimal/screens/home/profile/widgets/profile_user_publications.dart';
-import 'package:decimal/screens/home/profile/widgets/profile_user_stories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,13 +43,13 @@ class _ProfileState extends State<Profile> {
               child: SingleChildScrollView(
                 child: Container(
                   color: AppColors.primaryBackground,
-                  child: const Column(
+                  child: Column(
                     children: [
-                      ProfileUserDescription(),
-                      ProfileUserStories(),
-                      ProfileUserPics(),
-                      ProfileUserContacts(),
-                      ProfileUserPublications(),
+                      ProfileDescription(widget.user_uuid),
+                      ProfileStories(widget.user_uuid),
+                      ProfilePics(widget.user_uuid),
+                      ProfileContacts(widget.user_uuid),
+                      ProfilePublications(widget.user_uuid),
                     ],
                   ),
                 ),
@@ -73,11 +68,11 @@ class _ProfileState extends State<Profile> {
                     },
                     child: const Text('Sign Out'),
                   ),
-                  const ProfileDescription(),
-                  const ProfileStories(),
-                  const ProfilePics(),
-                  const ProfileContacts(),
-                  const ProfilePublications(),
+                  ProfileDescription(widget.user_uuid),
+                  ProfileStories(widget.user_uuid),
+                  ProfilePics(widget.user_uuid),
+                  ProfileContacts(widget.user_uuid),
+                  ProfilePublications(widget.user_uuid),
                 ],
               ),
             ),

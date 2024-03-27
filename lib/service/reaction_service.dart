@@ -1,15 +1,53 @@
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/reaction_model.dart';
+import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ReactionService {
-  Future<int> getReactions(String reactionType, int? publicationId) async {
+  Future<List<ReactionModel>> getReactions(String reactionType, int? publicationId) async {
+    try {
+      if (publicationId == null) {
+        return [];
+      }
+      final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
+      return (response as List).map((e) => ReactionModel.fromMap(e as Map<String, dynamic>)).toList();
+    } catch (e) {
+      debugPrint('Unable to get the reactions: $e');
+      throw Exception('Unable to get the reactions: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getCommentsAndUsers(String reactionType, int? publicationId) async {
+    try {
+      if (publicationId == null) {
+        return {};
+      }
+      final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
+      final reactionModel = response.map((e) => ReactionModel.fromMap(e as Map<String, dynamic>)).toList();
+      final List<CustomUser> commentsUser = [];
+      for (var item in reactionModel) {
+        var userResponse = await supabaseClient.from('users').select().eq('uuid', item.user_uuid);
+        var user = CustomUser.fromMap(userResponse.first as Map<String, dynamic>);
+        commentsUser.add(user);
+      }
+      return {
+        'comments': reactionModel,
+        'users': commentsUser,
+      };
+    } catch (e) {
+      debugPrint('Unable to get the comments: $e');
+      throw Exception('Unable to get the comments: $e');
+    }
+  }
+
+  Future<int> getReposts(int? publicationId) async {
     try {
       if (publicationId == null) {
         return 0;
       }
-      final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
+      final response = await supabaseClient.from('reposts').select().eq('publication_id_original', publicationId);
       return response.length;
     } catch (e) {
       debugPrint('Unable to get the reactions: $e');
@@ -62,48 +100,21 @@ class ReactionService {
   }
 
   Future addRepost(int publicationId) async {
-    var response = await supabaseClient.from('publications').select().eq('id', publicationId).eq('user_uuid_repost', null).single();
+    var response = await supabaseClient.from('publications').select().eq('id', publicationId).is_('user_uuid_original_publication', null).single();
     var publication = PublicationModel.fromMap(response as Map<String, dynamic>);
-    var responseItem = await supabaseClient.from(publication.type).select().eq('publication_id', publicationId).single();
-    var publicationItem = PublicationItemModel.fromMap(responseItem as Map<String, dynamic>);
 
     try {
       await supabaseClient.from('publications').insert([
         {
-          'user_uuid': publication.user_uuid,
+          'user_uuid': supabaseUser!.id,
           'type': publication.type,
           'location': publication.location,
           'date_of_publication': DateTime.now().toIso8601String(),
-          'user_uuid_repost': supabaseUser!.id,
+          'user_uuid_original_publication': publication.user_uuid,
         }
       ]);
-      
-      if (publication.type == 'posts' || publication.type == 'pics') {
-        await supabaseClient.from(publication.type).insert([
-          {
-            'publication_id': publication.id,
-            'content': publicationItem.content,
-            'url': publicationItem.url,
-            'tags': publicationItem.tags,
-            'is_repost': true,
-          }
-        ]);
-      } else if (publication.type == 'videos' || publication.type == 'stories') {
-        await supabaseClient.from(publication.type).insert([
-          {
-            'publication_id': publication.id,
-            'content': publicationItem.content,
-            'url': publicationItem.url,
-            'tags': publicationItem.tags,
-            'title': publicationItem.title,
-            'duration': publicationItem.duration,
-            'is_repost': true,
 
-          }
-        ]);
-      }
-
-      var response = await supabaseClient.from('publications').select().eq('user_uuid', publication.user_uuid).eq('type', publication.type).eq('location', publication.location).eq('user_uuid_repost', supabaseUser!.id).single();
+      var response = await supabaseClient.from('publications').select().eq('user_uuid', supabaseUser!.id).eq('type', publication.type).eq('location', publication.location).eq('user_uuid_original_publication', publication.user_uuid).single();
       var responseItem = PublicationItemModel.fromMap(response as Map<String, dynamic>);
       await supabaseClient.from('reposts').insert([
         {
@@ -113,22 +124,10 @@ class ReactionService {
           'publication_id': responseItem.id,
         }
       ]);
+
     } catch (e) {
       debugPrint('Unable to add the repost: $e');
       throw Exception('Unable to add the repost: $e');
-    }
-  }
-
-  Future removeRepost(int publicationId) async {
-    try {
-      await supabaseClient.from('reposts').delete().eq('publication_id', publicationId).eq('user_uuid', supabaseUser!.id);
-      await supabaseClient.from('publications').delete().eq('user_uuid_repost', supabaseUser!.id).eq('id', publicationId);
-      await supabaseClient.from('posts').delete().eq('publication_id', publicationId);
-      await supabaseClient.from('pics').delete().eq('publication_id', publicationId);
-      await supabaseClient.from('videos').delete().eq('publication_id', publicationId);
-    } catch (e) {
-      debugPrint('Unable to remove the repost: $e');
-      throw Exception('Unable to remove the repost: $e');
     }
   }
 }

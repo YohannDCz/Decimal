@@ -1,4 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -11,9 +14,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:video_player/video_player.dart';
 
 class ProfileStories extends StatefulWidget {
-  const ProfileStories({
-    super.key,
-  });
+  const ProfileStories(this.user_uuid, {super.key});
+
+  final String user_uuid;
 
   @override
   State<ProfileStories> createState() => _ProfileStoriesState();
@@ -40,10 +43,18 @@ class _ProfileStoriesState extends State<ProfileStories> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is FetchProfileSuccess) {
-          publications = state.fetchStoriesSuccess['publications'];
-          users = state.fetchStoriesSuccess['users'];
-          stories = state.fetchStoriesSuccess['stories'];
+        if (widget.user_uuid != supabaseUser!.id) {
+          if (state is FetchProfileUserSuccess) {
+            publications = state.fetchStoriesSuccess['publications'];
+            users = state.fetchStoriesSuccess['users'];
+            stories = state.fetchStoriesSuccess['stories'];
+          }
+        } else {
+          if (state is FetchProfileSuccess) {
+            publications = state.fetchStoriesSuccess['publications'];
+            users = state.fetchStoriesSuccess['users'];
+            stories = state.fetchStoriesSuccess['stories'];
+          }
         }
       },
       builder: (context, state) {

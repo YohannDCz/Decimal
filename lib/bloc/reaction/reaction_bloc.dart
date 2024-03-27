@@ -37,10 +37,10 @@ class ReactionBloc extends Bloc<ReactionEvent, ReactionState> {
       }
     });
 
-    on<RemoveRepost>((event, emit) async {
+    on<AddComment>((event, emit) async {
       emit(ReactionLoading());
       try {
-        await reactionService.removeRepost(event.publication_id);
+        await reactionService.addComment(event.publication_id, event.comment);
         emit(ReactionSuccess());
       } catch (e) {
         emit(ReactionFailure(error: e.toString()));

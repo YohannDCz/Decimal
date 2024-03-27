@@ -38,11 +38,12 @@ final class AddRepost extends ReactionEvent {
   List<Object> get props => [publication_id];
 }
 
-final class RemoveRepost extends ReactionEvent {
-  const RemoveRepost(this.publication_id);
+final class AddComment extends ReactionEvent {
+  const AddComment(this.publication_id, this.comment);
 
   final int publication_id;
+  final String comment;
 
   @override
-  List<Object> get props => [publication_id];
+  List<Object> get props => [publication_id, comment];
 }
