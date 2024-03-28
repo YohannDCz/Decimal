@@ -56,182 +56,187 @@ class _VideosState extends State<Videos> {
         }
       },
       builder: (context, state) {
-        return Skeletonizer(
-          enabled: publications.isEmpty,
-          child: SingleChildScrollView(
-            child: Container(
-              color: AppColors.primaryBackground,
-              width: double.infinity,
-              child: Column(
-                children: [
-                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.secondary, minHeight: 1),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: state is FetchLoading ? 3 : publications.length,
-                      itemBuilder: (context, index) {
-                        if (publications.isNotEmpty && index < publications.length) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Column(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 8.0),
-                                                  child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(6.0),
-                                                    child: Image.network(
-                                                      users[index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
-                                                      width: 48.0,
-                                                      height: 48.0,
+        return RefreshIndicator(
+          onRefresh: () async {
+            BlocProvider.of<FeedBloc>(context).add(FetchVideos());
+          },
+          child: Skeletonizer(
+            enabled: state is FetchLoading,
+            child: SingleChildScrollView(
+              child: Container(
+                color: AppColors.primaryBackground,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    if (state is FetchLoading) LinearProgressIndicator(color: AppColors.secondary, minHeight: 1),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state is FetchLoading ? 3 : publications.length,
+                        itemBuilder: (context, index) {
+                          if (publications.isNotEmpty && index < publications.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 8.0),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(6.0),
+                                                      child: Image.network(
+                                                        users[index].profile_picture ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
+                                                        width: 48.0,
+                                                        height: 48.0,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(users[index].name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                                    Text('${context.read<FeedService>().getDuration(publications[index].date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const Icon(Icons.more_vert),
-                                          ],
-                                        ),
-                                      ),
-                                      YoutubePlayer(
-                                        controller: YoutubePlayerController(
-                                          initialVideoId: _extractId(publicationItems[index].url ?? "https://youtu.be/dQw4w9WgXcQ?si=C1RoFT6luIcZHlN-"), // Add videoID.
-                                          flags: const YoutubePlayerFlags(
-                                            autoPlay: false,
-                                            mute: false,
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(users[index].name ?? '[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                                      Text('${context.read<FeedService>().getDuration(publications[index].date_of_publication)?.toString()} ago', style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              const Icon(Icons.more_vert),
+                                            ],
                                           ),
                                         ),
-                                        showVideoProgressIndicator: true,
-                                        onReady: () {
-                                          debugPrint('Player is ready.');
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                                    child: Reactions(container: false, publication_id: publications[index].id),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text.rich(
-                                        TextSpan(
-                                          text: users[index].pseudo ?? _extractPseudo(users[index].name ?? '[user_pseudo]'),
-                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                          children: [
-                                            const TextSpan(text: ' '),
-                                            TextSpan(text: publicationItems[index].title ?? '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                          ],
+                                        YoutubePlayer(
+                                          controller: YoutubePlayerController(
+                                            initialVideoId: _extractId(publicationItems[index].url ?? "https://youtu.be/dQw4w9WgXcQ?si=C1RoFT6luIcZHlN-"), // Add videoID.
+                                            flags: const YoutubePlayerFlags(
+                                              autoPlay: false,
+                                              mute: false,
+                                            ),
+                                          ),
+                                          showVideoProgressIndicator: true,
+                                          onReady: () {
+                                            debugPrint('Player is ready.');
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                                      child: Reactions(container: false, publication_id: publications[index].id),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: users[index].pseudo ?? _extractPseudo(users[index].name ?? '[user_pseudo]'),
+                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                            children: [
+                                              const TextSpan(text: ' '),
+                                              TextSpan(text: publicationItems[index].title ?? '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Column(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 8.0),
-                                                  child: ClipRRect(
-                                                    borderRadius: BorderRadius.circular(6.0),
-                                                    child: Image.network(
-                                                      'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
-                                                      width: 48.0,
-                                                      height: 48.0,
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 8.0),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(6.0),
+                                                      child: Image.network(
+                                                        'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.dart.jpeg?t=2024-03-21T08%3A31%3A52.510Z',
+                                                        width: 48.0,
+                                                        height: 48.0,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                                    Text("2h", style: Theme.of(context).primaryTextTheme.labelMedium),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const Icon(Icons.more_vert),
-                                          ],
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text('[user_name]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                                      Text("2h", style: Theme.of(context).primaryTextTheme.labelMedium),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              const Icon(Icons.more_vert),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      AspectRatio(
-                                        aspectRatio: 16 / 9,
-                                        child: Image.asset("assets/images/placeholder.png", fit: BoxFit.cover, width: double.infinity),
-                                      ),
-                                    ],
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(top: 8.0, left: 8.0),
-                                    child: Reactions(container: false),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text.rich(
-                                        TextSpan(
-                                          text: '[user_pseudo]',
-                                          style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                                          children: [
-                                            const TextSpan(text: ' '),
-                                            TextSpan(text: '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
-                                          ],
+                                        AspectRatio(
+                                          aspectRatio: 16 / 9,
+                                          child: Image.asset("assets/images/placeholder.png", fit: BoxFit.cover, width: double.infinity),
+                                        ),
+                                      ],
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 8.0, left: 8.0),
+                                      child: Reactions(container: false),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text.rich(
+                                          TextSpan(
+                                            text: '[user_pseudo]',
+                                            style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                            children: [
+                                              const TextSpan(text: ' '),
+                                              TextSpan(text: '[Publication content]', style: Theme.of(context).primaryTextTheme.bodyMedium),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  )
-                ],
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

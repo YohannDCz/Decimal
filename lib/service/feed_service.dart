@@ -194,4 +194,46 @@ class FeedService {
       throw Exception('Unable to get the publication data: $e');
     }
   }
+
+  Future followUser(String userUuid) async {
+    try {
+      await supabaseClient.from('followings').insert([
+        {
+          'user_uuid': supabaseUser!.id,
+          'contact_uuid': userUuid ,
+          'added_on': DateTime.now().toIso8601String(),
+        }
+      ]);
+      await supabaseClient.from('followers').insert([
+        {
+          'user_uuid': userUuid,
+          'contact_uuid': supabaseUser!.id,
+          'added_on': DateTime.now().toIso8601String(),
+        }
+      ]);
+    } catch (e) {
+      debugPrint('Unable to follow the user: $e');
+      throw Exception('Unable to follow the user: $e');
+    }
+  }
+
+  Future unfollowUser(String userUuid) async {
+    try {
+      await supabaseClient.from('followings').delete().eq('user_uuid', supabaseUser!.id).eq('contact_uuid', userUuid);
+      await supabaseClient.from('followers').delete().eq('user_uuid', userUuid).eq('contact_uuid', supabaseUser!.id);
+    } catch (e) {
+      debugPrint('Unable to unfollow the user: $e');
+      throw Exception('Unable to unfollow the user: $e');
+    }
+  }
+
+  Future<bool> isFollowed(String userUuid) async {
+    try {
+      final response = await supabaseClient.from('followings').select().eq('user_uuid', supabaseUser!.id).eq('contact_uuid', userUuid);
+      return response.length > 0;
+    } catch (e) {
+      debugPrint('Unable to check if the user is followed: $e');
+      throw Exception('Unable to check if the user is followed: $e');
+    }
+  }
 }

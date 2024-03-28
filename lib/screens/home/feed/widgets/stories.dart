@@ -42,55 +42,60 @@ class _StoriesState extends State<Stories> {
         }
       },
       builder: (context, state) {
-        return Skeletonizer(
-          enabled: publications.isEmpty,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.625368731563422,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: state is FetchLoading ? 6 : publicationItems.length,
-                    itemBuilder: (context, index) {
-                      if (publicationItems.isNotEmpty && index < publicationItems.length) {
-                        return Hero(
-                          tag: 'MyHero${publicationItems[index].id}',
-                          child: Material(
-                            child: GestureDetector(
-                              onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: VideoPlayer(
-                                    VideoPlayerController.networkUrl(Uri.parse(publicationItems[index].url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4"))..initialize(),
+        return RefreshIndicator(
+          onRefresh: () async {
+            BlocProvider.of<FeedBloc>(context).add(FetchStories());
+          },
+          child: Skeletonizer(
+            enabled: state is FetchLoading,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.625368731563422,
+                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing: 4.0,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: state is FetchLoading ? 6 : publicationItems.length,
+                      itemBuilder: (context, index) {
+                        if (publicationItems.isNotEmpty && index < publicationItems.length) {
+                          return Hero(
+                            tag: 'MyHero${publicationItems[index].id}',
+                            child: Material(
+                              child: GestureDetector(
+                                onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: VideoPlayer(
+                                      VideoPlayerController.networkUrl(Uri.parse(publicationItems[index].url ?? "https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/stories/placeholder.mp4"))..initialize(),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Image.asset("assets/images/placeholder.png", fit: BoxFit.cover),
-                            ));
-                      }
-                    },
-                  ),
-                )
-              ],
+                          );
+                        } else {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: Image.asset("assets/images/placeholder.png", fit: BoxFit.cover),
+                              ));
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

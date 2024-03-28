@@ -23,14 +23,14 @@ final class FetchPostsSuccess extends FeedState {
   @override
   List<Object?> get props => [users, publications, publicationItem, comments];
 }
-  
+
 final class FetchPicsSuccess extends FeedState {
   const FetchPicsSuccess({required this.users, required this.publications, required this.publicationItem, required this.comments, required this.commentsUsers});
 
   final List<CustomUser> users;
   final List<PublicationModel> publications;
   final List<PublicationItemModel> publicationItem;
-  final List<List<CommentModel>?> comments; 
+  final List<List<CommentModel>?> comments;
   final List<List<CustomUser>?> commentsUsers;
 
   @override
@@ -81,3 +81,9 @@ final class FetchFailure extends FeedState {
   @override
   List<Object> get props => [error];
 }
+
+final class FollowSuccess extends FeedState {}
+
+final class UnFollowSuccess extends FeedState {}
+
+final class FollowLoading extends FeedState {}

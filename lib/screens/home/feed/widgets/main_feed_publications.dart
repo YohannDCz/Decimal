@@ -1,6 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:math';
 
 import 'package:decimal/bloc/feed/feed_bloc.dart';
+import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/bloc/reaction/reaction_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/provider.dart';
@@ -15,6 +18,7 @@ import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/reaction_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -37,6 +41,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
   late List<FocusNode> focusNodes;
   late List<TextEditingController> controllers;
   late List<bool> commentsOpen;
+  late List<bool> followed;
 
   String _extractId(String url) {
     String videoId = url.split('?')[0].substring('https://youtu.be/'.length);
@@ -67,6 +72,10 @@ class _FeedPublicationsState extends State<FeedPublications> {
     return await context.read<ReactionService>().getCommentsAndUsers('comments', publicationId);
   }
 
+  Future<bool> _isFollowed(String user_uuid) async {
+    return await context.read<FeedService>().isFollowed(user_uuid);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FeedBloc, FeedState>(
@@ -81,6 +90,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
         focusNodes = List.generate(publications.length, (index) => FocusNode());
         controllers = List.generate(publications.length, (index) => TextEditingController());
         commentsOpen = List.generate(publications.length, (index) => false);
+        followed = List.generate(publications.length, (index) => false);
       },
       builder: (context, state) {
         return Skeletonizer(
@@ -93,13 +103,12 @@ class _FeedPublicationsState extends State<FeedPublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: state is FetchLoading ? 1 : publications.length,
+                itemCount: state is FetchLoading ? 5 : publications.length,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
-                    late final PublicationModel publication = publications[index];
-                    late final PublicationItemModel publicationItem = publicationItems[index];
-                    late final CustomUser user = users[index];
-
+                    final PublicationModel publication = publications[index];
+                    final PublicationItemModel publicationItem = publicationItems[index];
+                    final CustomUser user = users[index];
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
 
                     return Padding(
@@ -150,7 +159,46 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                           ),
                                         ],
                                       ),
-                                      const Icon(Icons.more_vert),
+                                      Row(
+                                        children: [
+                                          user.id != supabaseUser!.id
+                                              ? FutureBuilder<bool>(
+                                                  future: _isFollowed(user.id),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      followed[index] = snapshot.data!;
+                                                    }
+                                                    return SizedBox(
+                                                      height: 34.0,
+                                                      width: 90.0,
+                                                      child: ElevatedButton(
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor: AppColors.white,
+                                                          foregroundColor: AppColors.black,
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: followed[index] ? BorderSide(color: AppColors.black) : BorderSide.none),
+                                                          padding: EdgeInsets.zero,
+                                                        ),
+                                                        onPressed: () {
+                                                          if (followed[index]) {
+                                                            BlocProvider.of<FeedBloc>(context).add(UnfollowUser(user.id));
+                                                            BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
+                                                          } else {
+                                                            BlocProvider.of<FeedBloc>(context).add(FollowUser(user.id));
+                                                            BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
+                                                          }
+                                                          setState(() {
+                                                            followed[index] = !followed[index];
+                                                          });
+                                                        },
+                                                        child: followed[index] ? const Text('Followed') : const Text('Follow'),
+                                                      ),
+                                                    );
+                                                  })
+                                              : const SizedBox.shrink(),
+                                          const Gap(8),
+                                          const Icon(Icons.more_vert),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),

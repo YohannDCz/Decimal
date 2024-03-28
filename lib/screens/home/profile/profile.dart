@@ -35,27 +35,35 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return widget.user_uuid != supabaseUser!.id
-        ? Scaffold(
-            appBar: AppBar(
-              title: const Text('Profile'),
-            ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: Container(
-                  color: AppColors.primaryBackground,
-                  child: Column(
-                    children: [
-                      ProfileDescription(widget.user_uuid),
-                      ProfileStories(widget.user_uuid),
-                      ProfilePics(widget.user_uuid),
-                      ProfileContacts(widget.user_uuid),
-                      ProfilePublications(widget.user_uuid),
-                    ],
+        ? RefreshIndicator(
+            onRefresh: () async {
+              if (widget.user_uuid != supabaseUser!.id) {
+                BlocProvider.of<ProfileBloc>(context).add(FetchProfileUserContent(widget.user_uuid));
+              } else {
+                BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Profile'),
+              ),
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    color: AppColors.primaryBackground,
+                    child: Column(
+                      children: [
+                        ProfileDescription(widget.user_uuid),
+                        ProfileStories(widget.user_uuid),
+                        ProfilePics(widget.user_uuid),
+                        ProfileContacts(widget.user_uuid),
+                        ProfilePublications(widget.user_uuid),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
+            ))
         : SingleChildScrollView(
             child: Container(
               color: AppColors.primaryBackground,

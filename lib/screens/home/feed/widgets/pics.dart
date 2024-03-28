@@ -41,47 +41,52 @@ class _PicsState extends State<Pics> {
         }
       },
       builder: (context, state) {
-        return Skeletonizer(
-          enabled: publications.isEmpty,
-          containersColor: AppColors.accent3,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 2.0,
-                        mainAxisSpacing: 2.0,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: state is FetchLoading ? 18 : publicationItems.length,
-                      itemBuilder: (context, index) {
-                        if (publicationItems.isNotEmpty && index < publicationItems.length) {
-                          return Hero(
-                            tag: 'MyHero${publicationItems[index].id}',
-                            child: Material(
-                              child: InkWell(
-                                onTap: () => Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
-                                child: Image.network(
-                                  publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
-                                  fit: BoxFit.cover,
+        return RefreshIndicator(
+          onRefresh: () async {
+            BlocProvider.of<FeedBloc>(context).add(FetchPics());
+          },
+          child: Skeletonizer(
+            enabled: publications.isEmpty,
+            containersColor: AppColors.accent3,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - kToolbarHeight - kBottomNavigationBarHeight,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 2.0,
+                          mainAxisSpacing: 2.0,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: state is FetchLoading ? 18 : publicationItems.length,
+                        itemBuilder: (context, index) {
+                          if (publicationItems.isNotEmpty && index < publicationItems.length) {
+                            return Hero(
+                              tag: 'MyHero${publicationItems[index].id}',
+                              child: Material(
+                                child: InkWell(
+                                  onTap: () => Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': publicationItems[index], 'user': users[index]}),
+                                  child: Image.network(
+                                    publicationItems[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-22T15%3A47%3A36.888Z',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        } else {
-                          return Image.asset('assets/images/placeholder.png', fit: BoxFit.cover);
-                        }
-                      },
-                    ),
-                  )
-                ],
+                            );
+                          } else {
+                            return Image.asset('assets/images/placeholder.png', fit: BoxFit.cover);
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

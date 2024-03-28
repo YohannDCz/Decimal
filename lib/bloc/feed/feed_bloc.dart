@@ -82,6 +82,28 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         emit(FetchFailure(error: e.toString()));
       }
     });
+
+    on<FollowUser>((event, emit) async {
+      emit(FollowLoading());
+
+      try {
+        await feedService.followUser(event.user_uuid);
+        emit(FollowSuccess());
+      } catch (e) {
+        emit(FetchFailure(error: e.toString()));
+      }
+    });
+
+    on<UnfollowUser>((event, emit) async {
+      emit(FollowLoading());
+
+      try {
+        await feedService.unfollowUser(event.user_uuid);
+        emit(UnFollowSuccess());
+      } catch (e) {
+        emit(FetchFailure(error: e.toString()));
+      }
+    });
   }
 
   FeedService feedService;
