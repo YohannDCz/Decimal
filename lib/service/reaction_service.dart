@@ -104,7 +104,7 @@ class ReactionService {
     var publication = PublicationModel.fromMap(response as Map<String, dynamic>);
 
     try {
-      await supabaseClient.from('publications').insert([
+      var newPublication = await supabaseClient.from('publications').insert([
         {
           'user_uuid': supabaseUser!.id,
           'type': publication.type,
@@ -113,18 +113,18 @@ class ReactionService {
           'user_uuid_original_publication': publication.user_uuid,
         }
       ]);
+      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication.first as Map<String, dynamic>);
+      var response = await supabaseClient.from(publication.type).select().eq('publication_id', newPublicationModel.id).single();
+      PublicationItemModel publicationItem = PublicationItemModel.fromMap(response as Map<String, dynamic>);
 
-      var response = await supabaseClient.from('publications').select().eq('user_uuid', supabaseUser!.id).eq('type', publication.type).eq('location', publication.location).eq('user_uuid_original_publication', publication.user_uuid).single();
-      var responseItem = PublicationItemModel.fromMap(response as Map<String, dynamic>);
       await supabaseClient.from('reposts').insert([
         {
           'user_uuid': supabaseUser!.id,
           'date_of_reaction': DateTime.now().toIso8601String(),
           'publication_id_original': publicationId,
-          'publication_id': responseItem.id,
+          'publication_id': publicationItem.id,
         }
       ]);
-
     } catch (e) {
       debugPrint('Unable to add the repost: $e');
       throw Exception('Unable to add the repost: $e');

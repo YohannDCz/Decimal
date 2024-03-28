@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:decimal/models/publication_items_model.dart';
+import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/profile_service.dart';
@@ -18,7 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final fetchAllSuccess = await profileService.getPublicationsData(event.user_id);
         final fetchStoriesSuccess = await profileService.getStoriesData(event.user_id);
         final fetchPicsSuccess = await profileService.getPicsData(event.user_id);
-        final fetchContactcNumberSuccess = await profileService.getContactsNumberData(event.user_id);
+        final fetchContactsNumberSuccess = await profileService.getContactsNumberData(event.user_id);
 
         emit(FetchProfileSuccess(
           fetchAllSuccess: fetchAllSuccess,
@@ -26,7 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           fetchPicsSuccess: fetchPicsSuccess,
           fetchDescriptionSuccess: fetchDescriptionSuccess,
           fetchContactSuccess: fetchContactSuccess,
-          fetchContactcNumberSuccess: fetchContactcNumberSuccess,
+          fetchContactsNumberSuccess: fetchContactsNumberSuccess,
         ));
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
@@ -64,6 +66,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final profile = await profileContentService.getProfile(event.user_uuid);
 
         emit(GetProfileSuccess(profile: profile));
+      } catch (e) {
+        emit(FetchFailure(error: e.toString()));
+      }
+    });
+
+    on<PublishPublication>((event, emit) async {
+      emit(PublishLoading());
+
+      try {
+        await profileService.publishPublication(event.publication, event.publicationItem);
+
+        emit(PublishPublicationSuccess());
       } catch (e) {
         emit(FetchFailure(error: e.toString()));
       }

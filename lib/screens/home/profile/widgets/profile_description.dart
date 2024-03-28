@@ -4,6 +4,7 @@ import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
+import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +22,13 @@ class ProfileDescription extends StatefulWidget {
 
 class _ProfileDescriptionState extends State<ProfileDescription> {
   late CustomUser? user;
+  late List<PublicationModel>? publications;
   late List<CustomUser>? contacts;
   late List<CustomUser>? followers;
   late List<CustomUser>? followings;
+  late int? contactsNumber;
+  late int? followersNumber;
+  late int? followingsNumber;
 
   bool isEditing = false;
   TextEditingController biographyController = TextEditingController();
@@ -36,9 +41,13 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
     user = const CustomUser(
       id: "1",
     );
+    publications = [];
     contacts = [];
     followers = [];
     followings = [];
+    contactsNumber = 0;
+    followersNumber = 0;
+    followingsNumber = 0;
   }
 
   @override
@@ -49,9 +58,13 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
           if (state is FetchProfileUserSuccess) {
             setState(() {
               user = state.fetchDescriptionSuccess;
+              publications = state.fetchAllSuccess["publications"];
               contacts = state.fetchContactSuccess["contacts"];
               followers = state.fetchContactSuccess["followers"];
               followings = state.fetchContactSuccess["followings"];
+              contactsNumber = state.fetchContactsNumberSuccess["contacts"];
+              followersNumber = state.fetchContactsNumberSuccess["followers"];
+              followingsNumber = state.fetchContactsNumberSuccess["followings"];
               nameController.text = user?.name ?? '';
               pseudoController.text = user?.pseudo ?? '';
               biographyController.text = user?.biography ?? '';
@@ -61,9 +74,13 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
           if (state is FetchProfileSuccess) {
             setState(() {
               user = state.fetchDescriptionSuccess;
+              publications = state.fetchAllSuccess["publications"];
               contacts = state.fetchContactSuccess["contacts"];
               followers = state.fetchContactSuccess["followers"];
               followings = state.fetchContactSuccess["followings"];
+              contactsNumber = state.fetchContactsNumberSuccess["contacts"];
+              followersNumber = state.fetchContactsNumberSuccess["followers"];
+              followingsNumber = state.fetchContactsNumberSuccess["followings"];
               nameController.text = user?.name ?? '';
               pseudoController.text = user?.pseudo ?? '';
               biographyController.text = user?.biography ?? '';
@@ -182,25 +199,25 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                             Column(
                               children: [
                                 Text('Posts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                                Text('0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                                Text(publications?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                               ],
                             ),
                             Column(
                               children: [
                                 Text('Followers'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                                Text(followers?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                                Text(followersNumber?.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                               ],
                             ),
                             Column(
                               children: [
                                 Text('Contacts'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                                Text(contacts?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                                Text(contactsNumber?.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                               ],
                             ),
                             Column(
                               children: [
                                 Text('Following'.toUpperCase(), style: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9.0, fontWeight: FontWeight.bold)),
-                                Text(followings?.length.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
+                                Text(followingsNumber?.toString() ?? '0', style: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.secondaryText)),
                               ],
                             ),
                           ],
@@ -234,32 +251,34 @@ class _ProfileDescriptionState extends State<ProfileDescription> {
                       ],
                     ),
                   ),
-                  widget.user_uuid == supabaseUser!.id ? Positioned(
-                    right: 8.0,
-                    top: 8.0,
-                    child: Material(
-                      elevation: 4.0,
-                      shape: const CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      color: AppColors.black,
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        backgroundColor: AppColors.white,
-                        child: IconButton(
-                          onPressed: () {
-                            if (isEditing) {
-                              BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(id: supabaseUser!.id, name: nameController.text, pseudo: pseudoController.text, biography: biographyController.text)));
-                            }
-                            setState(() {
-                              isEditing = !isEditing;
-                            });
-                          },
-                          icon: const Icon(Icons.edit, size: 16),
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                  ) : const SizedBox.shrink(),
+                  widget.user_uuid == supabaseUser!.id
+                      ? Positioned(
+                          right: 8.0,
+                          top: 8.0,
+                          child: Material(
+                            elevation: 4.0,
+                            shape: const CircleBorder(),
+                            clipBehavior: Clip.antiAlias,
+                            color: AppColors.black,
+                            child: CircleAvatar(
+                              radius: 16.0,
+                              backgroundColor: AppColors.white,
+                              child: IconButton(
+                                onPressed: () {
+                                  if (isEditing) {
+                                    BlocProvider.of<ProfileContentBloc>(context).add(UpdateProfile(CustomUser(id: supabaseUser!.id, name: nameController.text, pseudo: pseudoController.text, biography: biographyController.text)));
+                                  }
+                                  setState(() {
+                                    isEditing = !isEditing;
+                                  });
+                                },
+                                icon: const Icon(Icons.edit, size: 16),
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
             ],

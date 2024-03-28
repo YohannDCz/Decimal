@@ -15,7 +15,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProfileService {
   Future<List<PublicationModel>> getPublications(String publication, String user_uuid) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).eq('user_uuid', user_uuid).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -27,16 +27,25 @@ class ProfileService {
   Future<List<PublicationItemModel>> getPublicationItems(String publication, String user_uuid) async {
     try {
       final List<PublicationModel> publications = await getPublications(publication, user_uuid);
+      log(publications.toString());
       final List<PublicationItemModel> publicationItems = [];
-      for (var items in publications) {
-        final response = await supabaseClient.from(publication).select().eq('publication_id', items.id).single();
-        final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
-        publicationItems.add(publicationModel);
+      for (var item in publications) {
+        if (item.user_uuid_original_publication != null) {
+          final response = await supabaseClient.from("reposts").select().eq('publication_id', item.id).single();
+          final repostModel = ReactionModel.fromMap(response as Map<String, dynamic>);
+          final response1 = await supabaseClient.from(publication).select().eq('publication_id', repostModel.publication_id_original).single();
+          final publicationModel = PublicationItemModel.fromMap(response1 as Map<String, dynamic>);
+          publicationItems.add(publicationModel);
+        } else {
+          final response = await supabaseClient.from(publication).select().eq('publication_id', item.id).single();
+          final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+          publicationItems.add(publicationModel);
+        }
       }
       return publicationItems;
     } catch (e) {
       debugPrint('Unable to get the publication or the $publication item: $e');
-      throw Exception('Unable to get the publictoin or the $publication item: $e');
+      throw Exception('Unable to get the publication or the $publication item: $e');
     }
   }
 
@@ -265,6 +274,51 @@ class ProfileService {
     } catch (e) {
       debugPrint('Unable to get the publication data: $e');
       throw Exception('Unable to get the publication data: $e');
+    }
+  }
+
+  Future publishPublication(PublicationModel publications, PublicationItemModel publicationItems) async {
+    try {
+      var publication = {
+        'type': 'posts',
+        'date_of_publication': DateTime.now().toIso8601String(),
+        'user_uuid': publications.user_uuid,
+        'user_uuid_original_publication': null,
+        'location': publications.location,
+        'is_repost': false,
+      };
+      Map<String, Object> publicationItem;
+
+      if (publications.type == "posts" || publications.type == "pics") {
+        publicationItem = {
+          'publication_id': publications.id,
+          'content': publicationItems.content!,
+          'url': publicationItems.url!,
+          'tags': publicationItems.tags!,
+        };
+      } else if (publications.type == "videos") {
+        publicationItem = {
+          'publication_id': publications.id,
+          'content': publicationItems.content!,
+          'url': publicationItems.url!,
+          'tags': publicationItems.tags!,
+          'duration': publicationItems.duration!,
+          'title': publicationItems.title!,
+        };
+      } else {
+        publicationItem = {
+          'publication_id': publications.id,
+          'content': publicationItems.content!,
+          'url': publicationItems.url!,
+          'tags': publicationItems.tags!,
+          'duration': publicationItems.duration!,
+        };
+      }
+      await supabaseClient.from('publications').insert([publication]);
+      await supabaseClient.from(publications.type).insert([publicationItem]);
+    } catch (e) {
+      debugPrint('Unable to publish the post: $e');
+      throw Exception('Unable to publish the post: $e');
     }
   }
 }

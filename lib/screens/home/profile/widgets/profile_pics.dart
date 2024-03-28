@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:math';
+
 import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
@@ -11,7 +13,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfilePics extends StatefulWidget {
   const ProfilePics(this.user_uuid, {super.key});
-    
+
   final String user_uuid;
 
   @override
@@ -79,14 +81,36 @@ class _ProfilePicsState extends State<ProfilePics> {
                         mainAxisSpacing: 2.0,
                       ),
                       shrinkWrap: true,
-                      itemCount: pics.isNotEmpty ? pics.length : 6,
+                      itemCount: pics.isNotEmpty ? max(pics.length + 1, 1) : 6,
                       itemBuilder: (context, index) {
-                        if (index < pics.length) {
+                        if (index == 0) {
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.darken),
+                                child: Image.asset(
+                                  'assets/images/placeholder.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.add_circle,
+                                  color: AppColors.white,
+                                  size: 32.0,
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                        if (index < pics.length + 1) {
                           return GestureDetector(
                             onTap: () {
                               Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': pics[index]});
                             },
-                            child: Image.network(pics[index].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z', fit: BoxFit.cover),
+                            child: Image.network(pics[index - 1].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z', fit: BoxFit.cover),
                           );
                         } else {
                           return Image.asset('assets/images/white_background.png', fit: BoxFit.cover); // Image placeholder

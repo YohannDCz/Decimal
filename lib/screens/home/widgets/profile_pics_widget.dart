@@ -2,6 +2,7 @@
 
 import 'package:decimal/bloc/profile/profile_bloc.dart' as pro;
 import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,7 +71,7 @@ class _ProfilePicWidgetState extends State<ProfilePicWidget> {
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
-                    Material(
+                    widget._user_uuid == supabaseUser!.id ? Material(
                       elevation: 4.0,
                       shape: const CircleBorder(),
                       clipBehavior: Clip.antiAlias,
@@ -86,7 +87,7 @@ class _ProfilePicWidgetState extends State<ProfilePicWidget> {
                           color: AppColors.black,
                         ),
                       ),
-                    ),
+                    ) : const SizedBox.shrink(),
                   ],
                 )
               ],

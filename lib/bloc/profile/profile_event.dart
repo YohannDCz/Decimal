@@ -39,3 +39,13 @@ final class GetProfile extends ProfileEvent {
   @override
   List<Object> get props => [user_uuid];
 }
+
+final class PublishPublication extends ProfileEvent {
+  final PublicationModel publication;
+  final PublicationItemModel publicationItem;
+
+  const PublishPublication(this.publication, this.publicationItem);
+
+  @override
+  List<Object> get props => [publication, publicationItem];
+}
