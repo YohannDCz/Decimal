@@ -131,7 +131,6 @@ class _ReactionsState extends State<Reactions> {
                         padding: EdgeInsets.zero,
                         onPressed: () {
                           if (widget.commentFocusNode != null) {
-                            print('requesting focus');
                             FocusScope.of(context).requestFocus(widget.commentFocusNode);
                           }
                         },
@@ -200,28 +199,32 @@ class _ReactionsState extends State<Reactions> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0),
                     child: Column(
                       children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            if (!addedLike) {
-                              setState(() {
-                                addedLike = true;
-                              });
-                              BlocProvider.of<ReactionBloc>(context).add(AddReaction('likes', widget.publication_id!));
-                            } else {
-                              BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('likes', widget.publication_id!));
-                              setState(() {
-                                addedLike = false;
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.thumb_up,
-                            color: addedLike ? AppColors.customColor1 : AppColors.customColor1.withOpacity(0.5),
-                            size: 20.0,
+                        SizedBox(
+                          width: 20.0,
+                          height: 20.0,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              if (!addedLike) {
+                                setState(() {
+                                  addedLike = true;
+                                });
+                                BlocProvider.of<ReactionBloc>(context).add(AddReaction('likes', widget.publication_id!));
+                              } else {
+                                BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('likes', widget.publication_id!));
+                                setState(() {
+                                  addedLike = false;
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              Icons.thumb_up,
+                              color: addedLike ? AppColors.customColor1 : AppColors.customColor1.withOpacity(0.5),
+                              size: 20.0,
+                            ),
                           ),
                         ),
                         FutureBuilder<List<ReactionModel>>(
@@ -237,28 +240,32 @@ class _ReactionsState extends State<Reactions> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Column(
                       children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            if (!addedLove) {
-                              setState(() {
-                                addedLove = true;
-                              });
-                              BlocProvider.of<ReactionBloc>(context).add(AddReaction('loves', widget.publication_id!));
-                            } else {
-                              BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('loves', widget.publication_id!));
-                              setState(() {
-                                addedLove = false;
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.favorite,
-                            color: addedLove ? AppColors.customColor2 : AppColors.customColor2.withOpacity(0.5),
-                            size: 20.0,
+                        SizedBox(
+                          width: 20.0,
+                          height: 20.0,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              if (!addedLove) {
+                                setState(() {
+                                  addedLove = true;
+                                });
+                                BlocProvider.of<ReactionBloc>(context).add(AddReaction('loves', widget.publication_id!));
+                              } else {
+                                BlocProvider.of<ReactionBloc>(context).add(RemoveReaction('loves', widget.publication_id!));
+                                setState(() {
+                                  addedLove = false;
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              Icons.favorite,
+                              color: addedLove ? AppColors.customColor2 : AppColors.customColor2.withOpacity(0.5),
+                              size: 20.0,
+                            ),
                           ),
                         ),
                         FutureBuilder<List<ReactionModel>>(
@@ -274,7 +281,7 @@ class _ReactionsState extends State<Reactions> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Column(
                       children: [
                         Icon(Icons.mode_comment, color: AppColors.customColor3, size: 20.0),
@@ -291,24 +298,28 @@ class _ReactionsState extends State<Reactions> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: Column(
                       children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            if (!isReposted) {
-                              BlocProvider.of<ReactionBloc>(context).add(AddRepost(widget.publication_id!));
-                              BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
-                              setState(() {
-                                isReposted = true;
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.repeat,
-                            color: isReposted ? AppColors.customColor4 : AppColors.customColor4.withOpacity(0.5),
-                            size: 20.0,
+                        SizedBox(
+                          width: 20.0,
+                          height: 20.0,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              if (!isReposted) {
+                                BlocProvider.of<ReactionBloc>(context).add(AddRepost(widget.publication_id!));
+                                BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
+                                setState(() {
+                                  isReposted = true;
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              Icons.repeat,
+                              color: isReposted ? AppColors.customColor4 : AppColors.customColor4.withOpacity(0.5),
+                              size: 20.0,
+                            ),
                           ),
                         ),
                         FutureBuilder<int>(

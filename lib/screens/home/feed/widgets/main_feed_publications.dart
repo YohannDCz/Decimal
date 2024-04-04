@@ -2,7 +2,7 @@
 
 import 'dart:math';
 
-import 'package:decimal/bloc/feed/feed_bloc.dart';
+import 'package:decimal/bloc/feed/feed_bloc.dart' as feed;
 import 'package:decimal/bloc/profile/profile_bloc.dart';
 import 'package:decimal/bloc/reaction/reaction_bloc.dart';
 import 'package:decimal/config/constants.dart';
@@ -78,9 +78,9 @@ class _FeedPublicationsState extends State<FeedPublications> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FeedBloc, FeedState>(
+    return BlocConsumer<feed.FeedBloc, feed.FeedState>(
       listener: (context, state) {
-        if (state is FetchAllSuccess) {
+        if (state is feed.FetchAllSuccess) {
           publications = state.fetchAllSuccess['publications'];
           publicationItems = state.fetchAllSuccess['publicationItems'];
           users = state.fetchAllSuccess['users'];
@@ -94,7 +94,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
       },
       builder: (context, state) {
         return Skeletonizer(
-          enabled: state is FetchLoading,
+          enabled: state is feed.FetchLoading,
           child: Container(
             color: AppColors.primaryBackground,
             width: double.infinity,
@@ -103,7 +103,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: state is FetchLoading ? 5 : publications.length,
+                itemCount: state is feed.FetchLoading ? 5 : publications.length,
                 itemBuilder: (context, index) {
                   if (publications.isNotEmpty && index < publications.length) {
                     final PublicationModel publication = publications[index];
@@ -180,10 +180,10 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                                         ),
                                                         onPressed: () {
                                                           if (followed[index]) {
-                                                            BlocProvider.of<FeedBloc>(context).add(UnfollowUser(user.id));
+                                                            BlocProvider.of<feed.FeedBloc>(context).add(feed.UnfollowUser(user.id));
                                                             BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
                                                           } else {
-                                                            BlocProvider.of<FeedBloc>(context).add(FollowUser(user.id));
+                                                            BlocProvider.of<feed.FeedBloc>(context).add(feed.FollowUser(user.id));
                                                             BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
                                                           }
                                                           setState(() {

@@ -376,3 +376,4 @@ ALTER TABLE comments DROP COLUMN user_id;
 ALTER TABLE likes DROP COLUMN user_id;
 ALTER TABLE loves DROP COLUMN user_id;
 ALTER TABLE reposts DROP COLUMN user_id;
+

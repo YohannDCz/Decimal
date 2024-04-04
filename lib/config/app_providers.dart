@@ -9,6 +9,7 @@ import 'package:decimal/service/feed_service.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/profile_service.dart';
 import 'package:decimal/service/reaction_service.dart';
+import 'package:decimal/service/vision_gpt_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,9 @@ class Bloc extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (_) => ReactionService(),
+        ),
+        RepositoryProvider(
+          create: (_) => VisionService(),
         ),
       ],
       child: MultiBlocProvider(
