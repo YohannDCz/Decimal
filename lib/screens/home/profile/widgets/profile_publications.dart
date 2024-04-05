@@ -318,7 +318,6 @@ class _ProfilePublicationsState extends State<ProfilePublications> {
                                 child: Stack(
                                   children: [
                                     TextField(
-                                      controller: controllers[index],
                                       focusNode: focusNodes[index],
                                       decoration: InputDecoration(
                                         isDense: true,

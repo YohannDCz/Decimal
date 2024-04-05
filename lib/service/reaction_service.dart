@@ -19,19 +19,6 @@ class ReactionService {
     }
   }
 
-  Future<int> getReposts(int? publicationId) async {
-    try {
-      if (publicationId == null) {
-        return 0;
-      }
-      final response = await supabaseClient.from('reposts').select().eq('publication_id_original', publicationId);
-      return response.length;
-    } catch (e) {
-      debugPrint('Unable to get the reactions: $e');
-      throw Exception('Unable to get the reactions: $e');
-    }
-  }
-
   Future<Map<String, dynamic>> getCommentsAndUsers(String reactionType, int? publicationId) async {
     try {
       if (publicationId == null) {
@@ -55,7 +42,18 @@ class ReactionService {
     }
   }
 
-
+  Future<int> getReposts(int? publicationId) async {
+    try {
+      if (publicationId == null) {
+        return 0;
+      }
+      final response = await supabaseClient.from('reposts').select().eq('publication_id_original', publicationId);
+      return response.length;
+    } catch (e) {
+      debugPrint('Unable to get the reactions: $e');
+      throw Exception('Unable to get the reactions: $e');
+    }
+  }
 
   Future addReaction(String reactionType, int publicationId) async {
     print(reactionType);
@@ -74,7 +72,17 @@ class ReactionService {
     }
   }
 
-   Future addComment(int publicationId, String comment) async {
+  Future removeReaction(String reactionType, int publicationId) async {
+    try {
+      final response = await supabaseClient.from(reactionType).delete().eq('publication_id', publicationId).eq('user_uuid', supabaseUser!.id);
+      return response;
+    } catch (e) {
+      debugPrint('Unable to remove the reaction: $e');
+      throw Exception('Unable to remove the reaction: $e');
+    }
+  }
+
+  Future addComment(int publicationId, String comment) async {
     try {
       final response = await supabaseClient.from('comments').insert([
         {
@@ -122,16 +130,4 @@ class ReactionService {
       throw Exception('Unable to add the repost: $e');
     }
   }
-
-  Future removeReaction(String reactionType, int publicationId) async {
-    try {
-      final response = await supabaseClient.from(reactionType).delete().eq('publication_id', publicationId).eq('user_uuid', supabaseUser!.id);
-      return response;
-    } catch (e) {
-      debugPrint('Unable to remove the reaction: $e');
-      throw Exception('Unable to remove the reaction: $e');
-    }
-  }
-
- 
 }
