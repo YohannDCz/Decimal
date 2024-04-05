@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 class VisionService {
   Future<String> generateDescription(String imageUrl) async {
     try {
-      // await dotenv.load();
+      await dotenv.load();
       final uri = Uri.parse('https://api.openai.com/v1/chat/completions');
       final response = await http.post(
         uri,
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer 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'},
+        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ${dotenv.env['OPENAI_API_KEY']}'},
         body: jsonEncode({
           'model': 'gpt-4-vision-preview',
           'messages': [
