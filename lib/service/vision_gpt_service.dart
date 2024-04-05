@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class VisionService {
   Future<String> generateDescription(String imageUrl) async {
     try {
-      await dotenv.load();
+      // await dotenv.load();
       final uri = Uri.parse('https://api.openai.com/v1/chat/completions');
       final response = await http.post(
         uri,
