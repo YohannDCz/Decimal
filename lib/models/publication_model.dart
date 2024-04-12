@@ -7,20 +7,22 @@ import 'package:equatable/equatable.dart';
 
 class PublicationModel extends Equatable {
   const PublicationModel({
-    required this.id,
+    this.id,
     required this.type,
-    required this.date_of_publication,
-    required this.location,
-    required this.user_uuid,
+    this.date_of_publication,
+    this.location,
+    this.user_uuid,
     this.user_uuid_original_publication,
+    required this.is_repost,
   });
 
-  final int id;
+  final int? id;
   final String type;
-  final DateTime date_of_publication;
-  final String location;
-  final String user_uuid;
+  final DateTime? date_of_publication;
+  final String? location;
+  final String? user_uuid;
   final String? user_uuid_original_publication;
+  final bool is_repost;
 
   factory PublicationModel.fromMap(Map<String, dynamic> map) {
     return PublicationModel(
@@ -30,6 +32,7 @@ class PublicationModel extends Equatable {
       location: map["location"] != null ? map['location'] as String : "",
       user_uuid: map['user_uuid'] != null ? map['user_uuid'] as String : "",
       user_uuid_original_publication: map['user_uuid_original_publication'] != null ? map['user_uuid_original_publication'] as String : null,
+      is_repost: map['is_repost'] != null ? map['is_repost'] as bool : false,
     );
   }
 
@@ -43,6 +46,7 @@ class PublicationModel extends Equatable {
       'location': location,
       'user_uuid': user_uuid,
       'user_uuid_original_publication': user_uuid_original_publication,
+      'is_repost': is_repost,
     };
   }
 
@@ -55,6 +59,7 @@ class PublicationModel extends Equatable {
     String? location,
     String? user_uuid,
     String? user_uuid_original_publication,
+    bool? is_repost,
   }) {
     return PublicationModel(
       id: id ?? this.id,
@@ -63,9 +68,10 @@ class PublicationModel extends Equatable {
       location: location ?? this.location,
       user_uuid: user_uuid ?? this.user_uuid,
       user_uuid_original_publication: user_uuid_original_publication ?? this.user_uuid_original_publication,
+      is_repost: is_repost ?? this.is_repost,
     );
   }
 
   @override
-  List<Object?> get props => [id, type, date_of_publication, location, user_uuid, user_uuid_original_publication];
+  List<Object?> get props => [id, type, date_of_publication, location, user_uuid, user_uuid_original_publication, is_repost];
 }

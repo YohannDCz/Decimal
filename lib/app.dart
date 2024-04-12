@@ -3,8 +3,8 @@ import 'package:decimal/config/routes.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:flutter/material.dart';
 
-class DecimalApp extends StatelessWidget {
-  const DecimalApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class DecimalApp extends StatelessWidget {
         routes: appRoutes,
         onGenerateRoute: generateRoute,
         initialRoute: '/signin',
+        // home: const Publication(),s
       ),
     );
   }

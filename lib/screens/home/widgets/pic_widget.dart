@@ -61,7 +61,7 @@ class PicWidget extends StatelessWidget {
                 bottom: 150.0,
                 right: 8,
                 child: Reactions(
-                  publication_id: _publication.id,
+                  publication_id: _publication.id!,
                   vertical: true,
                 ),
               ),

@@ -59,7 +59,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     });
 
-     on<GetProfile>((event, emit) async {
+    on<GetProfile>((event, emit) async {
       emit(FetchLoading());
 
       try {
@@ -71,15 +71,29 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     });
 
+    on<UploadPic>((event, emit) async {
+      emit(UploadPicLoading());
+      try {
+        final image = await profileContentService.selectImage();
+        if (image != null) {
+          final imageUrl = await profileContentService.uploadPicture("pics", image);
+
+          emit(UploadPicSuccess(imageUrl: imageUrl));
+        }
+      } catch (e) {
+        emit(UploadPicFailure(error: e.toString()));
+      }
+    });
+
     on<PublishPublication>((event, emit) async {
       emit(PublishLoading());
 
       try {
         await profileService.publishPublication(event.publication, event.publicationItem);
 
-        emit(PublishPublicationSuccess());
+        emit(PublishSuccess());
       } catch (e) {
-        emit(FetchFailure(error: e.toString()));
+        emit(PublishFailure(error: e.toString()));
       }
     });
   }

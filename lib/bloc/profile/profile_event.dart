@@ -49,3 +49,5 @@ final class PublishPublication extends ProfileEvent {
   @override
   List<Object> get props => [publication, publicationItem];
 }
+
+final class UploadPic extends ProfileEvent {}

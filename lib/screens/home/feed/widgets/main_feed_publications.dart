@@ -225,7 +225,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                           Positioned(
                                             bottom: 8.0,
                                             left: 8.0,
-                                            child: Reactions(publication_id: publication.id, commentFocusNode: focusNodes[index]),
+                                            child: Reactions(publication_id: publication.id!, commentFocusNode: focusNodes[index]),
                                           ),
                                         ],
                                       )
@@ -247,7 +247,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                             if (publication.type != 'pics' && isNotDirty)
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                                child: Reactions(container: false, publication_id: publication.id, commentFocusNode: focusNodes[index]),
+                                child: Reactions(container: false, publication_id: publication.id!, commentFocusNode: focusNodes[index]),
                               ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
@@ -270,7 +270,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                       ),
                                     ),
                                   FutureBuilder<Map<String, dynamic>>(
-                                    future: _getComments(publication.id),
+                                    future: _getComments(publication.id!),
                                     builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                                       var comments = [];
                                       var commentUsers = [];
@@ -360,7 +360,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                         suffixIcon: IconButton(
                                             icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0),
                                             onPressed: () {
-                                              BlocProvider.of<ReactionBloc>(context).add(AddComment(publication.id, controllers[index].text));
+                                              BlocProvider.of<ReactionBloc>(context).add(AddComment(publication.id!, controllers[index].text));
                                               setState(() {});
                                             }),
                                         border: OutlineInputBorder(

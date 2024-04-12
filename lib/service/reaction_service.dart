@@ -4,6 +4,7 @@ import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/reaction_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ReactionService {
   Future<List<ReactionModel>> getReactions(String reactionType, int? publicationId) async {
@@ -50,8 +51,12 @@ class ReactionService {
       final response = await supabaseClient.from('reposts').select().eq('publication_id_original', publicationId);
       return response.length;
     } catch (e) {
-      debugPrint('Unable to get the reactions: $e');
-      throw Exception('Unable to get the reactions: $e');
+      if (e is PostgrestException && e.message.contains('0 rows')) {
+        return 0;
+      } else {
+        debugPrint('Unable to get the reactions: $e');
+        throw Exception('Unable to get the reactions: $e');
+      }
     }
   }
 
@@ -100,24 +105,25 @@ class ReactionService {
   }
 
   Future addRepost(int publicationId) async {
-    var response = await supabaseClient.from('publications').select().eq('id', publicationId).is_('user_uuid_original_publication', null).single();
+    var response = await supabaseClient.from('publications').select().eq('id', publicationId).eq('is_repost', false).single();
     var publication = PublicationModel.fromMap(response as Map<String, dynamic>);
 
     try {
-      var newPublication = await supabaseClient.from('publications').insert([
+      var newPublication = await supabaseClient.from('publications').upsert([
         {
           'user_uuid': supabaseUser!.id,
           'type': publication.type,
           'location': publication.location,
           'date_of_publication': DateTime.now().toIso8601String(),
+          'is_repost': true,
           'user_uuid_original_publication': publication.user_uuid,
         }
-      ]);
-      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication.first as Map<String, dynamic>);
+      ]).single();
+      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication as Map<String, dynamic>);
       var response = await supabaseClient.from(publication.type).select().eq('publication_id', newPublicationModel.id).single();
       PublicationItemModel publicationItem = PublicationItemModel.fromMap(response as Map<String, dynamic>);
 
-      await supabaseClient.from('reposts').insert([
+      await supabaseClient.from('reposts').upsert([
         {
           'user_uuid': supabaseUser!.id,
           'date_of_reaction': DateTime.now().toIso8601String(),

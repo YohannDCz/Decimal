@@ -78,7 +78,13 @@ class _MainFeedState extends State<MainFeed> {
                         isDense: true,
                         labelText: "What's new with you ? ...",
                         labelStyle: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.accent3),
-                        prefixIcon: Icon(Icons.arrow_downward, color: AppColors.accent3, size: 24.0),
+                        prefixIcon: IconButton(
+                          icon: const Icon(Icons.arrow_downward),
+                          color: AppColors.accent3,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/publication');
+                          },
+                        ),
                         suffixIcon: Icon(Icons.search, color: AppColors.accent3, size: 24.0),
                         filled: true,
                         fillColor: AppColors.white,

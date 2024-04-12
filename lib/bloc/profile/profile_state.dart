@@ -76,10 +76,29 @@ final class FetchProfileUserSuccess extends ProfileState {
       ];
 }
 
-final class PublishPublicationSuccess extends ProfileState {}
+final class PublishSuccess extends ProfileState {}
 
 final class PublishLoading extends ProfileState {}
+
+final class PublishFailure extends ProfileState {
+  const PublishFailure({required this.error});
+  final String error;
+}
+
 final class FetchFailure extends ProfileState {
   const FetchFailure({required this.error});
   final String error;
 }
+
+final class UploadPicSuccess extends ProfileState {
+  const UploadPicSuccess({required this.imageUrl});
+  final String imageUrl;
+}
+
+final class UploadPicFailure extends ProfileState {
+  const UploadPicFailure({required this.error});
+  final String error;
+}
+
+final class UploadPicLoading extends ProfileState {}
+

@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 
 class PublicationItemModel extends Equatable {
   const PublicationItemModel({
-    required this.id,
-    required this.publication_id,
+    this.id,
+    this.publication_id,
     this.url,
     this.title,
     this.content,
@@ -16,8 +16,8 @@ class PublicationItemModel extends Equatable {
     this.duration,
   });
 
-  final int id;
-  final int publication_id;
+  final int? id;
+  final int? publication_id;
   final String? url;
   final String? title;
   final String? content;

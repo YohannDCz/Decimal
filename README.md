@@ -1,16 +1,14 @@
-# decimal
+# Decimal, the social networ of the future
 
-A new Flutter project.
+Bonjour et bienvenue dans ce projet !
 
-## Getting Started
+1. Pour le lancer et le visualiser, installez flutter selon la documentation officielle.
+2. Télécharger le dossier sur ce repertoire GitHub -> https://github.com/YohannDCz/decimal
+3. Rentrer "flutter pub get" dans la console au dossier flutter correspondant
+4. Aller sur Supabase et créer un nouveau compte ou aller sur votre compte
+5. Créez une nouvelle base de donnée
+6. Allez dans le volet SQL Editor et rentrer le contenu du fichier database.sql qui est situé à la racine de ce projet
+7. Relevez la clé ainsi que l'url sur les parametre Supabase de votre projet Supabase que vous rentrerez dans le fichier dot.env situé à la racine de ce projet
+8. Choisissez votre emulateur et rentrez "flutter run" dans le terminal
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Le projet est publié sur l'App Store et le Google Play store mais l'applicatoin est actuellement en pleine révision par leurs équipes
