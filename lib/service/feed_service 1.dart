@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class FeedService {
   Future<List<PublicationModel>> getPublications(String publication, int limit) async {
     try {
-      final response = await supabaseClient.from("publications").select().eq('type', publication).is_('user_uuid_original_publication', null).limit(limit).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().eq('type', publication).isFilter('user_uuid_original_publication', null).limit(limit).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -22,8 +22,8 @@ class FeedService {
       final List<PublicationModel> publications = await getPublications(publication, limit);
       final List<PublicationItemModel> publicationItems = [];
       for (var items in publications) {
-        final response = await supabaseClient.from(publication).select().eq('publication_id', items.id).single();
-        final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+        final response = await supabaseClient.from(publication).select().eq('publication_id', items.id!).single();
+        final publicationModel = PublicationItemModel.fromMap(response);
         publicationItems.add(publicationModel);
       }
       return publicationItems;
@@ -64,7 +64,7 @@ class FeedService {
         final List<CustomUser> allUserComments = [];
         for (var comment in comments) {
           final response = await supabaseClient.from('users').select().eq('uuid', comment.user_uuid).single();
-          final CustomUser user = CustomUser.fromMap(response as Map<String, dynamic>);
+          final CustomUser user = CustomUser.fromMap(response);
           allUserComments.add(user);
         }
         allUsers.add(allUserComments);
@@ -78,7 +78,7 @@ class FeedService {
 
   Future<List<PublicationModel>> getAllPublications() async {
     try {
-      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').is_('user_uuid_original_publication', null).limit(5).order('date_of_publication', ascending: false);
+      final response = await supabaseClient.from("publications").select().or('type.eq.posts,type.eq.pics,type.eq.videos').isFilter('user_uuid_original_publication', null).limit(5).order('date_of_publication', ascending: false);
       final publicationModel = (response as List).map((e) => PublicationModel.fromMap(e as Map<String, dynamic>)).toList();
       return publicationModel;
     } catch (e) {
@@ -92,8 +92,8 @@ class FeedService {
       final List<PublicationModel> publications = await getAllPublications();
       final List<PublicationItemModel> publicationItems = [];
       for (var items in publications) {
-        final response = await supabaseClient.from(items.type).select().eq('publication_id', items.id).single();
-        final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+        final response = await supabaseClient.from(items.type).select().eq('publication_id', items.id!).single();
+        final publicationModel = PublicationItemModel.fromMap(response);
         publicationItems.add(publicationModel);
       }
       return publicationItems;
@@ -134,7 +134,7 @@ class FeedService {
         final List<CustomUser> allUserComments = [];
         for (var comment in comments) {
           final response = await supabaseClient.from('users').select().eq('uuid', comment.user_uuid).single();
-          final CustomUser user = CustomUser.fromMap(response as Map<String, dynamic>);
+          final CustomUser user = CustomUser.fromMap(response);
           allUserComments.add(user);
         }
         allUsers.add(allUserComments);
@@ -200,7 +200,7 @@ class FeedService {
       await supabaseClient.from('followings').insert([
         {
           'user_uuid': supabaseUser!.id,
-          'contact_uuid': userUuid ,
+          'contact_uuid': userUuid,
           'added_on': DateTime.now().toIso8601String(),
         }
       ]);
@@ -230,7 +230,7 @@ class FeedService {
   Future<bool> isFollowed(String userUuid) async {
     try {
       final response = await supabaseClient.from('followings').select().eq('user_uuid', supabaseUser!.id).eq('contact_uuid', userUuid);
-      return response.length > 0;
+      return response.isNotEmpty;
     } catch (e) {
       debugPrint('Unable to check if the user is followed: $e');
       throw Exception('Unable to check if the user is followed: $e');

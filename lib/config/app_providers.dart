@@ -5,7 +5,7 @@ import 'package:decimal/bloc/profile_content/profile_content_bloc.dart';
 import 'package:decimal/bloc/reaction/reaction_bloc.dart';
 import 'package:decimal/config/provider.dart';
 import 'package:decimal/service/authentication_service.dart';
-import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/feed_service%201.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/profile_service.dart';
 import 'package:decimal/service/reaction_service.dart';

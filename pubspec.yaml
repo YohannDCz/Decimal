@@ -35,21 +35,22 @@ dependencies:
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   skeletonizer: ^1.1.1
-  supabase_flutter: ^1.10.25
+  supabase_flutter: ^2.5.1
   test: ^1.24.9
   uuid: ^4.3.3
   video_player: ^2.8.3
   youtube_player_flutter: ^9.0.0
 
-# flutter_icons:
-#   android: true
-#   ios: true
-#   image_path: "assets/images/logo.png"
-# flutter_native_splash:
-#   image: assets/images/logo.png
-#   color: "2A2A2A"
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+flutter_native_splash:
+  image: assets/images/logo.png
+  color: "2A2A2A"
+  
 dev_dependencies:
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
   flutter_test:
     sdk: flutter
 

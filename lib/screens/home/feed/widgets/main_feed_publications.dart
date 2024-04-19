@@ -13,7 +13,7 @@ import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
-import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/feed_service%201.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/reaction_service.dart';
 import 'package:flutter/material.dart';

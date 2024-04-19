@@ -31,14 +31,14 @@ class ProfileService {
       final List<PublicationItemModel> publicationItems = [];
       for (var item in publications) {
         if (item.user_uuid_original_publication != null) {
-          final response = await supabaseClient.from("reposts").select().eq('publication_id', item.id).single();
-          final repostModel = ReactionModel.fromMap(response as Map<String, dynamic>);
-          final response1 = await supabaseClient.from(publication).select().eq('publication_id', repostModel.publication_id_original).single();
-          final publicationModel = PublicationItemModel.fromMap(response1 as Map<String, dynamic>);
+          final response = await supabaseClient.from("reposts").select().eq('publication_id', item.id!).single();
+          final repostModel = ReactionModel.fromMap(response);
+          final response1 = await supabaseClient.from(publication).select().eq('publication_id', repostModel.publication_id_original!).single();
+          final publicationModel = PublicationItemModel.fromMap(response1);
           publicationItems.add(publicationModel);
         } else {
-          final response = await supabaseClient.from(publication).select().eq('publication_id', item.id).single();
-          final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+          final response = await supabaseClient.from(publication).select().eq('publication_id', item.id!).single();
+          final publicationModel = PublicationItemModel.fromMap(response);
           publicationItems.add(publicationModel);
         }
       }
@@ -80,7 +80,7 @@ class ProfileService {
         final List<CustomUser> allUserComments = [];
         for (var comment in comments) {
           final response = await supabaseClient.from('users').select().eq('uuid', comment.user_uuid).single();
-          final CustomUser user = CustomUser.fromMap(response as Map<String, dynamic>);
+          final CustomUser user = CustomUser.fromMap(response);
           allUserComments.add(user);
         }
         allUsers.add(allUserComments);
@@ -117,14 +117,15 @@ class ProfileService {
     for (var item in publications) {
       if (item.is_repost == true) {
         try {
-          response = await supabaseClient.from("reposts").select().eq('publication_id', item.id).single();
+          print(item);
+          response = await supabaseClient.from("reposts").select().eq('publication_id', item.id!).single();
           repostModel = ReactionModel.fromMap(response);
         } catch (e) {
           debugPrint('Unable to get the repost: $e');
           throw Exception('Unable to get the repost: $e');
         }
         try {
-          response1 = await supabaseClient.from(item.type).select().eq('publication_id', repostModel.publication_id_original).single();
+          response1 = await supabaseClient.from(item.type).select().eq('publication_id', repostModel.publication_id_original!).single();
           publicationModel = PublicationItemModel.fromMap(response1);
         } catch (e) {
           debugPrint('Unable to get the publication item where user_uuid_original_publication != null: $e');
@@ -133,8 +134,8 @@ class ProfileService {
         publicationItems.add(publicationModel);
       } else {
         try {
-          final response = await supabaseClient.from(item.type).select().eq('publication_id', item.id).single();
-          final publicationModel = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+          final response = await supabaseClient.from(item.type).select().eq('publication_id', item.id!).single();
+          final publicationModel = PublicationItemModel.fromMap(response);
           publicationItems.add(publicationModel);
         } catch (e) {
           debugPrint('Unable to get the publication item where user_uuid_original_publication == null: $e');
@@ -176,7 +177,7 @@ class ProfileService {
         final List<CustomUser> allUserComments = [];
         for (var comment in comments) {
           final response = await supabaseClient.from('users').select().eq('uuid', comment.user_uuid).single();
-          final CustomUser user = CustomUser.fromMap(response as Map<String, dynamic>);
+          final CustomUser user = CustomUser.fromMap(response);
           allUserComments.add(user);
         }
         allUsers.add(allUserComments);
@@ -210,8 +211,8 @@ class ProfileService {
 
   Future<int> getContactsNumber(String contactType, String user_uuid) async {
     try {
-      final countResponse = await supabaseClient.from(contactType).select('user_uuid', const FetchOptions(count: CountOption.exact)).eq('user_uuid', user_uuid);
-      final int count = (countResponse as PostgrestResponse).count ?? 0;
+      final countResponse = await supabaseClient.from(contactType).select().eq('user_uuid', user_uuid).count();
+      final int count = (countResponse as PostgrestResponse).count;
       return count;
     } catch (e) {
       debugPrint('Unable to get the list of user: $e');
@@ -301,7 +302,7 @@ class ProfileService {
         'is_repost': false,
       };
       var response = await supabaseClient.from('publications').insert([publication]).single();
-      var publicationPublished = PublicationModel.fromMap(response as Map<String, dynamic>);
+      var publicationPublished = PublicationModel.fromMap(response);
       Map<String, Object> publicationItem;
 
       if (publications.type == "posts" || publications.type == "pics") {

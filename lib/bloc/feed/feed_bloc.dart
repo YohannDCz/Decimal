@@ -3,7 +3,7 @@ import 'package:decimal/models/comment_model.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
-import 'package:decimal/service/feed_service.dart';
+import 'package:decimal/service/feed_service%201.dart';
 import 'package:equatable/equatable.dart';
 
 part 'feed_event.dart';

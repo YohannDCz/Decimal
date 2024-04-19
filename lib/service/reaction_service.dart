@@ -26,11 +26,11 @@ class ReactionService {
         return {};
       }
       final response = await supabaseClient.from(reactionType).select().eq('publication_id', publicationId);
-      final reactionModel = response.map((e) => ReactionModel.fromMap(e as Map<String, dynamic>)).toList();
+      final reactionModel = response.map((e) => ReactionModel.fromMap(e)).toList();
       final List<CustomUser> commentsUser = [];
       for (var item in reactionModel) {
         var userResponse = await supabaseClient.from('users').select().eq('uuid', item.user_uuid);
-        var user = CustomUser.fromMap(userResponse.first as Map<String, dynamic>);
+        var user = CustomUser.fromMap(userResponse.first);
         commentsUser.add(user);
       }
       return {
@@ -106,7 +106,7 @@ class ReactionService {
 
   Future addRepost(int publicationId) async {
     var response = await supabaseClient.from('publications').select().eq('id', publicationId).eq('is_repost', false).single();
-    var publication = PublicationModel.fromMap(response as Map<String, dynamic>);
+    var publication = PublicationModel.fromMap(response);
 
     try {
       var newPublication = await supabaseClient.from('publications').upsert([
@@ -119,9 +119,9 @@ class ReactionService {
           'user_uuid_original_publication': publication.user_uuid,
         }
       ]).single();
-      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication as Map<String, dynamic>);
-      var response = await supabaseClient.from(publication.type).select().eq('publication_id', newPublicationModel.id).single();
-      PublicationItemModel publicationItem = PublicationItemModel.fromMap(response as Map<String, dynamic>);
+      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication);
+      var response = await supabaseClient.from(publication.type).select().eq('publication_id', newPublicationModel.id!).single();
+      PublicationItemModel publicationItem = PublicationItemModel.fromMap(response);
 
       await supabaseClient.from('reposts').upsert([
         {

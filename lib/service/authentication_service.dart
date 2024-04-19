@@ -138,7 +138,7 @@ class AuthenticationService {
 
     try {
       await supabaseAuth.signInWithIdToken(
-        provider: Provider.google,
+        provider: OAuthProvider.google,
         idToken: idToken!,
         nonce: rawNonce,
       );
@@ -151,7 +151,7 @@ class AuthenticationService {
     try {
       await supabaseAuth.signInWithOAuth(
         redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
-        Provider.facebook,
+        OAuthProvider.facebook,
       );
     } catch (e) {
       throw "Erreur lors de la connexion avec Facebook : $e";
@@ -162,7 +162,7 @@ class AuthenticationService {
     try {
       await supabaseAuth.signInWithOAuth(
         redirectTo: 'https://hxlaujiaybgubdzzkoxu.supabase.co/auth/v1/callback',
-        Provider.twitter,
+        OAuthProvider.twitter,
       );
     } catch (e) {
       throw "Erreur lors de la connexion avec Twitter : $e";
@@ -175,8 +175,8 @@ class AuthenticationService {
     }
 
     try {
-      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single().execute();
-      if (response.data != null) {
+      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
+      if (response != null) {
         return true;
       } else {
         return false;
