@@ -1,8 +1,7 @@
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:decimal/bloc/feed/feed_bloc.dart';
 import 'package:decimal/models/publication_items_model.dart';
-import 'package:decimal/service/feed_service%201.dart';
+import 'package:decimal/service/feed_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -60,7 +59,7 @@ void main() {
       expect: () => [FetchLoading(), const FetchFailure(error: 'Exception: Profile loading failed')],
     );
 
-     blocTest<FeedBloc, FeedState>(
+    blocTest<FeedBloc, FeedState>(
       'emits [FetchLoading, FetchSuccess] when FetchPics is added',
       build: () {
         when(() => mockFeedService.getPublicationItems("pics")).thenAnswer((_) async => [publicationItemModel]);
@@ -84,7 +83,7 @@ void main() {
       expect: () => [FetchLoading(), const FetchFailure(error: 'Exception: Profile loading failed')],
     );
 
-     blocTest<FeedBloc, FeedState>(
+    blocTest<FeedBloc, FeedState>(
       'emits [FetchLoading, FetchSuccess] when FetchVideos is added',
       build: () {
         when(() => mockFeedService.getPublicationItems("videos")).thenAnswer((_) async => [publicationItemModel]);
@@ -108,7 +107,7 @@ void main() {
       expect: () => [FetchLoading(), const FetchFailure(error: 'Exception: Profile loading failed')],
     );
 
-     blocTest<FeedBloc, FeedState>(
+    blocTest<FeedBloc, FeedState>(
       'emits [FetchLoading, FetchSuccess] when FetchStories is added',
       build: () {
         when(() => mockFeedService.getPublicationItems("stories")).thenAnswer((_) async => [publicationItemModel]);

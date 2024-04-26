@@ -292,8 +292,10 @@ class ProfileService {
   }
 
   Future publishPublication(PublicationModel publications, PublicationItemModel publicationItems) async {
+    int id = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     try {
       var publication = {
+        'id': id,
         'type': publications.type,
         'date_of_publication': DateTime.now().toIso8601String(),
         'user_uuid': supabaseUser!.id,
@@ -301,7 +303,8 @@ class ProfileService {
         'location': publications.location,
         'is_repost': false,
       };
-      var response = await supabaseClient.from('publications').insert([publication]).single();
+      await supabaseClient.from('publications').insert([publication]);
+      var response = await supabaseClient.from('publications').select().eq('id', id).single();
       var publicationPublished = PublicationModel.fromMap(response);
       Map<String, Object> publicationItem;
 
@@ -309,8 +312,8 @@ class ProfileService {
         publicationItem = {
           'publication_id': publicationPublished.id!,
           'content': publicationItems.content!,
-          'url': publicationItems.url!,
-          'tags': publicationItems.tags!,
+          'url': publicationItems.url ?? "",
+          'tags': publicationItems.tags ?? "",
         };
       } else if (publications.type == "videos") {
         publicationItem = {

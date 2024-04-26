@@ -4,7 +4,7 @@ import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/screens/home/widgets/reactions.dart';
-import 'package:decimal/service/feed_service%201.dart';
+import 'package:decimal/service/feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -67,7 +67,7 @@ class _PostsState extends State<Posts> {
                             final CustomUser user = users[index];
                             final PublicationItemModel publicationItem = publicationItems[index];
                             final PublicationModel publication = publications[index];
-          
+
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 4.0),
                               child: Container(

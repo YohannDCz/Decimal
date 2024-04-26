@@ -459,7 +459,7 @@
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.10",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.10+1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -501,9 +501,9 @@
     },
     {
       "name": "json_annotation",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/json_annotation-4.8.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/json_annotation-4.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "jwt_decode",
@@ -651,9 +651,9 @@
     },
     {
       "name": "pointycastle",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/pointycastle-3.8.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/pointycastle-3.9.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "pool",
@@ -993,7 +993,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/win32-5.4.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/win32-5.5.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1034,7 +1034,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-04-19T07:42:35.126521Z",
+  "generated": "2024-04-26T06:17:18.623775Z",
   "generator": "pub",
-  "generatorVersion": "3.3.3"
+  "generatorVersion": "3.3.4"
 }
