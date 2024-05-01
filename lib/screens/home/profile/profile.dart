@@ -69,13 +69,6 @@ class _ProfileState extends State<Profile> {
               color: AppColors.primaryBackground,
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthenticationBloc>(context).add(SignOut());
-                      Navigator.of(context).pushNamed('/signin');
-                    },
-                    child: const Text('Sign Out'),
-                  ),
                   ProfileDescription(widget.user_uuid),
                   ProfileStories(widget.user_uuid),
                   ProfilePics(widget.user_uuid),

@@ -26,8 +26,10 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_lorem: ^2.0.0
   flutter_native_splash: ^2.2.16
+  flutter_zoom_drawer: ^3.2.0
   font_awesome_flutter: ^10.6.0
   gap: ^3.0.1
+  get: ^4.6.6
   http: ^1.2.1
   image_picker: ^1.0.7
   meta: ^1.11.0

@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
@@ -247,6 +248,7 @@ class _PublicationState extends State<Publication> {
                                 ),
                               ),
                             );
+                            BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
                           },
                         ),
                       ],

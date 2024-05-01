@@ -303,32 +303,30 @@ class ProfileService {
         'is_repost': false,
       };
       await supabaseClient.from('publications').insert([publication]);
-      var response = await supabaseClient.from('publications').select().eq('id', id).single();
-      var publicationPublished = PublicationModel.fromMap(response);
       Map<String, Object> publicationItem;
 
       if (publications.type == "posts" || publications.type == "pics") {
         publicationItem = {
-          'publication_id': publicationPublished.id!,
+          'publication_id': id,
           'content': publicationItems.content!,
           'url': publicationItems.url ?? "",
           'tags': publicationItems.tags ?? "",
         };
       } else if (publications.type == "videos") {
         publicationItem = {
-          'publication_id': publicationPublished.id!,
+          'publication_id': id,
           'content': publicationItems.content!,
-          'url': publicationItems.url!,
-          'tags': publicationItems.tags!,
-          'duration': publicationItems.duration!,
-          'title': publicationItems.title!,
+          'url': publicationItems.url ?? "",
+          'tags': publicationItems.tags ?? "",
+          'duration': publicationItems.duration ?? 0,
+          'title': publicationItems.title ?? "",
         };
       } else {
         publicationItem = {
-          'publication_id': publicationPublished.id!,
+          'publication_id': id,
           'content': publicationItems.content!,
           'url': publicationItems.url!,
-          'tags': publicationItems.tags!,
+          'tags': publicationItems.tags ?? "",
           'duration': publicationItems.duration!,
         };
       }
