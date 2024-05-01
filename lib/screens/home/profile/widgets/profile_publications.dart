@@ -21,7 +21,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ProfilePublications extends StatefulWidget {
-  const ProfilePublications(this.user_uuid, {Key? key}) : super(key: key);
+  const ProfilePublications(this.user_uuid, {super.key});
 
   final String user_uuid;
 

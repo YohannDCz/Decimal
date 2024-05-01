@@ -29,10 +29,10 @@ class AuthenticationService {
       };
       // Perform the insert query
       try {
-      var response = await supabaseClient.from('users').upsert([userToInsert]);
-      return response;
+        var response = await supabaseClient.from('users').upsert([userToInsert]);
+        return response;
       } catch (e) {
-        print("Erreur lors de la création de l'entrée dans la table : $e");
+        debugPrint("Erreur lors de la création de l'entrée dans la table : $e");
         throw "Erreur lors de la création de l'entrée dans la table : $e";
       }
     }
@@ -175,12 +175,8 @@ class AuthenticationService {
     }
 
     try {
-      final response = await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
-      if (response != null) {
-        return true;
-      } else {
-        return false;
-      }
+      await supabaseClient.from('users').select().eq('uuid', supabaseUser!.id).single();
+      return true;
     } catch (e) {
       return false;
     }

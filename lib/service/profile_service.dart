@@ -117,7 +117,6 @@ class ProfileService {
     for (var item in publications) {
       if (item.is_repost == true) {
         try {
-          print(item);
           response = await supabaseClient.from("reposts").select().eq('publication_id', item.id!).single();
           repostModel = ReactionModel.fromMap(response);
         } catch (e) {

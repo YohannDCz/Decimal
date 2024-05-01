@@ -3,7 +3,7 @@ import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -46,7 +46,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       try {
         await authenticationService.signInWithGoogle();
         bool response = await authenticationService.getUser();
-        print(response);
+        debugPrint("$response");
         if (response) {
           emit(AuthenticationSuccess(userExist: true));
         } else {

@@ -131,7 +131,6 @@ class _ReactionsState extends State<Reactions> {
                         padding: EdgeInsets.zero,
                         onPressed: () {
                           if (widget.commentFocusNode != null) {
-                            print('requesting focus');
                             FocusScope.of(context).requestFocus(widget.commentFocusNode);
                           }
                         },

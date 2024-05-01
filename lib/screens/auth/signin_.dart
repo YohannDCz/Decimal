@@ -51,7 +51,7 @@ class _SignInState extends State<SignIn> {
         decoration: BoxDecoration(gradient: AppColors.gradient),
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            print(state);
+            debugPrint("$state");
             if (state is AuthenticationSuccess) {
               if (state.userExist!) {
                 Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);

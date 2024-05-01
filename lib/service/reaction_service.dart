@@ -61,7 +61,6 @@ class ReactionService {
   }
 
   Future addReaction(String reactionType, int publicationId) async {
-    print(reactionType);
     try {
       final response = await supabaseClient.from(reactionType).insert([
         {
@@ -107,10 +106,11 @@ class ReactionService {
   Future addRepost(int publicationId) async {
     var response = await supabaseClient.from('publications').select().eq('id', publicationId).eq('is_repost', false).single();
     var publication = PublicationModel.fromMap(response);
-
+    int id = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     try {
-      var newPublication = await supabaseClient.from('publications').upsert([
+      await supabaseClient.from('publications').upsert([
         {
+          "id": id,
           'user_uuid': supabaseUser!.id,
           'type': publication.type,
           'location': publication.location,
@@ -118,17 +118,14 @@ class ReactionService {
           'is_repost': true,
           'user_uuid_original_publication': publication.user_uuid,
         }
-      ]).single();
-      PublicationModel newPublicationModel = PublicationModel.fromMap(newPublication);
-      var response = await supabaseClient.from(publication.type).select().eq('publication_id', newPublicationModel.id!).single();
-      PublicationItemModel publicationItem = PublicationItemModel.fromMap(response);
+      ]);
 
       await supabaseClient.from('reposts').upsert([
         {
           'user_uuid': supabaseUser!.id,
           'date_of_reaction': DateTime.now().toIso8601String(),
           'publication_id_original': publicationId,
-          'publication_id': publicationItem.id,
+          'publication_id': id,
         }
       ]);
     } catch (e) {
