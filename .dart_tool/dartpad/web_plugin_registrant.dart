@@ -7,6 +7,7 @@
 // ignore_for_file: type=lint
 
 import 'package:app_links/src/app_links_web.dart';
+import 'package:camera_web/camera_web.dart';
 import 'package:connectivity_for_web/connectivity_for_web.dart';
 import 'package:flutter_inappwebview_web/web/main.dart';
 import 'package:flutter_keyboard_visibility_web/flutter_keyboard_visibility_web.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 void registerPlugins([final Registrar? pluginRegistrar]) {
   final Registrar registrar = pluginRegistrar ?? webPluginRegistrar;
   AppLinksPluginWeb.registerWith(registrar);
+  CameraPlugin.registerWith(registrar);
   ConnectivityPlugin.registerWith(registrar);
   InAppWebViewFlutterPlugin.registerWith(registrar);
   FlutterKeyboardVisibilityPlugin.registerWith(registrar);

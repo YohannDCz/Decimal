@@ -1,5 +1,9 @@
 # This is a generated file; do not edit or check into version control.
 app_links=/Users/yohannd/.pub-cache/hosted/pub.dev/app_links-4.0.1/
+camera=/Users/yohannd/.pub-cache/hosted/pub.dev/camera-0.10.5+9/
+camera_android=/Users/yohannd/.pub-cache/hosted/pub.dev/camera_android-0.10.9+1/
+camera_avfoundation=/Users/yohannd/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.16/
+camera_web=/Users/yohannd/.pub-cache/hosted/pub.dev/camera_web-0.3.3/
 connectivity=/Users/yohannd/.pub-cache/hosted/pub.dev/connectivity-3.0.6/
 connectivity_for_web=/Users/yohannd/.pub-cache/hosted/pub.dev/connectivity_for_web-0.4.0+1/
 connectivity_macos=/Users/yohannd/.pub-cache/hosted/pub.dev/connectivity_macos-0.2.1+2/

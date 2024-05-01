@@ -1,4 +1,5 @@
 import 'package:decimal/bloc/profile/profile_bloc.dart';
+import 'package:decimal/bloc/publication/publication_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
@@ -27,6 +28,8 @@ class _PublicationState extends State<Publication> {
   final tagController = TextEditingController();
   final videoController = TextEditingController();
   final videoTitleController = TextEditingController();
+  
+  String? storyLocalPath;
 
   @override
   void initState() {
@@ -140,7 +143,7 @@ class _PublicationState extends State<Publication> {
                               padding: const EdgeInsets.only(left: 16.0, right: 8.0),
                               child: IconButton(
                                   icon: Icon(Icons.play_circle, color: iconPlayPressed ? AppColors.black : AppColors.secondaryText),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     if (iconPlayPressed) {
                                       setState(() {
                                         iconPlayPressed = false;
@@ -156,6 +159,13 @@ class _PublicationState extends State<Publication> {
                                         isImageURL = false;
                                       });
                                     }
+                                    final filePath = await Navigator.pushNamed(context, '/publication_story');
+                                    if (filePath != null) {
+                                      setState(() {
+                                        storyLocalPath = filePath as String;
+                                      });
+                                    }
+                                    Navigator.pushNamed(context, '/publication_story');
                                   }),
                             ),
                             IconButton(
@@ -226,7 +236,7 @@ class _PublicationState extends State<Publication> {
                           icon: const Icon(Icons.send),
                           onPressed: () {
                             var tagsList = tagController.text.split(' ');
-                            BlocProvider.of<ProfileBloc>(context).add(
+                            BlocProvider.of<PublicationBloc>(context).add(
                               PublishPublication(
                                 PublicationModel(
                                   type: isVideoURL
@@ -244,6 +254,7 @@ class _PublicationState extends State<Publication> {
                                       : isImageURL
                                           ? imageURL
                                           : null,
+                                  localVideoPath: storyLocalPath?.startsWith('http') != null ? storyLocalPath : null,
                                   title: isVideoURL ? videoTitleController.text : null,
                                 ),
                               ),

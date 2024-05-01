@@ -14,6 +14,7 @@ class PublicationItemModel extends Equatable {
     this.content,
     this.tags,
     this.duration,
+    this.localVideoPath
   });
 
   final int? id;
@@ -23,6 +24,7 @@ class PublicationItemModel extends Equatable {
   final String? content;
   final List<String>? tags;
   final int? duration;
+  final String? localVideoPath;
 
   factory PublicationItemModel.fromMap(Map<String, dynamic> map) {
     return PublicationItemModel(
@@ -60,6 +62,7 @@ class PublicationItemModel extends Equatable {
     String? content,
     List<String>? tags,
     int? duration,
+    String? localVideoPath
   }) {
     return PublicationItemModel(
       id: id ?? this.id,
@@ -69,6 +72,7 @@ class PublicationItemModel extends Equatable {
       content: content ?? this.content,
       tags: tags ?? this.tags,
       duration: duration ?? this.duration,
+      localVideoPath: localVideoPath ?? this.localVideoPath
     );
   }
 

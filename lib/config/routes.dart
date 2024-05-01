@@ -14,6 +14,7 @@ import 'package:decimal/screens/home/widgets/pic_widget.dart';
 import 'package:decimal/screens/home/widgets/profile_pics_widget.dart';
 import 'package:decimal/screens/home/widgets/story_widget.dart';
 import 'package:decimal/screens/publication.dart';
+import 'package:decimal/screens/publication_story.dart';
 import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> appRoutes = {
@@ -23,6 +24,7 @@ Map<String, WidgetBuilder> appRoutes = {
   "/signup_email": (context) => const SignUpEmail(),
   "/profile_content": (context) => const ProfileContent(),
   "/publication": (context) => const Publication(),
+  "/publication_story": (context) => const PublicationStory(),
 };
 
 Route<dynamic>? generateRoute(RouteSettings settings) {

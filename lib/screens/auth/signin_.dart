@@ -28,7 +28,7 @@ class _SignInState extends State<SignIn> {
   initState() {
     super.initState();
     _authSubscription =  supabaseAuth.onAuthStateChange.listen((auth) {
-      if (auth.session != null) {
+      if (auth.session != null && ModalRoute.of(context)?.settings.name != '/home') {
         Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       }
     });

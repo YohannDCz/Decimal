@@ -84,18 +84,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(UploadPicFailure(error: e.toString()));
       }
     });
-
-    on<PublishPublication>((event, emit) async {
-      emit(PublishLoading());
-
-      try {
-        await profileService.publishPublication(event.publication, event.publicationItem);
-
-        emit(PublishSuccess());
-      } catch (e) {
-        emit(PublishFailure(error: e.toString()));
-      }
-    });
   }
 
   ProfileService profileService;

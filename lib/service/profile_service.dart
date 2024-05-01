@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/comment_model.dart';
@@ -291,6 +292,17 @@ class ProfileService {
   }
 
   Future publishPublication(PublicationModel publications, PublicationItemModel publicationItems) async {
+    String? videoUrl;
+    if (publicationItems.localVideoPath != null) {
+      final videoFile = File(publicationItems.localVideoPath!);
+      final videoBytes = await videoFile.readAsBytes();
+      final videoName = DateTime.now().millisecondsSinceEpoch.toString();
+      final videoPath = 'publications/$videoName.mp4';
+      await supabaseStorage.from('publications').uploadBinary(videoPath, videoBytes);
+      videoUrl = await supabaseStorage.from('publications').createSignedUrl(videoPath, 60 * 60 * 24 * 365 * 10);
+    }
+
+
     int id = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     try {
       var publication = {
@@ -325,7 +337,7 @@ class ProfileService {
         publicationItem = {
           'publication_id': id,
           'content': publicationItems.content!,
-          'url': publicationItems.url!,
+          'url': videoUrl ?? "",
           'tags': publicationItems.tags ?? "",
           'duration': publicationItems.duration!,
         };

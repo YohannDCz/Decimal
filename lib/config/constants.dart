@@ -5,5 +5,6 @@ SupabaseClient supabaseClient = Supabase.instance.client;
 GoTrueClient supabaseAuth = Supabase.instance.client.auth;
 User? supabaseUser = Supabase.instance.client.auth.currentUser;
 Session? supabaseSession = Supabase.instance.client.auth.currentSession;
+SupabaseStorageClient supabaseStorage = Supabase.instance.client.storage;
 
 ValueNotifier<Session?> sessionNotifier = ValueNotifier<Session?>(supabaseSession);

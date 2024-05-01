@@ -3,6 +3,7 @@ ${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework
 ${BUILT_PRODUCTS_DIR}/OrderedSet/OrderedSet.framework
 ${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework
 ${BUILT_PRODUCTS_DIR}/app_links/app_links.framework
+${BUILT_PRODUCTS_DIR}/camera_avfoundation/camera_avfoundation.framework
 ${BUILT_PRODUCTS_DIR}/connectivity/connectivity.framework
 ${BUILT_PRODUCTS_DIR}/flutter_appauth/flutter_appauth.framework
 ${BUILT_PRODUCTS_DIR}/flutter_inappwebview_ios/flutter_inappwebview_ios.framework
