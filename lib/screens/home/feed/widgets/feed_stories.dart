@@ -47,7 +47,7 @@ class _FeedStoriesState extends State<FeedStories> {
       },
       builder: (context, state) {
         return Skeletonizer(
-          enabled: state is FetchLoading,
+          enabled: publications.isEmpty,
           ignoreContainers: true,
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0),
@@ -56,9 +56,9 @@ class _FeedStoriesState extends State<FeedStories> {
               height: 120.0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: state is FetchAllLoading ? 5 : publications.length,
                 itemBuilder: (context, index) {
-                  if (state is! FetchLoading) {
+                  if (publications.isNotEmpty && index < publications.length) {
                     PublicationModel publication = publications[index];
                     PublicationItemModel publicationItem = publicationItems[index];
                     CustomUser user = users[index];

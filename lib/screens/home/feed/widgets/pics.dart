@@ -53,7 +53,7 @@ class _PicsState extends State<Pics> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
+                    if (state is FetchPicsLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0),
                       child: GridView.builder(

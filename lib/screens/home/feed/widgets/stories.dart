@@ -51,7 +51,7 @@ class _StoriesState extends State<Stories> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state is FetchLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
+                  if (state is FetchStoriesLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: GridView.builder(

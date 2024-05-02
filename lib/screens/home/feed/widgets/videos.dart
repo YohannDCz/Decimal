@@ -68,7 +68,7 @@ class _VideosState extends State<Videos> {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    if (state is FetchLoading) LinearProgressIndicator(color: AppColors.secondary, minHeight: 1),
+                    if (state is FetchVideosLoading) LinearProgressIndicator(color: AppColors.secondary, minHeight: 1),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: ListView.builder(

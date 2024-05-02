@@ -99,3 +99,13 @@ final class FetchMoreSuccess extends FeedState {
   @override
   List<Object?> get props => [fetchAllSuccess, fetchStoriesSuccess];
 }
+
+final class FetchAllLoading extends FeedState {}
+
+final class FetchPicsLoading extends FeedState {}
+
+final class FetchVideosLoading extends FeedState {}
+
+final class FetchStoriesLoading extends FeedState {}
+
+final class FetchPostsLoading extends FeedState {}

@@ -89,16 +89,6 @@ class _FeedPublicationsState extends State<FeedPublications> {
             commentsUsers = state.fetchAllSuccess['commentsUsers'];
           });
         }
-        if (state is feed.FetchMoreSuccess) {
-          print('OOOOOOK');
-          setState(() {
-            publications.addAll(state.fetchAllSuccess['publications']);
-            publicationItems.addAll(state.fetchAllSuccess['publicationItems']);
-            users.addAll(state.fetchAllSuccess['users']);
-            commentsAll.addAll(state.fetchAllSuccess['comments']);
-            commentsUsers.addAll(state.fetchAllSuccess['commentsUsers']);
-          });
-        }
 
         focusNodes = List.generate(publications.length, (index) => FocusNode());
         controllers = List.generate(publications.length, (index) => TextEditingController());
@@ -107,7 +97,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
       },
       builder: (context, state) {
         return Skeletonizer(
-          enabled: state is FetchLoading,
+          enabled: publications.isEmpty,
           child: Container(
             color: AppColors.primaryBackground,
             width: double.infinity,
@@ -116,9 +106,9 @@ class _FeedPublicationsState extends State<FeedPublications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: state is FetchLoading ? 5 : publications.length,
+                itemCount: state is feed.FetchAllLoading ? 5 : publications.length,
                 itemBuilder: (context, index) {
-                  if (state is! FetchLoading) {
+                  if (publications.isNotEmpty && index < publications.length) {
                     final PublicationModel publication = publications[index];
                     final PublicationItemModel publicationItem = publicationItems[index];
                     final CustomUser user = users[index];

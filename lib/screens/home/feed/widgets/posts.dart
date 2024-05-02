@@ -55,7 +55,7 @@ class _PostsState extends State<Posts> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    if (state is FetchLoading) LinearProgressIndicator(color: AppColors.alternate, minHeight: 1),
+                    if (state is FetchPostsLoading) LinearProgressIndicator(color: AppColors.alternate, minHeight: 1),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: ListView.builder(
