@@ -22,6 +22,7 @@ final class FetchUsers extends FeedEvent {}
 
 final class FetchAllPublications extends FeedEvent {}
 
+final class FetchNextMainPublications extends FeedEvent {}
 final class FollowUser extends FeedEvent {
   final String user_uuid;
 

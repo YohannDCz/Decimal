@@ -39,9 +39,9 @@ class _FeedStoriesState extends State<FeedStories> {
       listener: (context, state) {
         if (state is FetchAllSuccess) {
           setState(() {
-            publications = state.fetchAllSuccess['publications'];
-            publicationItems = state.fetchAllSuccess['publicationItems'];
-            users = state.fetchAllSuccess['users'];
+            publications = state.fetchStoriesSuccess['publications'];
+            publicationItems = state.fetchStoriesSuccess['publicationItems'];
+            users = state.fetchStoriesSuccess['users'];
           });
         }
       },
@@ -58,7 +58,7 @@ class _FeedStoriesState extends State<FeedStories> {
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
                 itemBuilder: (context, index) {
-                  if (publications.isNotEmpty && index < publications.length) {
+                  if (state is! FetchLoading) {
                     PublicationModel publication = publications[index];
                     PublicationItemModel publicationItem = publicationItems[index];
                     CustomUser user = users[index];

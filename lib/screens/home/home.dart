@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import '../../config/theme.dart';
+import '../../../../config/theme.dart';
 
 class Home extends StatefulWidget {
   const Home({

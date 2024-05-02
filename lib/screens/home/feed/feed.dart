@@ -66,9 +66,12 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
                           hintText: "What's new with you ? ...",
                           hintStyle: Theme.of(context).primaryTextTheme.labelLarge!.copyWith(color: AppColors.accent3),
                           alignLabelWithHint: true,
-                          prefixIcon: IconButton(splashColor: AppColors.alternate, icon: Icon(Icons.arrow_downward, color: AppColors.accent3), onPressed: () {
-                            Navigator.of(context).pushNamed('/publication');
-                          }),
+                          prefixIcon: IconButton(
+                              splashColor: AppColors.alternate,
+                              icon: Icon(Icons.arrow_downward, color: AppColors.accent3),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/publication');
+                              }),
                           suffixIcon: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -101,7 +104,6 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
               child: IndexedStack(
                 index: _selectedIndex,
                 children: [
-                  // Remplacez par vos Widgets : MainFeed, Stories, Posts, Pics, Videos
                   MainFeed(
                     scrollController: _scrollController,
                     searchBarfocusNode: _searchBarFocusNode,

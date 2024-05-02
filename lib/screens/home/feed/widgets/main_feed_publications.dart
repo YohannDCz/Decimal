@@ -81,12 +81,25 @@ class _FeedPublicationsState extends State<FeedPublications> {
     return BlocConsumer<feed.FeedBloc, feed.FeedState>(
       listener: (context, state) {
         if (state is feed.FetchAllSuccess) {
-          publications = state.fetchAllSuccess['publications'];
-          publicationItems = state.fetchAllSuccess['publicationItems'];
-          users = state.fetchAllSuccess['users'];
-          commentsAll = state.fetchAllSuccess['comments'];
-          commentsUsers = state.fetchAllSuccess['commentsUsers'];
+          setState(() {
+            publications = state.fetchAllSuccess['publications'];
+            publicationItems = state.fetchAllSuccess['publicationItems'];
+            users = state.fetchAllSuccess['users'];
+            commentsAll = state.fetchAllSuccess['comments'];
+            commentsUsers = state.fetchAllSuccess['commentsUsers'];
+          });
         }
+        if (state is feed.FetchMoreSuccess) {
+          print('OOOOOOK');
+          setState(() {
+            publications.addAll(state.fetchAllSuccess['publications']);
+            publicationItems.addAll(state.fetchAllSuccess['publicationItems']);
+            users.addAll(state.fetchAllSuccess['users']);
+            commentsAll.addAll(state.fetchAllSuccess['comments']);
+            commentsUsers.addAll(state.fetchAllSuccess['commentsUsers']);
+          });
+        }
+
         focusNodes = List.generate(publications.length, (index) => FocusNode());
         controllers = List.generate(publications.length, (index) => TextEditingController());
         commentsOpen = List.generate(publications.length, (index) => false);
@@ -105,7 +118,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: state is FetchLoading ? 5 : publications.length,
                 itemBuilder: (context, index) {
-                  if (publications.isNotEmpty && index < publications.length) {
+                  if (state is! FetchLoading) {
                     final PublicationModel publication = publications[index];
                     final PublicationItemModel publicationItem = publicationItems[index];
                     final CustomUser user = users[index];
@@ -451,7 +464,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                   ),
                                 ),
                                 Image.network(
-                                  'https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive-960x540.jpg',
+                                  'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png',
                                   width: double.infinity,
                                   height: 200.0,
                                   fit: BoxFit.cover,

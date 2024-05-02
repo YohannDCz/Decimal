@@ -87,3 +87,15 @@ final class FollowSuccess extends FeedState {}
 final class UnFollowSuccess extends FeedState {}
 
 final class FollowLoading extends FeedState {}
+
+final class FetchMoreLoading extends FeedState {}
+
+final class FetchMoreSuccess extends FeedState {
+  const FetchMoreSuccess({required this.fetchAllSuccess, required this.fetchStoriesSuccess});
+
+  final Map<String, dynamic> fetchAllSuccess;
+  final Map<String, dynamic> fetchStoriesSuccess;
+
+  @override
+  List<Object?> get props => [fetchAllSuccess, fetchStoriesSuccess];
+}
