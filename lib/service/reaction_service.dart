@@ -1,5 +1,4 @@
 import 'package:decimal/config/constants.dart';
-import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/reaction_model.dart';
 import 'package:decimal/models/user_model.dart';

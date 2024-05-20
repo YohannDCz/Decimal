@@ -83,40 +83,40 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     });
 
-    on<FetchNextMainPublications>((event, emit) async {
-      if (state is FetchAllSuccess) {
-        final currentState = state as FetchAllSuccess;
-        final publications = currentState.fetchAllSuccess['publications'];
-        final offset = publications.length;
+    // on<FetchNextMainPublications>((event, emit) async {
+    //   if (state is FetchAllSuccess) {
+    //     final currentState = state as FetchAllSuccess;
+    //     final publications = currentState.fetchAllSuccess['publications'];
+    //     final offset = publications.length;
 
-        emit(FetchMoreLoading());
-        print("OOOOOOOOk");
+    //     emit(FetchMoreLoading());
+    //     print("OOOOOOOOk");
 
-        try {
-          final fetchAllSuccess = await feedService.getPublicationData(offset: 5);
-          final fetchStoriesSuccess = await feedService.getStoriesData(offset: 5);
+    //     try {
+    //       final fetchAllSuccess = await feedService.getPublicationData(offset: 5);
+    //       final fetchStoriesSuccess = await feedService.getStoriesData(offset: 5);
 
-          emit(FetchMoreSuccess(
-            fetchAllSuccess: {
-              'publications': [...currentState.fetchAllSuccess['publications'], ...fetchAllSuccess['publications']] as List<PublicationModel>,
-              'publicationItems': [...currentState.fetchAllSuccess['publicationItems'], ...fetchAllSuccess['publicationItems']] as List<PublicationItemModel>,
-              'users': [...currentState.fetchAllSuccess['users'], ...fetchAllSuccess['users']] as List<CustomUser>,
-              'comments': [...currentState.fetchAllSuccess['comments'], ...fetchAllSuccess['comments']],
-              'commentsUsers': [...currentState.fetchAllSuccess['commentsUsers'], ...fetchAllSuccess['commentsUsers']] as List<List<CustomUser>?>,
-            },
-            fetchStoriesSuccess: {
-              'publications': [...currentState.fetchStoriesSuccess['publications'], ...fetchStoriesSuccess['publications']] as List<PublicationModel>,
-              'publicationItems': [...currentState.fetchStoriesSuccess['publicationItems'], ...fetchStoriesSuccess['publicationItems']] as List<PublicationItemModel>,
-              'users': [...currentState.fetchStoriesSuccess['users'], ...fetchStoriesSuccess['users']] as List<CustomUser>,
-              'comments': [...currentState.fetchStoriesSuccess['comments'], ...fetchStoriesSuccess['comments']] as List<List<CommentModel>?>,
-              'commentsUsers': [...currentState.fetchStoriesSuccess['commentsUsers'], ...fetchStoriesSuccess['commentsUsers']] as List<List<CustomUser>?>,
-            },
-          ));
-        } catch (e) {
-          emit(FetchFailure(error: e.toString()));
-        }
-      }
-    });
+    //       emit(FetchMoreSuccess(
+    //         fetchAllSuccess: {
+    //           'publications': [...currentState.fetchAllSuccess['publications'], ...fetchAllSuccess['publications']] as List<PublicationModel>,
+    //           'publicationItems': [...currentState.fetchAllSuccess['publicationItems'], ...fetchAllSuccess['publicationItems']] as List<PublicationItemModel>,
+    //           'users': [...currentState.fetchAllSuccess['users'], ...fetchAllSuccess['users']] as List<CustomUser>,
+    //           'comments': [...currentState.fetchAllSuccess['comments'], ...fetchAllSuccess['comments']],
+    //           'commentsUsers': [...currentState.fetchAllSuccess['commentsUsers'], ...fetchAllSuccess['commentsUsers']] as List<List<CustomUser>?>,
+    //         },
+    //         fetchStoriesSuccess: {
+    //           'publications': [...currentState.fetchStoriesSuccess['publications'], ...fetchStoriesSuccess['publications']] as List<PublicationModel>,
+    //           'publicationItems': [...currentState.fetchStoriesSuccess['publicationItems'], ...fetchStoriesSuccess['publicationItems']] as List<PublicationItemModel>,
+    //           'users': [...currentState.fetchStoriesSuccess['users'], ...fetchStoriesSuccess['users']] as List<CustomUser>,
+    //           'comments': [...currentState.fetchStoriesSuccess['comments'], ...fetchStoriesSuccess['comments']] as List<List<CommentModel>?>,
+    //           'commentsUsers': [...currentState.fetchStoriesSuccess['commentsUsers'], ...fetchStoriesSuccess['commentsUsers']] as List<List<CustomUser>?>,
+    //         },
+    //       ));
+    //     } catch (e) {
+    //       emit(FetchFailure(error: e.toString()));
+    //     }
+    //   }
+    // });
 
     on<FollowUser>((event, emit) async {
       emit(FollowLoading());

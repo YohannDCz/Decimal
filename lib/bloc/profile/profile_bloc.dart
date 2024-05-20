@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:decimal/models/publication_items_model.dart';
-import 'package:decimal/models/publication_model.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:decimal/service/profile_content_service.dart';
 import 'package:decimal/service/profile_service.dart';

@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:decimal/bloc/authentication/authentication_bloc.dart';
 import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/provider.dart';
 import 'package:decimal/screens/home/feed/feed.dart';
 import 'package:decimal/screens/home/profile/profile.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../config/theme.dart';
