@@ -21,15 +21,15 @@
     },
     {
       "name": "app_links",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/app_links-4.0.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/app_links-6.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "archive",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/archive-3.4.10",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/archive-3.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "args",
@@ -81,15 +81,15 @@
     },
     {
       "name": "camera",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/camera-0.10.5+9",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/camera-0.10.6",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/camera_android-0.10.9+1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/camera_android-0.10.9+3",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.4"
     },
     {
       "name": "camera_avfoundation",
@@ -177,7 +177,7 @@
     },
     {
       "name": "coverage",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/coverage-1.7.2",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/coverage-1.8.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -249,9 +249,9 @@
     },
     {
       "name": "file_selector_macos",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.3+3",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/file_selector_macos-0.9.4",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.1"
     },
     {
       "name": "file_selector_platform_interface",
@@ -275,7 +275,7 @@
       "name": "flutter",
       "rootUri": "file:///Applications/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_appauth",
@@ -411,15 +411,15 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.19",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.20",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_test",
       "rootUri": "file:///Applications/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_web_plugins",
@@ -441,13 +441,13 @@
     },
     {
       "name": "frontend_server_client",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/frontend_server_client-3.2.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/frontend_server_client-4.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "functions_client",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/functions_client-2.0.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/functions_client-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -471,7 +471,7 @@
     },
     {
       "name": "gotrue",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/gotrue-2.6.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/gotrue-2.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -507,21 +507,21 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image-4.1.7",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image-4.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "image_picker",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker-1.1.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker-1.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_android-0.8.10",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+3",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "image_picker_for_web",
@@ -531,7 +531,7 @@
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.10+1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/image_picker_ios-0.8.12",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -585,21 +585,21 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker-10.0.4",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.3",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_testing",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/leak_tracker_testing-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "lints",
@@ -627,7 +627,7 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/meta-1.11.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/meta-1.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -681,15 +681,15 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/path_provider_android-2.2.4",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/path_provider_android-2.2.5",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/path_provider_foundation-2.3.2",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "path_provider_linux",
@@ -728,12 +728,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "pointycastle",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/pointycastle-3.9.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
-    },
-    {
       "name": "pool",
       "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/pool-1.5.1",
       "packageUri": "lib/",
@@ -741,7 +735,7 @@
     },
     {
       "name": "postgrest",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/postgrest-2.1.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/postgrest-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -759,7 +753,7 @@
     },
     {
       "name": "realtime_client",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/realtime_client-2.0.4",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/realtime_client-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -783,15 +777,15 @@
     },
     {
       "name": "shared_preferences_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.2",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "shared_preferences_foundation",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.5",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.4.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "shared_preferences_linux",
@@ -843,7 +837,7 @@
     },
     {
       "name": "skeletonizer",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/skeletonizer-1.1.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/skeletonizer-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -891,7 +885,7 @@
     },
     {
       "name": "storage_client",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/storage_client-2.0.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/storage_client-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -915,13 +909,13 @@
     },
     {
       "name": "supabase",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/supabase-2.1.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/supabase-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "supabase_flutter",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/supabase_flutter-2.5.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/supabase_flutter-2.5.4",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -933,19 +927,19 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test-1.24.9",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test-1.25.2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test_api-0.6.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test_api-0.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test_core-0.5.9",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/test_core-0.6.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -969,13 +963,13 @@
     },
     {
       "name": "url_launcher_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.1",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "url_launcher_ios",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_ios-6.2.5",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_ios-6.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -987,9 +981,9 @@
     },
     {
       "name": "url_launcher_macos",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.1"
     },
     {
       "name": "url_launcher_platform_interface",
@@ -1029,13 +1023,13 @@
     },
     {
       "name": "video_player_android",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_android-2.4.14",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_android-2.4.16",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "video_player_avfoundation",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_avfoundation-2.5.7",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_avfoundation-2.6.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1047,15 +1041,15 @@
     },
     {
       "name": "video_player_web",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_web-2.3.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/video_player_web-2.3.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/vm_service-14.2.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.3"
     },
     {
       "name": "watcher",
@@ -1083,9 +1077,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/win32-5.5.0",
+      "rootUri": "file:///Users/yohannd/.pub-cache/hosted/pub.dev/win32-5.5.1",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "xdg_directories",
@@ -1124,7 +1118,10 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-05-01T08:39:56.119026Z",
+  "generated": "2024-06-03T15:45:58.215548Z",
   "generator": "pub",
-  "generatorVersion": "3.3.4"
+  "generatorVersion": "3.4.1",
+  "flutterRoot": "file:///Applications/flutter",
+  "flutterVersion": "3.22.1",
+  "pubCache": "file:///Users/yohannd/.pub-cache"
 }

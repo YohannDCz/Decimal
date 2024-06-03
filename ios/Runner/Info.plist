@@ -52,7 +52,7 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>com.example.decimal</string>
+					<string>com.decimal.app</string>
 				</array>
 			</dict>
 		</array>

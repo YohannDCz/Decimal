@@ -32,7 +32,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         emit(FetchFailure(error: e.toString()));
       }
     });
-
+ 
     on<FetchProfileUserContent>((event, emit) async {
       emit(FetchLoading());
 

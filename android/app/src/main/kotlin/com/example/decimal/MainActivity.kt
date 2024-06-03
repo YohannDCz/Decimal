@@ -1,4 +1,4 @@
-package com.example.decimal
+package com.decimal.app
 
 import io.flutter.embedding.android.FlutterActivity
 

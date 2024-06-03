@@ -7,6 +7,7 @@ import 'package:decimal/config/constants.dart';
 import 'package:decimal/config/theme.dart';
 import 'package:decimal/models/publication_items_model.dart';
 import 'package:decimal/models/publication_model.dart';
+import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -23,10 +24,12 @@ class ProfilePics extends StatefulWidget {
 class _ProfilePicsState extends State<ProfilePics> {
   late List<PublicationModel> publications;
   late List<PublicationItemModel> pics;
+  late CustomUser user;
 
   @override
   initState() {
     super.initState();
+    user = const CustomUser(id: "");
     publications = [];
     pics = [];
   }
@@ -39,6 +42,7 @@ class _ProfilePicsState extends State<ProfilePics> {
           if (state is FetchProfileUserSuccess) {
             setState(
               () {
+                user = state.fetchDescriptionSuccess;
                 publications = state.fetchPicsSuccess['publications'];
                 pics = state.fetchPicsSuccess['pics'];
               },
@@ -48,6 +52,7 @@ class _ProfilePicsState extends State<ProfilePics> {
           if (state is FetchProfileSuccess) {
             setState(
               () {
+                user = state.fetchDescriptionSuccess;
                 publications = state.fetchPicsSuccess['publications'];
                 pics = state.fetchPicsSuccess['pics'];
               },
@@ -108,7 +113,7 @@ class _ProfilePicsState extends State<ProfilePics> {
                         if (index < pics.length + 1) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index], 'publicationItem': pics[index]});
+                              Navigator.of(context).pushNamed('/pic_widget', arguments: {'publication': publications[index - 1], 'publicationItem': pics[index - 1], 'user': user});
                             },
                             child: Image.network(pics[index - 1].url ?? 'https://hxlaujiaybgubdzzkoxu.supabase.co/storage/v1/object/public/Assets/image/placeholders/profile_placeholder.png?t=2024-03-21T09%3A42%3A52.755Z', fit: BoxFit.cover),
                           );

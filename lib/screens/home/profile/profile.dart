@@ -27,6 +27,7 @@ class _ProfileState extends State<Profile> {
     if (widget.user_uuid != supabaseUser!.id) {
       BlocProvider.of<ProfileBloc>(context).add(FetchProfileUserContent(widget.user_uuid));
     } else {
+      print(supabaseUser!.id);
       BlocProvider.of<ProfileBloc>(context).add(FetchProfileContent(supabaseUser!.id));
     }
   }
