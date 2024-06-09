@@ -24,23 +24,6 @@ class _SignUpEmailState extends State<SignUpEmail> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  StreamSubscription<AuthState>? _authSubscription;
-
-  @override
-  initState() {
-    super.initState();
-    _authSubscription = supabaseAuth.onAuthStateChange.listen((auth) {
-      if (auth.session != null && ModalRoute.of(context)?.settings.name != '/home') {
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-      }
-    });
-  }
-
-  @override
-  dispose() {
-    _authSubscription?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

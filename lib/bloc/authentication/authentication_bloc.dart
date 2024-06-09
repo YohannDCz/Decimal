@@ -26,7 +26,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
       try {
         await authenticationService.signUpWithEmail(event.user);
-        if (supabaseUser != null) {
+        if (supabaseSession != null) {
           await Future.delayed(const Duration(seconds: 1), await authenticationService.createTableEntry());
           emit(AuthenticationSuccess(userExist: false));
         }

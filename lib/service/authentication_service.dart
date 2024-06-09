@@ -12,17 +12,11 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthenticationService {
-  AuthenticationService({required SupabaseClient supabaseClient})
-      : supabase = supabaseClient,
-        supabaseAuth = supabaseClient.auth,
-        supabaseUser = supabaseClient.auth.currentUser;
-
-  late final SupabaseClient supabase;
-  late final GoTrueClient supabaseAuth;
-  late final User? supabaseUser;
+  AuthenticationService();
 
   Future createTableEntry() async {
-    if (supabaseAuth.currentSession != null) {
+    if (supabaseSession != null) {
+      print(supabaseUser!.id);
       var userToInsert = {
         'uuid': supabaseUser!.id,
         'email': supabaseUser!.email,
@@ -41,7 +35,7 @@ class AuthenticationService {
 
   Future signInWithEmail(AppUser user) async {
     try {
-      await supabase.auth.signInWithPassword(
+      await supabaseAuth.signInWithPassword(
         email: user.email,
         password: user.password,
       );
@@ -56,6 +50,7 @@ class AuthenticationService {
         email: user.email,
         password: user.password,
       );
+      print(supabaseUser!.id);
       return 'User signed up successfully';
     } catch (e) {
       throw "Erreur lors de l'inscription avec email : $e";

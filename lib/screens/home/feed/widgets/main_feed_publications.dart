@@ -364,6 +364,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                                             icon: Icon(Icons.arrow_upward, color: AppColors.black, size: 24.0),
                                             onPressed: () {
                                               BlocProvider.of<ReactionBloc>(context).add(AddComment(publication.id!, controllers[index].text));
+                                              controllers[index].clear();
                                               setState(() {});
                                             }),
                                         border: OutlineInputBorder(

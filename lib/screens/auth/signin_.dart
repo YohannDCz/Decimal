@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
-import 'package:decimal/config/constants.dart';
 import 'package:decimal/service/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../config/theme.dart';
 import 'widgets/divider_sign_in.dart';
@@ -22,24 +18,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  StreamSubscription<AuthState>? _authSubscription;
-
-  @override
-  initState() {
-    super.initState();
-    _authSubscription = supabaseAuth.onAuthStateChange.listen((auth) {
-      if (auth.session != null && ModalRoute.of(context)?.settings.name != '/home') {
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-      }
-    });
-  }
-
-  @override
-  dispose() {
-    _authSubscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     var bodySmall = Theme.of(context).primaryTextTheme.bodySmall;
@@ -52,7 +30,9 @@ class _SignInState extends State<SignIn> {
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationSuccess) {
-              if (!state.userExist!) {
+              if (state.userExist!) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+              } else {
                 Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
               }
             }

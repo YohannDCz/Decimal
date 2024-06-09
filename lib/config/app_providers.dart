@@ -14,7 +14,6 @@ import 'package:decimal/service/vision_gpt_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Bloc extends StatelessWidget {
   const Bloc({super.key, required this.child});
@@ -25,7 +24,7 @@ class Bloc extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (_) => AuthenticationService(supabaseClient: Supabase.instance.client)),
+        RepositoryProvider(create: (_) => AuthenticationService()),
         RepositoryProvider(create: (_) => ProfileContentService()),
         RepositoryProvider(create: (_) => FeedService()),
         RepositoryProvider(create: (_) => ProfileService()),
