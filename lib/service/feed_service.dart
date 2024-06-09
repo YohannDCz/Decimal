@@ -171,7 +171,10 @@ class FeedService {
       final stories = await getPublicationItems("stories", 5, offset: offset);
       final users = await getPublicationUsers("stories", 5, offset: offset);
       final comments = await getComments("stories", 5, offset: offset);
-      final commentsUsers = await getCommentUsers("stories", 5,);
+      final commentsUsers = await getCommentUsers(
+        "stories",
+        5,
+      );
       final storiesData = {'publications': publications, 'publicationItems': stories, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
       return storiesData;
     } catch (e) {
@@ -186,7 +189,7 @@ class FeedService {
       final List<PublicationItemModel> publicationItems = await getAllPublicationItems(offset: offset);
       final List<CustomUser> users = await getAllPublicationUsers(offset: offset);
       final List<List<CommentModel>> comments = await getAllComments(offset: offset);
-      final List<List<CustomUser>>  commentsUsers = await getAllCommentUsers(offset: offset);
+      final List<List<CustomUser>> commentsUsers = await getAllCommentUsers(offset: offset);
       final Map<String, List<Object>> publicationData = {'publications': publications, 'publicationItems': publicationItems, 'users': users, 'comments': comments, 'commentsUsers': commentsUsers};
       return publicationData;
     } catch (e) {

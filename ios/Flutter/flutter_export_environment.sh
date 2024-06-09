@@ -3,12 +3,15 @@
 export "FLUTTER_ROOT=/Applications/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/yohannd/Desktop/Decimal"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=/Users/yohannd/Desktop/Decimal/lib/main.dart"
+export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"
+<<<<<<< HEAD
 export "DART_DEFINES=RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC81NWVhZTY4NjRiMjk2ZGQ5ZjQzYjJjYzc1NzdlYzI1NmU1YzMyYThkLw=="
+=======
+>>>>>>> 9a517ba (- macos refresh)
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
-export "PACKAGE_CONFIG=/Users/yohannd/Desktop/Decimal/.dart_tool/package_config.json"
+export "PACKAGE_CONFIG=.dart_tool/package_config.json"

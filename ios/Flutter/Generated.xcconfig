@@ -2,14 +2,17 @@
 FLUTTER_ROOT=/Applications/flutter
 FLUTTER_APPLICATION_PATH=/Users/yohannd/Desktop/Decimal
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/yohannd/Desktop/Decimal/lib/main.dart
+FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
+<<<<<<< HEAD
 DART_DEFINES=RkxVVFRFUl9XRUJfQ0FOVkFTS0lUX1VSTD1odHRwczovL3d3dy5nc3RhdGljLmNvbS9mbHV0dGVyLWNhbnZhc2tpdC81NWVhZTY4NjRiMjk2ZGQ5ZjQzYjJjYzc1NzdlYzI1NmU1YzMyYThkLw==
+=======
+>>>>>>> 9a517ba (- macos refresh)
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/yohannd/Desktop/Decimal/.dart_tool/package_config.json
+PACKAGE_CONFIG=.dart_tool/package_config.json
