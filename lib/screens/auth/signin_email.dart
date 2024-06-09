@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:decimal/bloc/authentication/authentication_bloc.dart';
+import 'package:decimal/config/constants.dart';
 import 'package:decimal/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../config/theme.dart';
 import 'widgets/auth_title.dart';
@@ -18,6 +22,23 @@ class SignInEmail extends StatefulWidget {
 class _SignInEmailState extends State<SignInEmail> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  StreamSubscription<AuthState>? _authSubscription;
+
+  @override
+  initState() {
+    super.initState();
+    _authSubscription = supabaseAuth.onAuthStateChange.listen((auth) {
+      if (auth.session != null && ModalRoute.of(context)?.settings.name != '/home') {
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      }
+    });
+  }
+
+  @override
+  dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +50,7 @@ class _SignInEmailState extends State<SignInEmail> {
         height: double.infinity,
         decoration: BoxDecoration(gradient: AppColors.gradient),
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state is AuthenticationSuccess) {
-              if (state.userExist!) {
-                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-              }
-            }
-          },
+          listener: (context, state) {},
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,8 +89,6 @@ class _SignInEmailState extends State<SignInEmail> {
           BlocProvider.of<AuthenticationBloc>(context).add(SignInWithEmail(
             user: AppUser(email: emailController.text, password: passwordController.text),
           ));
-
-          Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

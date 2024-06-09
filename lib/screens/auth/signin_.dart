@@ -22,12 +22,12 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-    StreamSubscription<AuthState>? _authSubscription;
+  StreamSubscription<AuthState>? _authSubscription;
 
   @override
   initState() {
     super.initState();
-    _authSubscription =  supabaseAuth.onAuthStateChange.listen((auth) {
+    _authSubscription = supabaseAuth.onAuthStateChange.listen((auth) {
       if (auth.session != null && ModalRoute.of(context)?.settings.name != '/home') {
         Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       }
@@ -51,13 +51,10 @@ class _SignInState extends State<SignIn> {
         decoration: BoxDecoration(gradient: AppColors.gradient),
         child: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            debugPrint("$state");
             if (state is AuthenticationSuccess) {
-              if (state.userExist!) {
-                Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-              } else {
-              Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
-            }
+              if (!state.userExist!) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/profile_content', (route) => false);
+              }
             }
           },
           child: Column(
