@@ -32,6 +32,8 @@ class _PostsState extends State<Posts> {
 
   @override
   Widget build(BuildContext context) {
+    double mediaQuery = MediaQuery.of(context).size.width;
+
     return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
         if (state is FetchPostsSuccess) {
@@ -57,7 +59,7 @@ class _PostsState extends State<Posts> {
                   children: [
                     if (state is FetchPostsLoading) LinearProgressIndicator(color: AppColors.alternate, minHeight: 1),
                     Padding(
-                      padding: const EdgeInsets.all(4.0),
+                      padding: mediaQuery > 1000 ? const EdgeInsets.symmetric(horizontal: 300.0, vertical: 4.0) : const EdgeInsets.all(4.0),
                       child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

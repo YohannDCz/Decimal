@@ -35,6 +35,8 @@ class _FeedStoriesState extends State<FeedStories> {
 
   @override
   Widget build(BuildContext context) {
+    double mediaQuery = MediaQuery.of(context).size.width;
+
     return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
         if (state is FetchAllSuccess) {
@@ -50,7 +52,7 @@ class _FeedStoriesState extends State<FeedStories> {
           enabled: publications.isEmpty,
           ignoreContainers: true,
           child: Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+             padding: mediaQuery > 1000 ? const EdgeInsets.only(top: 16.0, left: 300.0, right: 300.0) : const EdgeInsets.only(top: 16.0),
             child: SizedBox(
               width: double.infinity,
               height: 120.0,
@@ -65,7 +67,7 @@ class _FeedStoriesState extends State<FeedStories> {
 
                     if (index == 0) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 4.0),
+                        padding: mediaQuery > 1000 ? const EdgeInsets.only(top: 4.0, left: 300.0, right: 300.0) : const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 8.0, right: 4.0),
                         child: Material(
                           child: GestureDetector(
                             onTap: () => Navigator.of(context).pushNamed('/story_widget', arguments: {'publication': publication, 'publicationItem': publicationItem, 'user': users[index]}),

@@ -78,6 +78,8 @@ class _FeedPublicationsState extends State<FeedPublications> {
 
   @override
   Widget build(BuildContext context) {
+    double mediaQuery = MediaQuery.of(context).size.width;
+
     return BlocConsumer<feed.FeedBloc, feed.FeedState>(
       listener: (context, state) {
         if (state is feed.FetchAllSuccess) {
@@ -115,7 +117,7 @@ class _FeedPublicationsState extends State<FeedPublications> {
                     final bool isNotDirty = publication.type != "songs" && publication.type != "articles" && publication.type != "pictures" && publication.type != "vids";
 
                     return Padding(
-                      padding: const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
+                      padding: mediaQuery > 1000 ? const EdgeInsets.only(top: 4.0, left: 300.0, right: 300.0) : const EdgeInsets.only(top: 8.0, right: 8.0, left: 8.0),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.white,

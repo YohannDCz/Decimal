@@ -31,6 +31,8 @@ class _StoriesState extends State<Stories> {
 
   @override
   Widget build(BuildContext context) {
+    double mediaQuery = MediaQuery.of(context).size.width;
+
     return BlocConsumer<FeedBloc, FeedState>(
       listener: (context, state) {
         if (state is FetchStoriesSuccess) {
@@ -53,7 +55,7 @@ class _StoriesState extends State<Stories> {
                 children: [
                   if (state is FetchStoriesLoading) LinearProgressIndicator(color: AppColors.primary, minHeight: 1),
                   Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: mediaQuery > 1000 ? const EdgeInsets.only(top: 4.0, left: 300.0, right: 300.0) : const EdgeInsets.all(4.0),
                     child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

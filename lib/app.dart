@@ -1,6 +1,8 @@
 import 'package:decimal/config/app_providers.dart' as bloc;
 import 'package:decimal/config/routes.dart';
 import 'package:decimal/config/theme.dart';
+import 'package:decimal/screens/home/feed/feed.dart';
+import 'package:decimal/screens/home/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -14,8 +16,8 @@ class App extends StatelessWidget {
         theme: appTheme,
         routes: appRoutes,
         onGenerateRoute: generateRoute,
-        initialRoute: '/signin',
-        // home: const Publication(),s
+        // initialRoute: '/signin',
+        home: const Feed(),
       ),
     );
   }

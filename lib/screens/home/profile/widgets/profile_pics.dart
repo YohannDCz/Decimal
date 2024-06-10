@@ -36,6 +36,8 @@ class _ProfilePicsState extends State<ProfilePics> {
 
   @override
   Widget build(BuildContext context) {
+    double mediaQuery = MediaQuery.of(context).size.width;
+
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (widget.user_uuid != supabaseUser!.id) {
@@ -62,7 +64,7 @@ class _ProfilePicsState extends State<ProfilePics> {
       },
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          padding: mediaQuery > 1000 ? const EdgeInsets.symmetric(vertical: 8.0, horizontal: 300.0) : const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: Skeletonizer(
             enabled: pics.isEmpty,
             child: Container(
